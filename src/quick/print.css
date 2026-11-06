@@ -1,0 +1,159 @@
+@page {
+  size: A4;
+  margin: 17mm 16mm;
+  @bottom-right {
+    content: counter(page) " / " counter(pages);
+    font-family: Arial, sans-serif;
+    font-size: 8pt;
+    color: #777;
+  }
+}
+@media print {
+  body {
+    color: #111;
+    background: #fff;
+  }
+  .site-header,
+  .no-print,
+  .landing-page,
+  .history-page,
+  .question-page,
+  .results-page,
+  .question-example,
+  .error-banner,
+  .method-dialog,
+  .import-dialog,
+  .skip-link {
+    display: none !important;
+  }
+  .quick-content {
+    margin: 0;
+    padding: 0;
+  }
+  .quick-print-report {
+    display: block !important;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    font-size: 10pt;
+    line-height: 1.5;
+  }
+  .quick-print-report h1 {
+    font-size: 29pt;
+    margin: 20pt 0 12pt;
+  }
+  .quick-print-report h2 {
+    font-size: 17pt;
+    letter-spacing: -0.5pt;
+    margin: 25pt 0 14pt;
+    break-after: avoid;
+  }
+  .quick-print-report h3 {
+    font-size: 13pt;
+    margin: 20pt 0 10pt;
+    break-after: avoid;
+  }
+  .quick-print-report h4 {
+    font-size: 11pt;
+    line-height: 1.4;
+    letter-spacing: -0.2pt;
+    margin: 0 0 7pt;
+    break-after: avoid;
+  }
+  .quick-print-report p {
+    margin: 6pt 0 12pt;
+    orphans: 3;
+    widows: 3;
+  }
+  .print-brand {
+    display: flex;
+    align-items: center;
+    gap: 20pt;
+    border-bottom: 1pt solid #222;
+    padding: 0 0 15pt;
+  }
+  .print-brand > strong {
+    font-size: 30pt;
+    letter-spacing: -3pt;
+  }
+  .print-brand > span {
+    font-size: 12pt;
+  }
+  .print-context {
+    font-size: 9pt;
+    color: #666;
+    margin-top: 15pt !important;
+  }
+  .print-score {
+    display: flex;
+    align-items: baseline;
+    gap: 15pt;
+  }
+  .print-score strong {
+    font-size: 78pt;
+    line-height: 1;
+    letter-spacing: -5pt;
+  }
+  .print-score > span {
+    font-size: 25pt;
+  }
+  .quick-print-report table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 10pt;
+    margin: 12pt 0 20pt;
+  }
+  .quick-print-report th,
+  .quick-print-report td {
+    text-align: left;
+    padding: 9pt 8pt;
+    border-bottom: 1pt solid #ddd;
+  }
+  .quick-print-report th {
+    background: #f0f0f0;
+  }
+  .print-block {
+    break-inside: avoid;
+  }
+  .print-answer {
+    padding: 10pt 0 5pt;
+    border-bottom: 0.5pt solid #ddd;
+  }
+  .print-page-start {
+    break-before: page;
+  }
+  .legacy-page {
+    padding: 0 !important;
+    max-width: none;
+  }
+  .legacy-page .report {
+    padding: 0 !important;
+    border: 0 !important;
+    font-size: 10pt;
+    line-height: 1.5;
+  }
+  .legacy-page .report h1 {
+    font-size: 26pt;
+  }
+  .legacy-page .report h2 {
+    font-size: 18pt;
+    break-after: avoid;
+  }
+  .legacy-page .report h3,
+  .legacy-page .report h4 {
+    break-after: avoid;
+  }
+  .legacy-page .report-block {
+    break-inside: avoid;
+  }
+  .legacy-page .report h2:nth-of-type(2) {
+    break-before: page;
+  }
+  .legacy-page .report p {
+    orphans: 3;
+    widows: 3;
+  }
+  .legacy-page .report {
+    overflow-wrap: anywhere;
+  }
+}

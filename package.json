@@ -1,6 +1,6 @@
 {
   "name": "ki-resilienz-check",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -9,8 +9,7 @@
     "preview": "vite preview --host 127.0.0.1",
     "test": "vitest run",
     "format": "prettier --write src tests scripts vite.config.ts",
-    "examples": "node scripts/export-examples.mjs",
-    "test:browser": "node tests/browser-check.mjs"
+    "examples": "node scripts/export-examples.mjs"
   },
   "dependencies": {
     "react": "^19.2.0",
