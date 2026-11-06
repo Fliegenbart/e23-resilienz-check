@@ -1,0 +1,328 @@
+{
+  "version": "0.1",
+  "questions": [
+    {
+      "id": "A1",
+      "group": "A",
+      "text": "Wie konkret und relevant ist das Kundenproblem?",
+      "anchors": {
+        "low": "Kein klarer Käufer oder kein relevanter Nachteil des bisherigen Zustands.",
+        "medium": "Problem und Käufer sind benannt; Häufigkeit oder Bedeutung sind noch ungeklärt.",
+        "high": "Konkreter Käufer, wiederkehrender Bedarf und nachvollziehbarer wirtschaftlicher oder operativer Nachteil."
+      },
+      "allowsNotApplicable": false,
+      "helpText": "Geeignete Belege: dokumentierte Kundenaufgaben, Prozessbeobachtung, Zeitverlust, Fehlerkosten, wiederkehrende konkrete Beschwerden."
+    },
+    {
+      "id": "A2",
+      "group": "A",
+      "text": "Welche Zahlungsbereitschaft besteht?",
+      "anchors": {
+        "low": "Ablehnung oder belegter fehlender Zahlungswille bei den untersuchten Zielkunden.",
+        "medium": "Interesse, Gespräche, unverbindliche Absichtserklärungen oder noch ungeprüfte Budgetannahmen.",
+        "high": "Tatsächliches Kaufverhalten wie bezahlter Pilot, Auftrag, budgetierte Nutzung oder Verlängerung."
+      },
+      "allowsNotApplicable": false,
+      "helpText": "Geeignete Belege: Aufträge, bezahlte Piloten, anonymisierte Umsatzdaten, Verlängerungen, dokumentierte Budgetentscheidung.\nFehlender Nachweis ist „unbekannt“ oder eine mittelstarke Hypothese; er ist nicht automatisch belegte Ablehnung."
+    },
+    {
+      "id": "A3",
+      "group": "A",
+      "text": "Welcher zusätzliche Nutzen besteht gegenüber der besten zugänglichen Alternative?",
+      "anchors": {
+        "low": "Kein für den Kunden relevanter Unterschied.",
+        "medium": "Nutzen ist plausibel oder nur in einem begrenzten Einsatzbereich gezeigt.",
+        "high": "Relevanter Vorteil bei Qualität, Zeit, Kosten oder Ergebnis ist nachvollziehbar demonstriert."
+      },
+      "allowsNotApplicable": false,
+      "helpText": "Geeignete Belege: Vergleich an echten Aufgaben, Kundenmessung, nachprüfbare Zeit- und Qualitätsdaten einschließlich Nacharbeit.\nDie Vergleichsalternative kann auch eine vorhandene Standardsoftware, Eigenleistung oder „nichts ändern“ sein."
+    },
+    {
+      "id": "A4",
+      "group": "A",
+      "text": "Ist die Wirtschaftlichkeit tragfähig?",
+      "anchors": {
+        "low": "Bekannte Kosten übersteigen realistisch erreichbaren Erlös; ein plausibler Verbesserungspfad fehlt.",
+        "medium": "Ein positiver Verlauf ist plausibel, aber wichtige Kosten-, Nachfrage- oder Amortisationsannahmen sind noch offen.",
+        "high": "Relevante Kosten sind berücksichtigt und ein nachvollziehbarer Weg zu einem positiven wirtschaftlichen Ergebnis besteht."
+      },
+      "allowsNotApplicable": false,
+      "helpText": "Geeignete Belege: bestehender Deckungsbeitrag, belastbare Kostenstruktur oder offengelegter Business Case mit validierten Teilannahmen.\nEinführung, Vertrieb, Betreuung, Qualitätssicherung und Anpassungen dürfen nicht stillschweigend als kostenlos gelten."
+    },
+    {
+      "id": "B1",
+      "group": "B",
+      "text": "Wie weit können zugängliche KI-Systeme die bezahlte Kernleistung bereits erbringen?",
+      "anchors": {
+        "low": "Sie übernehmen überwiegend nebensächliche Teilaufgaben.",
+        "medium": "Sie übernehmen wesentliche Teile, aber relevante Lücken bei Ergebnis, Ausführung oder Kundenanforderungen bleiben.",
+        "high": "Sie ermöglichen eine weitgehend gleichwertige Kernleistung innerhalb der betrachteten Kundenanforderungen."
+      },
+      "allowsNotApplicable": false,
+      "helpText": "Geeignete Belege: aktueller Vergleich des vollständigen relevanten Arbeitsablaufs, einschließlich Prüfung, Fehlern und Nacharbeit.\nEin überzeugendes Einzelbeispiel oder die Reproduktion einer Oberfläche genügt nicht als Nachweis der gesamten Leistung."
+    },
+    {
+      "id": "B2",
+      "group": "B",
+      "text": "Wie stark hängt der heutige Vorteil von einer vorübergehenden Modellschwäche ab?",
+      "anchors": {
+        "low": "Der Wert entsteht überwiegend unabhängig von dieser Schwäche.",
+        "medium": "Ein wesentlicher Teil hängt daran, andere wertvolle Bestandteile bleiben bestehen.",
+        "high": "Der Hauptnutzen besteht darin, eine konkrete Modellschwäche zu überbrücken."
+      },
+      "allowsNotApplicable": true,
+      "helpText": "Geeignete Belege: Zerlegung des Produktnutzens, Vergleich mit neueren Modellen, dokumentierter Zusammenhang zwischen Modellverbesserung und verlorenem Produktvorteil.\nDie konkrete Schwäche muss benannt werden; das Etikett „Wrapper“ ist keine Analyse."
+    },
+    {
+      "id": "B3",
+      "group": "B",
+      "text": "Wie nah liegt die Leistung am Angebot und Kundenzugang einer Plattform?",
+      "anchors": {
+        "low": "Wenige erkennbare wirtschaftliche Anreize oder erhebliche zusätzliche Ausführungsanforderungen sprechen derzeit gegen direkte Bündelung.",
+        "medium": "Angrenzende Angebote, passender Kundenzugang und plausible wirtschaftliche Anreize bestehen.",
+        "high": "Konkrete Veröffentlichungen, Integrationen oder vergleichbare bereits angebotene Leistungen zeigen unmittelbare Nähe."
+      },
+      "allowsNotApplicable": false,
+      "helpText": "Geeignete Belege: datierte Produktinformationen, Preis- und Bündelungsmodelle, dokumentierte Integrationen, vertriebliche Überschneidung.\nDer Befund beschreibt beobachtete Nähe. Er ist keine Markteintrittswahrscheinlichkeit. Fehlende öffentliche Informationen rechtfertigen allein keine niedrige Bewertung."
+    },
+    {
+      "id": "B4",
+      "group": "B",
+      "text": "Wie leicht können Kunden tatsächlich wechseln oder die Leistung selbst erbringen?",
+      "anchors": {
+        "low": "Erhebliche, konkret belegte Wechselhindernisse bestehen.",
+        "medium": "Migration, Prüfung, Schulung oder organisatorische Umstellung sind erforderlich.",
+        "high": "Eine brauchbare Alternative ist bereits im Arbeitsablauf verfügbar oder mit geringem Umstellungsaufwand einsetzbar."
+      },
+      "allowsNotApplicable": false,
+      "helpText": "Geeignete Belege: beobachtete Migration, Kundenversuch, Kündigungsgründe, Beschaffungsanforderungen, Aufwandsschätzung mit nachvollziehbarer Grundlage.\nDie Dauer des Kündigungsklicks ist nicht die Dauer eines fachlichen Anbieterwechsels."
+    },
+    {
+      "id": "C1",
+      "group": "C",
+      "text": "Gibt es schwer ersetzbare, nützliche eigene Daten?",
+      "anchors": {
+        "low": "Daten sind leicht zugänglich, ersetzbar oder liefern keinen relevanten zusätzlichen Nutzen.",
+        "medium": "Teilweise exklusiver Zugang oder plausibler Nutzen; Rechte, Qualität oder Wirkung sind noch offen.",
+        "high": "Nutzungsrechte, schwer ersetzbarer Zugang und ein relevanter Ergebnisvorteil sind nachvollziehbar vorhanden."
+      },
+      "allowsNotApplicable": true,
+      "helpText": "Geeignete Belege: Rechtebeschreibung, Vergleich mit und ohne diese Daten, laufender Zugang zu neuen Beobachtungen, Prüfung von Ersatzquellen."
+    },
+    {
+      "id": "C2",
+      "group": "C",
+      "text": "Wie tief ist das Angebot in Prozesse oder physische Ausführung eingebettet?",
+      "anchors": {
+        "low": "Leicht austauschbare Einzelleistung.",
+        "medium": "Integration oder Umsetzung verursacht nachvollziehbaren Aufwand.",
+        "high": "Schwer reproduzierbarer Zugang, Einbettung oder Betriebserfahrung ist wesentlich für den Kundennutzen."
+      },
+      "allowsNotApplicable": true,
+      "helpText": "Geeignete Belege: tatsächliche Prozessabhängigkeiten, Betriebswissen, Gerätezugang, Integrations- und Migrationsaufwand.\nAufwendige Projektarbeit allein beweist weder hohe Marge noch dauerhaften Schutz."
+    },
+    {
+      "id": "C3",
+      "group": "C",
+      "text": "Besteht ein schwer reproduzierbarer fachlicher Ergebnisvorsprung?",
+      "anchors": {
+        "low": "Standardverfahren oder leicht reproduzierbares Ergebnis.",
+        "medium": "Fachlicher Vorsprung vorhanden, aber begrenzt geprüft oder voraussichtlich leicht aufholbar.",
+        "high": "Validierter relevanter Vorsprung mit nachvollziehbaren Hindernissen oder Kosten für seine Reproduktion."
+      },
+      "allowsNotApplicable": true,
+      "helpText": "Geeignete Belege: geeignete Vergleichsaufgaben, unabhängige Prüfung, validiertes Verfahren, dokumentierte Fehler- und Qualitätsdaten.\nDeterminismus oder mathematische Formeln sind allein kein Vorteil; entscheidend sind Richtigkeit, Relevanz und Reproduzierbarkeit."
+    },
+    {
+      "id": "C4",
+      "group": "C",
+      "text": "Ist Vertrauen oder Verantwortungsübernahme tatsächlich kaufentscheidend?",
+      "anchors": {
+        "low": "Allgemeine Behauptung ohne konkrete Leistungsgrundlage.",
+        "medium": "Referenzen, passende Prozesse oder vertragliche Leistungen bestehen.",
+        "high": "Zuverlässigkeit, Qualifikation oder Verantwortungsübernahme ist nachweislich kaufentscheidend und schwer ersetzbar."
+      },
+      "allowsNotApplicable": true,
+      "helpText": "Geeignete Belege: Kundenentscheidungen, Leistungsnachweise, passende Qualifikationen, relevante Vereinbarungen und gelebte Betreuung.\nKeine automatische Höchstwertung durch Regulierung, einen Standort oder einen einzelnen Vertrag."
+    },
+    {
+      "id": "C5",
+      "group": "C",
+      "text": "Besteht ein echter Netzwerkeffekt?",
+      "anchors": {
+        "low": "Kein entsprechender Effekt.",
+        "medium": "Teilnehmer schaffen zusätzlichen Nutzen, sind aber leicht parallel nutzbar oder ersetzbar.",
+        "high": "Der Nutzen hängt wesentlich von einem schwer neu aufzubauenden aktiven Netzwerk ab."
+      },
+      "allowsNotApplicable": true,
+      "helpText": "Geeignete Belege: tatsächliche Transaktionen, wiederkehrende Interaktionen, Netzwerknutzen für einzelne Teilnehmer, Wechselverhalten.\nMehrbenutzerfähigkeit und ein mehrstufiger Freigabeprozess sind allein kein Netzwerkeffekt."
+    },
+    {
+      "id": "C6",
+      "group": "C",
+      "text": "Wie belastbar sind Kundenzugang und Kundenbindung?",
+      "anchors": {
+        "low": "Austauschbarer Zugang und geringe Bindung.",
+        "medium": "Direkter Zugang, erste Wiederholungskäufe oder teilweise Einbettung.",
+        "high": "Wiederholt bestätigte Bindung und schwer reproduzierbarer Zugang zu relevanten Käufern."
+      },
+      "allowsNotApplicable": true,
+      "helpText": "Geeignete Belege: Verlängerungen, Wiederholungskäufe, Vertriebskanäle, beobachtete Bindung trotz Alternativen.\nKundenlisten und laufende Vertragslaufzeiten allein reichen nicht; der Fortbestand der Beziehung muss begründet werden."
+    },
+    {
+      "id": "D1",
+      "group": "D",
+      "text": "Besteht ausreichende Kontrolle über Daten und Arbeitsstände?",
+      "anchors": {
+        "low": "Kritische Daten oder Zustände sind nicht ausreichend zugänglich oder wiederverwendbar.",
+        "medium": "Teilweiser Export; Rechte, Vollständigkeit oder Wiederverwendung sind ungeprüft.",
+        "high": "Benötigte Daten, Zustände und Rechte sind verfügbar; die Wiederverwendung wurde geprüft."
+      },
+      "allowsNotApplicable": false,
+      "helpText": "Geeignete Belege: Export und Wiederherstellung, Rechteübersicht, Datenflussbeschreibung."
+    },
+    {
+      "id": "D2",
+      "group": "D",
+      "text": "Ist ein Anbieter- oder Modellwechsel tatsächlich möglich?",
+      "anchors": {
+        "low": "Keine brauchbare Alternative für den kritischen Prozess.",
+        "medium": "Alternative ist benannt oder technisch angebunden, aber nicht ausreichend geprüft.",
+        "high": "Alternative wurde an relevanten Aufgaben auf Qualität, Kosten und Betrieb geprüft."
+      },
+      "allowsNotApplicable": true,
+      "helpText": "Geeignete Belege: Vergleichsergebnisse, dokumentierter Wechselversuch, bekannte Anpassungskosten.\nEine einheitliche API allein beweist keine fachliche Austauschbarkeit. Zwei Anbieter mit derselben kritischen Infrastruktur sind nicht automatisch unabhängige Ausweichmöglichkeiten."
+    },
+    {
+      "id": "D3",
+      "group": "D",
+      "text": "Wird die Qualität wiederholbar geprüft?",
+      "anchors": {
+        "low": "Beurteilung überwiegend anhand einzelner Beispiele oder subjektiver Eindrücke.",
+        "medium": "Prüfungen vorhanden, aber Lücken bei relevanten Aufgaben oder Fehlermöglichkeiten.",
+        "high": "Repräsentative Aufgaben, klare Anforderungen und wiederholbare Prüfungen bestehen."
+      },
+      "allowsNotApplicable": true,
+      "helpText": "Geeignete Belege: dokumentierte Prüfaufgaben, Akzeptanzgrenzen, Fehlerklassen, Ergebnisse nach Modelländerungen."
+    },
+    {
+      "id": "D4",
+      "group": "D",
+      "text": "Sind Handlungen des Systems angemessen begrenzt und nachvollziehbar?",
+      "anchors": {
+        "low": "Kritische Aktionen sind ohne passende Begrenzung, Freigabe oder Nachvollziehbarkeit möglich.",
+        "medium": "Teilweise Rechte, Freigaben und Protokolle bestehen; relevante Lücken sind offen.",
+        "high": "Rechte, Grenzen, Freigaben und Eingriffsmöglichkeiten passen zum tatsächlichen Einsatz und wurden geprüft."
+      },
+      "allowsNotApplicable": true,
+      "helpText": "Geeignete Belege: überprüfte Berechtigungen, Freigabeabläufe, Protokolle und Eingriffstests.\nDer Prüfbedarf richtet sich nach dem Einsatz: Textentwurf, Empfehlung und eigenständiges Ausführen geschäftlicher Aktionen sind unterschiedliche Fälle."
+    },
+    {
+      "id": "D5",
+      "group": "D",
+      "text": "Ist ein ausreichender Weiterbetrieb und Wiederanlauf vorbereitet?",
+      "anchors": {
+        "low": "Kritischer Ausfall ohne tragfähige Reaktion.",
+        "medium": "Ausweichverfahren sind beschrieben, aber ungeprüft.",
+        "high": "Mindestbetrieb und Wiederanlauf wurden unter relevanten Bedingungen erprobt."
+      },
+      "allowsNotApplicable": true,
+      "helpText": "Geeignete Belege: Wiederanlauftest, manueller Ersatzprozess, tolerierbare Ausfallzeit, Wiederherstellungsdauer."
+    },
+    {
+      "id": "D6",
+      "group": "D",
+      "text": "Kann sich das Unternehmen rechtzeitig anpassen?",
+      "anchors": {
+        "low": "Erforderliche Veränderungen passen nicht zu Ressourcen oder Entscheidungswegen.",
+        "medium": "Anpassung ist grundsätzlich möglich; Zeit, Verantwortung oder Budget bleiben unklar.",
+        "high": "Zuständigkeit, Ressourcen und zeitlicher Handlungsspielraum für relevante Änderungen sind plausibel vorhanden."
+      },
+      "allowsNotApplicable": false,
+      "helpText": "Geeignete Belege: konkrete Verantwortliche, verfügbare Kapazität, Umsetzungsplan und bisherige Änderungserfahrung."
+    }
+  ],
+  "rules": [
+    {
+      "id": "R01",
+      "triggerDescription": "A1 oder A2 offen, strittig oder ohne ausreichenden Beleg",
+      "outputDescription": "Kundenproblem, Käufer beziehungsweise Zahlungsbereitschaft validieren. Bei einer neuen Idee einen passenden kleinen Nachweis planen."
+    },
+    {
+      "id": "R02",
+      "triggerDescription": "A4 offen, mittel oder nicht ausreichend belegt",
+      "outputDescription": "Wirtschaftlichkeit und entscheidende Annahmen prüfen."
+    },
+    {
+      "id": "R03",
+      "triggerDescription": "B1 hoch und B4 hoch",
+      "outputDescription": "Kernleistung ist unter den dokumentierten Bedingungen stark austauschbar. Belegt nur, wenn beide Antworten belegt sind; sonst Hypothese."
+    },
+    {
+      "id": "R04",
+      "triggerDescription": "B2 hoch",
+      "outputDescription": "Abhängigkeit von einer Modellschwäche untersuchen; verbleibenden Kundennutzen benennen."
+    },
+    {
+      "id": "R05",
+      "triggerDescription": "B3 hoch",
+      "outputDescription": "Konkrete Plattformnähe prüfen; Bündelungsszenario bearbeiten. Kein automatisches Urteil über Kundenverlust."
+    },
+    {
+      "id": "R06",
+      "triggerDescription": "R03 aktiv; eine betroffene Bedrohung wurde zugeordnet; keine aktuell belegte Schutzwirkung für diese Bedrohung vorhanden",
+      "outputDescription": "Schutzwirkung ist offen. Fehlt schon die Bedrohungszuordnung, zunächst „Betroffene Bedrohung zuordnen“ ausgeben. Niemals automatisch „kein Schutz vorhanden“ behaupten."
+    },
+    {
+      "id": "R07",
+      "triggerDescription": "B1 und B4 belegt hoch, A3 belegt niedrig, A4 belegt niedrig",
+      "outputDescription": "Neuausrichtung oder Begrenzung weiterer Investitionen prüfen. Keine automatische Entscheidung und keine Schließungsempfehlung."
+    },
+    {
+      "id": "R08",
+      "triggerDescription": "Ein C-Faktor hoch, aber nicht ausreichend belegt",
+      "outputDescription": "Möglichen Vorteil als unbestätigt ausweisen; geeigneten Nachweis vorschlagen."
+    },
+    {
+      "id": "R09",
+      "triggerDescription": "C-Faktor hoch und belegt, aber keine aktuell geprüfte Schutzverknüpfung zu einer konkreten Bedrohung vorhanden",
+      "outputDescription": "Wirkung des Vorteils gegenüber dem betrachteten Risiko präzisieren und belegen."
+    },
+    {
+      "id": "R10",
+      "triggerDescription": "Eine als kritisch markierte D-Frage niedrig",
+      "outputDescription": "Konkrete Betriebsvoraussetzung vor dem betroffenen Einsatz prüfen. Andere Vorteile dürfen den Hinweis nicht ausgleichen."
+    },
+    {
+      "id": "R11",
+      "triggerDescription": "D2 oder D5 mittel",
+      "outputDescription": "Alternative beziehungsweise Ausweichverfahren praktisch erproben."
+    },
+    {
+      "id": "R12",
+      "triggerDescription": "D6 niedrig oder offen",
+      "outputDescription": "Verantwortung, Anpassungszeit und Ressourcen klären."
+    },
+    {
+      "id": "R13",
+      "triggerDescription": "Widerspruch ungelöst oder entscheidende Quelle erneut zu prüfen",
+      "outputDescription": "Fachlichen Konflikt beziehungsweise Aktualität als offene Entscheidungsvoraussetzung anzeigen."
+    },
+    {
+      "id": "R14",
+      "triggerDescription": "Keine inhaltlich bewertete Frage vorhanden",
+      "outputDescription": "„Noch nicht beurteilbar“; keine positive oder negative Geschäftsaussage."
+    },
+    {
+      "id": "R15",
+      "triggerDescription": "A1 oder A2 niedrig",
+      "outputDescription": "Negative Einschätzung zu Problemrelevanz oder Zahlungsbereitschaft prüfen. Bei ausreichendem Beleg als beobachtete negative Evidenz ausweisen, sonst als Hypothese."
+    },
+    {
+      "id": "R16",
+      "triggerDescription": "A4 niedrig",
+      "outputDescription": "Kosten, Erlösmodell oder Leistungsumfang überprüfen. Bei ausreichendem Beleg: Wirtschaftlichkeit unter den dokumentierten Bedingungen nicht tragfähig; sonst Hypothese."
+    }
+  ],
+  "notes": "Eigener methodischer Entwurf für einen Beratungspiloten. Kein kalibriertes Prognosemodell und keine Zertifizierung. Keine Gesamtbewertung oder Überlebenswahrscheinlichkeit."
+}

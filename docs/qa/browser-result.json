@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "viewport": "1440x1000 / 390x844",
+  "externalRequests": [],
+  "pageErrors": [],
+  "checks": [
+    "Fall anlegen",
+    "Persistenz nach Neuladen",
+    "Unbekannt ohne Negativwertung",
+    "R14 ohne inhaltliche Bewertung",
+    "Fiktive Beispiele",
+    "Historischer Stand",
+    "PDF-Ausgabe",
+    "JSON-Download und Kopierimport",
+    "Fehlerhafter Import ohne Datenverlust",
+    "Schmale Ansicht ohne Überlauf",
+    "Tastaturbedienung",
+    "Sichtbarer Speicherfehler und exportierbarer Entwurf"
+  ]
+}

@@ -1,0 +1,3186 @@
+{
+  "format": "ai-resilience-check",
+  "schemaVersion": "1.0",
+  "appVersion": "0.1.0",
+  "exportedAt": "2026-11-06T17:25:48.692Z",
+  "assessments": [
+    {
+      "id": "4587265d-a872-4aa1-8c64-a335eac9471b",
+      "schemaVersion": "1.0",
+      "methodologyVersion": "0.1",
+      "methodologySnapshot": {
+        "version": "0.1",
+        "questions": [
+          {
+            "id": "A1",
+            "group": "A",
+            "text": "Wie konkret und relevant ist das Kundenproblem?",
+            "anchors": {
+              "low": "Kein klarer Käufer oder kein relevanter Nachteil des bisherigen Zustands.",
+              "medium": "Problem und Käufer sind benannt; Häufigkeit oder Bedeutung sind noch ungeklärt.",
+              "high": "Konkreter Käufer, wiederkehrender Bedarf und nachvollziehbarer wirtschaftlicher oder operativer Nachteil."
+            },
+            "allowsNotApplicable": false,
+            "helpText": "Geeignete Belege: dokumentierte Kundenaufgaben, Prozessbeobachtung, Zeitverlust, Fehlerkosten, wiederkehrende konkrete Beschwerden."
+          },
+          {
+            "id": "A2",
+            "group": "A",
+            "text": "Welche Zahlungsbereitschaft besteht?",
+            "anchors": {
+              "low": "Ablehnung oder belegter fehlender Zahlungswille bei den untersuchten Zielkunden.",
+              "medium": "Interesse, Gespräche, unverbindliche Absichtserklärungen oder noch ungeprüfte Budgetannahmen.",
+              "high": "Tatsächliches Kaufverhalten wie bezahlter Pilot, Auftrag, budgetierte Nutzung oder Verlängerung."
+            },
+            "allowsNotApplicable": false,
+            "helpText": "Geeignete Belege: Aufträge, bezahlte Piloten, anonymisierte Umsatzdaten, Verlängerungen, dokumentierte Budgetentscheidung.\nFehlender Nachweis ist „unbekannt“ oder eine mittelstarke Hypothese; er ist nicht automatisch belegte Ablehnung."
+          },
+          {
+            "id": "A3",
+            "group": "A",
+            "text": "Welcher zusätzliche Nutzen besteht gegenüber der besten zugänglichen Alternative?",
+            "anchors": {
+              "low": "Kein für den Kunden relevanter Unterschied.",
+              "medium": "Nutzen ist plausibel oder nur in einem begrenzten Einsatzbereich gezeigt.",
+              "high": "Relevanter Vorteil bei Qualität, Zeit, Kosten oder Ergebnis ist nachvollziehbar demonstriert."
+            },
+            "allowsNotApplicable": false,
+            "helpText": "Geeignete Belege: Vergleich an echten Aufgaben, Kundenmessung, nachprüfbare Zeit- und Qualitätsdaten einschließlich Nacharbeit.\nDie Vergleichsalternative kann auch eine vorhandene Standardsoftware, Eigenleistung oder „nichts ändern“ sein."
+          },
+          {
+            "id": "A4",
+            "group": "A",
+            "text": "Ist die Wirtschaftlichkeit tragfähig?",
+            "anchors": {
+              "low": "Bekannte Kosten übersteigen realistisch erreichbaren Erlös; ein plausibler Verbesserungspfad fehlt.",
+              "medium": "Ein positiver Verlauf ist plausibel, aber wichtige Kosten-, Nachfrage- oder Amortisationsannahmen sind noch offen.",
+              "high": "Relevante Kosten sind berücksichtigt und ein nachvollziehbarer Weg zu einem positiven wirtschaftlichen Ergebnis besteht."
+            },
+            "allowsNotApplicable": false,
+            "helpText": "Geeignete Belege: bestehender Deckungsbeitrag, belastbare Kostenstruktur oder offengelegter Business Case mit validierten Teilannahmen.\nEinführung, Vertrieb, Betreuung, Qualitätssicherung und Anpassungen dürfen nicht stillschweigend als kostenlos gelten."
+          },
+          {
+            "id": "B1",
+            "group": "B",
+            "text": "Wie weit können zugängliche KI-Systeme die bezahlte Kernleistung bereits erbringen?",
+            "anchors": {
+              "low": "Sie übernehmen überwiegend nebensächliche Teilaufgaben.",
+              "medium": "Sie übernehmen wesentliche Teile, aber relevante Lücken bei Ergebnis, Ausführung oder Kundenanforderungen bleiben.",
+              "high": "Sie ermöglichen eine weitgehend gleichwertige Kernleistung innerhalb der betrachteten Kundenanforderungen."
+            },
+            "allowsNotApplicable": false,
+            "helpText": "Geeignete Belege: aktueller Vergleich des vollständigen relevanten Arbeitsablaufs, einschließlich Prüfung, Fehlern und Nacharbeit.\nEin überzeugendes Einzelbeispiel oder die Reproduktion einer Oberfläche genügt nicht als Nachweis der gesamten Leistung."
+          },
+          {
+            "id": "B2",
+            "group": "B",
+            "text": "Wie stark hängt der heutige Vorteil von einer vorübergehenden Modellschwäche ab?",
+            "anchors": {
+              "low": "Der Wert entsteht überwiegend unabhängig von dieser Schwäche.",
+              "medium": "Ein wesentlicher Teil hängt daran, andere wertvolle Bestandteile bleiben bestehen.",
+              "high": "Der Hauptnutzen besteht darin, eine konkrete Modellschwäche zu überbrücken."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: Zerlegung des Produktnutzens, Vergleich mit neueren Modellen, dokumentierter Zusammenhang zwischen Modellverbesserung und verlorenem Produktvorteil.\nDie konkrete Schwäche muss benannt werden; das Etikett „Wrapper“ ist keine Analyse."
+          },
+          {
+            "id": "B3",
+            "group": "B",
+            "text": "Wie nah liegt die Leistung am Angebot und Kundenzugang einer Plattform?",
+            "anchors": {
+              "low": "Wenige erkennbare wirtschaftliche Anreize oder erhebliche zusätzliche Ausführungsanforderungen sprechen derzeit gegen direkte Bündelung.",
+              "medium": "Angrenzende Angebote, passender Kundenzugang und plausible wirtschaftliche Anreize bestehen.",
+              "high": "Konkrete Veröffentlichungen, Integrationen oder vergleichbare bereits angebotene Leistungen zeigen unmittelbare Nähe."
+            },
+            "allowsNotApplicable": false,
+            "helpText": "Geeignete Belege: datierte Produktinformationen, Preis- und Bündelungsmodelle, dokumentierte Integrationen, vertriebliche Überschneidung.\nDer Befund beschreibt beobachtete Nähe. Er ist keine Markteintrittswahrscheinlichkeit. Fehlende öffentliche Informationen rechtfertigen allein keine niedrige Bewertung."
+          },
+          {
+            "id": "B4",
+            "group": "B",
+            "text": "Wie leicht können Kunden tatsächlich wechseln oder die Leistung selbst erbringen?",
+            "anchors": {
+              "low": "Erhebliche, konkret belegte Wechselhindernisse bestehen.",
+              "medium": "Migration, Prüfung, Schulung oder organisatorische Umstellung sind erforderlich.",
+              "high": "Eine brauchbare Alternative ist bereits im Arbeitsablauf verfügbar oder mit geringem Umstellungsaufwand einsetzbar."
+            },
+            "allowsNotApplicable": false,
+            "helpText": "Geeignete Belege: beobachtete Migration, Kundenversuch, Kündigungsgründe, Beschaffungsanforderungen, Aufwandsschätzung mit nachvollziehbarer Grundlage.\nDie Dauer des Kündigungsklicks ist nicht die Dauer eines fachlichen Anbieterwechsels."
+          },
+          {
+            "id": "C1",
+            "group": "C",
+            "text": "Gibt es schwer ersetzbare, nützliche eigene Daten?",
+            "anchors": {
+              "low": "Daten sind leicht zugänglich, ersetzbar oder liefern keinen relevanten zusätzlichen Nutzen.",
+              "medium": "Teilweise exklusiver Zugang oder plausibler Nutzen; Rechte, Qualität oder Wirkung sind noch offen.",
+              "high": "Nutzungsrechte, schwer ersetzbarer Zugang und ein relevanter Ergebnisvorteil sind nachvollziehbar vorhanden."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: Rechtebeschreibung, Vergleich mit und ohne diese Daten, laufender Zugang zu neuen Beobachtungen, Prüfung von Ersatzquellen."
+          },
+          {
+            "id": "C2",
+            "group": "C",
+            "text": "Wie tief ist das Angebot in Prozesse oder physische Ausführung eingebettet?",
+            "anchors": {
+              "low": "Leicht austauschbare Einzelleistung.",
+              "medium": "Integration oder Umsetzung verursacht nachvollziehbaren Aufwand.",
+              "high": "Schwer reproduzierbarer Zugang, Einbettung oder Betriebserfahrung ist wesentlich für den Kundennutzen."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: tatsächliche Prozessabhängigkeiten, Betriebswissen, Gerätezugang, Integrations- und Migrationsaufwand.\nAufwendige Projektarbeit allein beweist weder hohe Marge noch dauerhaften Schutz."
+          },
+          {
+            "id": "C3",
+            "group": "C",
+            "text": "Besteht ein schwer reproduzierbarer fachlicher Ergebnisvorsprung?",
+            "anchors": {
+              "low": "Standardverfahren oder leicht reproduzierbares Ergebnis.",
+              "medium": "Fachlicher Vorsprung vorhanden, aber begrenzt geprüft oder voraussichtlich leicht aufholbar.",
+              "high": "Validierter relevanter Vorsprung mit nachvollziehbaren Hindernissen oder Kosten für seine Reproduktion."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: geeignete Vergleichsaufgaben, unabhängige Prüfung, validiertes Verfahren, dokumentierte Fehler- und Qualitätsdaten.\nDeterminismus oder mathematische Formeln sind allein kein Vorteil; entscheidend sind Richtigkeit, Relevanz und Reproduzierbarkeit."
+          },
+          {
+            "id": "C4",
+            "group": "C",
+            "text": "Ist Vertrauen oder Verantwortungsübernahme tatsächlich kaufentscheidend?",
+            "anchors": {
+              "low": "Allgemeine Behauptung ohne konkrete Leistungsgrundlage.",
+              "medium": "Referenzen, passende Prozesse oder vertragliche Leistungen bestehen.",
+              "high": "Zuverlässigkeit, Qualifikation oder Verantwortungsübernahme ist nachweislich kaufentscheidend und schwer ersetzbar."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: Kundenentscheidungen, Leistungsnachweise, passende Qualifikationen, relevante Vereinbarungen und gelebte Betreuung.\nKeine automatische Höchstwertung durch Regulierung, einen Standort oder einen einzelnen Vertrag."
+          },
+          {
+            "id": "C5",
+            "group": "C",
+            "text": "Besteht ein echter Netzwerkeffekt?",
+            "anchors": {
+              "low": "Kein entsprechender Effekt.",
+              "medium": "Teilnehmer schaffen zusätzlichen Nutzen, sind aber leicht parallel nutzbar oder ersetzbar.",
+              "high": "Der Nutzen hängt wesentlich von einem schwer neu aufzubauenden aktiven Netzwerk ab."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: tatsächliche Transaktionen, wiederkehrende Interaktionen, Netzwerknutzen für einzelne Teilnehmer, Wechselverhalten.\nMehrbenutzerfähigkeit und ein mehrstufiger Freigabeprozess sind allein kein Netzwerkeffekt."
+          },
+          {
+            "id": "C6",
+            "group": "C",
+            "text": "Wie belastbar sind Kundenzugang und Kundenbindung?",
+            "anchors": {
+              "low": "Austauschbarer Zugang und geringe Bindung.",
+              "medium": "Direkter Zugang, erste Wiederholungskäufe oder teilweise Einbettung.",
+              "high": "Wiederholt bestätigte Bindung und schwer reproduzierbarer Zugang zu relevanten Käufern."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: Verlängerungen, Wiederholungskäufe, Vertriebskanäle, beobachtete Bindung trotz Alternativen.\nKundenlisten und laufende Vertragslaufzeiten allein reichen nicht; der Fortbestand der Beziehung muss begründet werden."
+          },
+          {
+            "id": "D1",
+            "group": "D",
+            "text": "Besteht ausreichende Kontrolle über Daten und Arbeitsstände?",
+            "anchors": {
+              "low": "Kritische Daten oder Zustände sind nicht ausreichend zugänglich oder wiederverwendbar.",
+              "medium": "Teilweiser Export; Rechte, Vollständigkeit oder Wiederverwendung sind ungeprüft.",
+              "high": "Benötigte Daten, Zustände und Rechte sind verfügbar; die Wiederverwendung wurde geprüft."
+            },
+            "allowsNotApplicable": false,
+            "helpText": "Geeignete Belege: Export und Wiederherstellung, Rechteübersicht, Datenflussbeschreibung."
+          },
+          {
+            "id": "D2",
+            "group": "D",
+            "text": "Ist ein Anbieter- oder Modellwechsel tatsächlich möglich?",
+            "anchors": {
+              "low": "Keine brauchbare Alternative für den kritischen Prozess.",
+              "medium": "Alternative ist benannt oder technisch angebunden, aber nicht ausreichend geprüft.",
+              "high": "Alternative wurde an relevanten Aufgaben auf Qualität, Kosten und Betrieb geprüft."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: Vergleichsergebnisse, dokumentierter Wechselversuch, bekannte Anpassungskosten.\nEine einheitliche API allein beweist keine fachliche Austauschbarkeit. Zwei Anbieter mit derselben kritischen Infrastruktur sind nicht automatisch unabhängige Ausweichmöglichkeiten."
+          },
+          {
+            "id": "D3",
+            "group": "D",
+            "text": "Wird die Qualität wiederholbar geprüft?",
+            "anchors": {
+              "low": "Beurteilung überwiegend anhand einzelner Beispiele oder subjektiver Eindrücke.",
+              "medium": "Prüfungen vorhanden, aber Lücken bei relevanten Aufgaben oder Fehlermöglichkeiten.",
+              "high": "Repräsentative Aufgaben, klare Anforderungen und wiederholbare Prüfungen bestehen."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: dokumentierte Prüfaufgaben, Akzeptanzgrenzen, Fehlerklassen, Ergebnisse nach Modelländerungen."
+          },
+          {
+            "id": "D4",
+            "group": "D",
+            "text": "Sind Handlungen des Systems angemessen begrenzt und nachvollziehbar?",
+            "anchors": {
+              "low": "Kritische Aktionen sind ohne passende Begrenzung, Freigabe oder Nachvollziehbarkeit möglich.",
+              "medium": "Teilweise Rechte, Freigaben und Protokolle bestehen; relevante Lücken sind offen.",
+              "high": "Rechte, Grenzen, Freigaben und Eingriffsmöglichkeiten passen zum tatsächlichen Einsatz und wurden geprüft."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: überprüfte Berechtigungen, Freigabeabläufe, Protokolle und Eingriffstests.\nDer Prüfbedarf richtet sich nach dem Einsatz: Textentwurf, Empfehlung und eigenständiges Ausführen geschäftlicher Aktionen sind unterschiedliche Fälle."
+          },
+          {
+            "id": "D5",
+            "group": "D",
+            "text": "Ist ein ausreichender Weiterbetrieb und Wiederanlauf vorbereitet?",
+            "anchors": {
+              "low": "Kritischer Ausfall ohne tragfähige Reaktion.",
+              "medium": "Ausweichverfahren sind beschrieben, aber ungeprüft.",
+              "high": "Mindestbetrieb und Wiederanlauf wurden unter relevanten Bedingungen erprobt."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: Wiederanlauftest, manueller Ersatzprozess, tolerierbare Ausfallzeit, Wiederherstellungsdauer."
+          },
+          {
+            "id": "D6",
+            "group": "D",
+            "text": "Kann sich das Unternehmen rechtzeitig anpassen?",
+            "anchors": {
+              "low": "Erforderliche Veränderungen passen nicht zu Ressourcen oder Entscheidungswegen.",
+              "medium": "Anpassung ist grundsätzlich möglich; Zeit, Verantwortung oder Budget bleiben unklar.",
+              "high": "Zuständigkeit, Ressourcen und zeitlicher Handlungsspielraum für relevante Änderungen sind plausibel vorhanden."
+            },
+            "allowsNotApplicable": false,
+            "helpText": "Geeignete Belege: konkrete Verantwortliche, verfügbare Kapazität, Umsetzungsplan und bisherige Änderungserfahrung."
+          }
+        ],
+        "rules": [
+          {
+            "id": "R01",
+            "triggerDescription": "A1 oder A2 offen, strittig oder ohne ausreichenden Beleg",
+            "outputDescription": "Kundenproblem, Käufer beziehungsweise Zahlungsbereitschaft validieren. Bei einer neuen Idee einen passenden kleinen Nachweis planen."
+          },
+          {
+            "id": "R02",
+            "triggerDescription": "A4 offen, mittel oder nicht ausreichend belegt",
+            "outputDescription": "Wirtschaftlichkeit und entscheidende Annahmen prüfen."
+          },
+          {
+            "id": "R03",
+            "triggerDescription": "B1 hoch und B4 hoch",
+            "outputDescription": "Kernleistung ist unter den dokumentierten Bedingungen stark austauschbar. Belegt nur, wenn beide Antworten belegt sind; sonst Hypothese."
+          },
+          {
+            "id": "R04",
+            "triggerDescription": "B2 hoch",
+            "outputDescription": "Abhängigkeit von einer Modellschwäche untersuchen; verbleibenden Kundennutzen benennen."
+          },
+          {
+            "id": "R05",
+            "triggerDescription": "B3 hoch",
+            "outputDescription": "Konkrete Plattformnähe prüfen; Bündelungsszenario bearbeiten. Kein automatisches Urteil über Kundenverlust."
+          },
+          {
+            "id": "R06",
+            "triggerDescription": "R03 aktiv; eine betroffene Bedrohung wurde zugeordnet; keine aktuell belegte Schutzwirkung für diese Bedrohung vorhanden",
+            "outputDescription": "Schutzwirkung ist offen. Fehlt schon die Bedrohungszuordnung, zunächst „Betroffene Bedrohung zuordnen“ ausgeben. Niemals automatisch „kein Schutz vorhanden“ behaupten."
+          },
+          {
+            "id": "R07",
+            "triggerDescription": "B1 und B4 belegt hoch, A3 belegt niedrig, A4 belegt niedrig",
+            "outputDescription": "Neuausrichtung oder Begrenzung weiterer Investitionen prüfen. Keine automatische Entscheidung und keine Schließungsempfehlung."
+          },
+          {
+            "id": "R08",
+            "triggerDescription": "Ein C-Faktor hoch, aber nicht ausreichend belegt",
+            "outputDescription": "Möglichen Vorteil als unbestätigt ausweisen; geeigneten Nachweis vorschlagen."
+          },
+          {
+            "id": "R09",
+            "triggerDescription": "C-Faktor hoch und belegt, aber keine aktuell geprüfte Schutzverknüpfung zu einer konkreten Bedrohung vorhanden",
+            "outputDescription": "Wirkung des Vorteils gegenüber dem betrachteten Risiko präzisieren und belegen."
+          },
+          {
+            "id": "R10",
+            "triggerDescription": "Eine als kritisch markierte D-Frage niedrig",
+            "outputDescription": "Konkrete Betriebsvoraussetzung vor dem betroffenen Einsatz prüfen. Andere Vorteile dürfen den Hinweis nicht ausgleichen."
+          },
+          {
+            "id": "R11",
+            "triggerDescription": "D2 oder D5 mittel",
+            "outputDescription": "Alternative beziehungsweise Ausweichverfahren praktisch erproben."
+          },
+          {
+            "id": "R12",
+            "triggerDescription": "D6 niedrig oder offen",
+            "outputDescription": "Verantwortung, Anpassungszeit und Ressourcen klären."
+          },
+          {
+            "id": "R13",
+            "triggerDescription": "Widerspruch ungelöst oder entscheidende Quelle erneut zu prüfen",
+            "outputDescription": "Fachlichen Konflikt beziehungsweise Aktualität als offene Entscheidungsvoraussetzung anzeigen."
+          },
+          {
+            "id": "R14",
+            "triggerDescription": "Keine inhaltlich bewertete Frage vorhanden",
+            "outputDescription": "„Noch nicht beurteilbar“; keine positive oder negative Geschäftsaussage."
+          },
+          {
+            "id": "R15",
+            "triggerDescription": "A1 oder A2 niedrig",
+            "outputDescription": "Negative Einschätzung zu Problemrelevanz oder Zahlungsbereitschaft prüfen. Bei ausreichendem Beleg als beobachtete negative Evidenz ausweisen, sonst als Hypothese."
+          },
+          {
+            "id": "R16",
+            "triggerDescription": "A4 niedrig",
+            "outputDescription": "Kosten, Erlösmodell oder Leistungsumfang überprüfen. Bei ausreichendem Beleg: Wirtschaftlichkeit unter den dokumentierten Bedingungen nicht tragfähig; sonst Hypothese."
+          }
+        ],
+        "notes": "Eigener methodischer Entwurf für einen Beratungspiloten. Kein kalibriertes Prognosemodell und keine Zertifizierung. Keine Gesamtbewertung oder Überlebenswahrscheinlichkeit."
+      },
+      "evaluationAsOf": "2026-11-06",
+      "createdAt": "2026-11-06T17:25:48.682Z",
+      "updatedAt": "2026-11-06T17:25:48.683Z",
+      "isExample": true,
+      "originAssessmentId": null,
+      "status": "draft",
+      "revisions": [],
+      "content": {
+        "actionPriority": 2,
+        "title": "Allgemeiner Dokumentenassistent",
+        "customerAlias": "Fiktive Organisation",
+        "type": "existing",
+        "decisionQuestion": "Welche Bestandteile sollen wir weiterentwickeln?",
+        "customerSegment": "Fiktive B2B-Kunden",
+        "user": "Fachteam",
+        "economicBuyer": "Bereichsleitung",
+        "customerProblem": "Wiederkehrende Dokumenten- und Analyseaufgaben",
+        "currentAlternative": "Standardsoftware und manuelle Prüfung",
+        "paidOutcome": "Geprüfte, nutzbare Arbeitsergebnisse",
+        "revenueModel": "Fiktive monatliche Nutzung",
+        "costDescription": "Software, Betreuung, Fachprüfung und Vertrieb",
+        "marketContext": "Fiktiver Beratungspilot",
+        "excludedScope": "Keine Aussagen über reale Anbieter oder Kunden",
+        "horizonMonths": 18,
+        "owner": "Moderation",
+        "participants": [
+          "Fachbeitrag",
+          "Dokumentation"
+        ],
+        "valueSteps": [
+          {
+            "id": "b849e844-3b25-4ec5-b55d-cf37bc98ff60",
+            "title": "Datenzugang",
+            "customerValue": "Passende und verlässliche Ergebnisse",
+            "requiredResources": "Fachwissen und passende Nutzungsrechte",
+            "currentAIUse": "Unterstützung bei Entwürfen",
+            "alternative": "Manuelle Bearbeitung",
+            "critical": true,
+            "openQuestions": "Im Pilot überprüfen"
+          },
+          {
+            "id": "3556fe7b-44e5-45a9-bbcb-84ece1519bde",
+            "title": "Erstellung und Analyse",
+            "customerValue": "Passende und verlässliche Ergebnisse",
+            "requiredResources": "Fachwissen und passende Nutzungsrechte",
+            "currentAIUse": "Unterstützung bei Entwürfen",
+            "alternative": "Manuelle Bearbeitung",
+            "critical": true,
+            "openQuestions": "Im Pilot überprüfen"
+          },
+          {
+            "id": "dc55fadf-8bc4-4cba-8eda-1bdfe272f646",
+            "title": "Fachliche Prüfung",
+            "customerValue": "Passende und verlässliche Ergebnisse",
+            "requiredResources": "Fachwissen und passende Nutzungsrechte",
+            "currentAIUse": "Unterstützung bei Entwürfen",
+            "alternative": "Manuelle Bearbeitung",
+            "critical": true,
+            "openQuestions": "Im Pilot überprüfen"
+          },
+          {
+            "id": "ac57e2ba-125b-4d59-ac7f-1ee5f195fd64",
+            "title": "Freigabe und Verantwortung",
+            "customerValue": "Passende und verlässliche Ergebnisse",
+            "requiredResources": "Fachwissen und passende Nutzungsrechte",
+            "currentAIUse": "Unterstützung bei Entwürfen",
+            "alternative": "Manuelle Bearbeitung",
+            "critical": true,
+            "openQuestions": "Im Pilot überprüfen"
+          }
+        ],
+        "answers": {
+          "A1": {
+            "questionId": "A1",
+            "revision": 2,
+            "state": "rated",
+            "rating": "low",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "A2": {
+            "questionId": "A2",
+            "revision": 2,
+            "state": "rated",
+            "rating": "low",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "A3": {
+            "questionId": "A3",
+            "revision": 2,
+            "state": "rated",
+            "rating": "low",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "A4": {
+            "questionId": "A4",
+            "revision": 2,
+            "state": "rated",
+            "rating": "low",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "B1": {
+            "questionId": "B1",
+            "revision": 2,
+            "state": "rated",
+            "rating": "high",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "B2": {
+            "questionId": "B2",
+            "revision": 2,
+            "state": "rated",
+            "rating": "high",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "B3": {
+            "questionId": "B3",
+            "revision": 2,
+            "state": "rated",
+            "rating": "high",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "B4": {
+            "questionId": "B4",
+            "revision": 2,
+            "state": "rated",
+            "rating": "high",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "C1": {
+            "questionId": "C1",
+            "revision": 2,
+            "state": "rated",
+            "rating": "low",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "C2": {
+            "questionId": "C2",
+            "revision": 2,
+            "state": "rated",
+            "rating": "low",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "C3": {
+            "questionId": "C3",
+            "revision": 2,
+            "state": "rated",
+            "rating": "low",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "C4": {
+            "questionId": "C4",
+            "revision": 2,
+            "state": "rated",
+            "rating": "low",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "C5": {
+            "questionId": "C5",
+            "revision": 2,
+            "state": "rated",
+            "rating": "low",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "C6": {
+            "questionId": "C6",
+            "revision": 2,
+            "state": "rated",
+            "rating": "low",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "D1": {
+            "questionId": "D1",
+            "revision": 2,
+            "state": "rated",
+            "rating": "medium",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "D2": {
+            "questionId": "D2",
+            "revision": 2,
+            "state": "rated",
+            "rating": "medium",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "D3": {
+            "questionId": "D3",
+            "revision": 2,
+            "state": "rated",
+            "rating": "medium",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "D4": {
+            "questionId": "D4",
+            "revision": 2,
+            "state": "rated",
+            "rating": "medium",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "D5": {
+            "questionId": "D5",
+            "revision": 2,
+            "state": "rated",
+            "rating": "medium",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "D6": {
+            "questionId": "D6",
+            "revision": 2,
+            "state": "rated",
+            "rating": "medium",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          }
+        },
+        "evidence": [
+          {
+            "id": "11ddb385-d87a-471f-9399-7635bada62b2",
+            "revision": 2,
+            "kind": "Sonstige Quelle",
+            "title": "Fiktive Pilotbeobachtung",
+            "authorOrOrigin": "Fiktives Beispielteam",
+            "url": null,
+            "internalReference": "DEMO / keine reale Quelle",
+            "observation": "Für dieses Beispiel angenommener Vergleich an fiktiven Aufgaben.",
+            "eventDate": null,
+            "recordedAt": "2026-11-06T17:25:48.683Z",
+            "reviewStatus": "reviewed",
+            "reviewedRevision": 2,
+            "reviewedBy": "Beispielmoderation",
+            "reviewedAt": "2026-11-06T17:25:48.683Z",
+            "reviewDueAt": null,
+            "scopeAndLimitations": "Ausschließlich Demonstration, keine reale Marktevidenz.",
+            "synthetic": true
+          }
+        ],
+        "threats": [
+          {
+            "id": "42f454dd-5f6f-4ab7-81e5-19a5e2ab699c",
+            "revision": 1,
+            "category": "Plattformbündelung",
+            "actor": "Fiktive Plattform",
+            "change": "Die Generierung wird im Standardangebot verfügbar.",
+            "valueStepIds": [
+              "3556fe7b-44e5-45a9-bbcb-84ece1519bde"
+            ],
+            "economicMechanism": "Kunden könnten einfache Generierung selbst übernehmen.",
+            "basis": "scenario",
+            "questionIds": [
+              "B1",
+              "B3",
+              "B4"
+            ],
+            "evidenceLinks": []
+          }
+        ],
+        "protections": [],
+        "baseline": null,
+        "scenarios": [
+          {
+            "id": "45056d65-6cc5-44c1-9c40-7a18a5a2c96c",
+            "template": "bundle",
+            "title": "Die Kernfunktion wird gebündelt",
+            "status": "open",
+            "notApplicableReason": "",
+            "assumption": "Ausdrücklich fiktive bedingte Annahme.",
+            "horizonMonths": 18,
+            "valueStepIds": [],
+            "customerReaction": "Kunden vergleichen den verbleibenden Nutzen.",
+            "remainingPaidValue": "Noch zu prüfen",
+            "response": "Mit repräsentativen Aufgaben und Käufern validieren.",
+            "timeAndResourceNeeds": "",
+            "earlyIndicator": "Konkrete Nachfrage nach einer Alternative",
+            "evidenceLinks": [],
+            "financialStress": null,
+            "openQuestions": "",
+            "nextCheck": "Kundenaufgaben und Vergleichsalternative dokumentieren.",
+            "owner": "Moderation",
+            "dueAt": null,
+            "affectedCustomers": "",
+            "affectedRevenueParts": ""
+          },
+          {
+            "id": "38ff3ab9-01d0-4c59-80c2-77683d00e2c6",
+            "template": "competitor",
+            "title": "Ein Branchenwettbewerber nutzt stärkere KI",
+            "status": "open",
+            "notApplicableReason": "",
+            "assumption": "Ausdrücklich fiktive bedingte Annahme.",
+            "horizonMonths": 18,
+            "valueStepIds": [],
+            "customerReaction": "Kunden vergleichen den verbleibenden Nutzen.",
+            "remainingPaidValue": "Noch zu prüfen",
+            "response": "Mit repräsentativen Aufgaben und Käufern validieren.",
+            "timeAndResourceNeeds": "",
+            "earlyIndicator": "Konkrete Nachfrage nach einer Alternative",
+            "evidenceLinks": [],
+            "financialStress": null,
+            "openQuestions": "",
+            "nextCheck": "Kundenaufgaben und Vergleichsalternative dokumentieren.",
+            "owner": "Moderation",
+            "dueAt": null,
+            "affectedCustomers": "",
+            "affectedRevenueParts": ""
+          },
+          {
+            "id": "3aefc6dd-357d-447e-85e4-d4c774336f70",
+            "template": "provider",
+            "title": "Der wichtigste KI-Dienst ist nicht nutzbar",
+            "status": "open",
+            "notApplicableReason": "",
+            "assumption": "Ausdrücklich fiktive bedingte Annahme.",
+            "horizonMonths": 18,
+            "valueStepIds": [],
+            "customerReaction": "Kunden vergleichen den verbleibenden Nutzen.",
+            "remainingPaidValue": "Noch zu prüfen",
+            "response": "Mit repräsentativen Aufgaben und Käufern validieren.",
+            "timeAndResourceNeeds": "",
+            "earlyIndicator": "Konkrete Nachfrage nach einer Alternative",
+            "evidenceLinks": [],
+            "financialStress": null,
+            "openQuestions": "",
+            "nextCheck": "Kundenaufgaben und Vergleichsalternative dokumentieren.",
+            "owner": "Moderation",
+            "dueAt": null,
+            "affectedCustomers": "",
+            "affectedRevenueParts": ""
+          }
+        ],
+        "actions": [
+          {
+            "id": "cd03f4cc-7ce4-4bc1-9e38-13e58da6c861",
+            "title": "Vergleich an Kundenaufgaben durchführen",
+            "description": "Begrenzten Pilot vereinbaren und Beobachtungen dokumentieren.",
+            "expectedEvidence": "Dokumentierte Kaufentscheidung und Ergebnisvergleich",
+            "owner": "Moderation",
+            "dueAt": null,
+            "status": "open",
+            "effortNote": "Im Workshop festlegen",
+            "linkedQuestionIds": [
+              "B1",
+              "B4"
+            ],
+            "linkedRuleIds": [],
+            "linkedFindingIds": [],
+            "linkedThreatIds": [],
+            "linkedScenarioIds": []
+          }
+        ],
+        "decision": {
+          "recommendation": "validate",
+          "rationale": "Entscheidende Grundlagen mit begrenztem Aufwand prüfen.",
+          "conditions": "Alle Angaben dieses Falls sind fiktiv.",
+          "dissent": "",
+          "findingResponses": [],
+          "decidedBy": "Beispielmoderation",
+          "decidedAt": "2026-11-06",
+          "reviewDueAt": null,
+          "provisional": true
+        },
+        "executiveSummary": {
+          "mainThreat": "Bündelung einfacher Funktionen",
+          "evidencedAdvantage": "Noch kein aktuell belegter Vorteil",
+          "keyUnknown": "Verbleibender bezahlter Nutzen im Szenario",
+          "priorityActionIds": [
+            "cd03f4cc-7ce4-4bc1-9e38-13e58da6c861"
+          ]
+        }
+      }
+    },
+    {
+      "id": "ebc63ff4-d25d-4449-9bc7-1d8a1d4c190b",
+      "schemaVersion": "1.0",
+      "methodologyVersion": "0.1",
+      "methodologySnapshot": {
+        "version": "0.1",
+        "questions": [
+          {
+            "id": "A1",
+            "group": "A",
+            "text": "Wie konkret und relevant ist das Kundenproblem?",
+            "anchors": {
+              "low": "Kein klarer Käufer oder kein relevanter Nachteil des bisherigen Zustands.",
+              "medium": "Problem und Käufer sind benannt; Häufigkeit oder Bedeutung sind noch ungeklärt.",
+              "high": "Konkreter Käufer, wiederkehrender Bedarf und nachvollziehbarer wirtschaftlicher oder operativer Nachteil."
+            },
+            "allowsNotApplicable": false,
+            "helpText": "Geeignete Belege: dokumentierte Kundenaufgaben, Prozessbeobachtung, Zeitverlust, Fehlerkosten, wiederkehrende konkrete Beschwerden."
+          },
+          {
+            "id": "A2",
+            "group": "A",
+            "text": "Welche Zahlungsbereitschaft besteht?",
+            "anchors": {
+              "low": "Ablehnung oder belegter fehlender Zahlungswille bei den untersuchten Zielkunden.",
+              "medium": "Interesse, Gespräche, unverbindliche Absichtserklärungen oder noch ungeprüfte Budgetannahmen.",
+              "high": "Tatsächliches Kaufverhalten wie bezahlter Pilot, Auftrag, budgetierte Nutzung oder Verlängerung."
+            },
+            "allowsNotApplicable": false,
+            "helpText": "Geeignete Belege: Aufträge, bezahlte Piloten, anonymisierte Umsatzdaten, Verlängerungen, dokumentierte Budgetentscheidung.\nFehlender Nachweis ist „unbekannt“ oder eine mittelstarke Hypothese; er ist nicht automatisch belegte Ablehnung."
+          },
+          {
+            "id": "A3",
+            "group": "A",
+            "text": "Welcher zusätzliche Nutzen besteht gegenüber der besten zugänglichen Alternative?",
+            "anchors": {
+              "low": "Kein für den Kunden relevanter Unterschied.",
+              "medium": "Nutzen ist plausibel oder nur in einem begrenzten Einsatzbereich gezeigt.",
+              "high": "Relevanter Vorteil bei Qualität, Zeit, Kosten oder Ergebnis ist nachvollziehbar demonstriert."
+            },
+            "allowsNotApplicable": false,
+            "helpText": "Geeignete Belege: Vergleich an echten Aufgaben, Kundenmessung, nachprüfbare Zeit- und Qualitätsdaten einschließlich Nacharbeit.\nDie Vergleichsalternative kann auch eine vorhandene Standardsoftware, Eigenleistung oder „nichts ändern“ sein."
+          },
+          {
+            "id": "A4",
+            "group": "A",
+            "text": "Ist die Wirtschaftlichkeit tragfähig?",
+            "anchors": {
+              "low": "Bekannte Kosten übersteigen realistisch erreichbaren Erlös; ein plausibler Verbesserungspfad fehlt.",
+              "medium": "Ein positiver Verlauf ist plausibel, aber wichtige Kosten-, Nachfrage- oder Amortisationsannahmen sind noch offen.",
+              "high": "Relevante Kosten sind berücksichtigt und ein nachvollziehbarer Weg zu einem positiven wirtschaftlichen Ergebnis besteht."
+            },
+            "allowsNotApplicable": false,
+            "helpText": "Geeignete Belege: bestehender Deckungsbeitrag, belastbare Kostenstruktur oder offengelegter Business Case mit validierten Teilannahmen.\nEinführung, Vertrieb, Betreuung, Qualitätssicherung und Anpassungen dürfen nicht stillschweigend als kostenlos gelten."
+          },
+          {
+            "id": "B1",
+            "group": "B",
+            "text": "Wie weit können zugängliche KI-Systeme die bezahlte Kernleistung bereits erbringen?",
+            "anchors": {
+              "low": "Sie übernehmen überwiegend nebensächliche Teilaufgaben.",
+              "medium": "Sie übernehmen wesentliche Teile, aber relevante Lücken bei Ergebnis, Ausführung oder Kundenanforderungen bleiben.",
+              "high": "Sie ermöglichen eine weitgehend gleichwertige Kernleistung innerhalb der betrachteten Kundenanforderungen."
+            },
+            "allowsNotApplicable": false,
+            "helpText": "Geeignete Belege: aktueller Vergleich des vollständigen relevanten Arbeitsablaufs, einschließlich Prüfung, Fehlern und Nacharbeit.\nEin überzeugendes Einzelbeispiel oder die Reproduktion einer Oberfläche genügt nicht als Nachweis der gesamten Leistung."
+          },
+          {
+            "id": "B2",
+            "group": "B",
+            "text": "Wie stark hängt der heutige Vorteil von einer vorübergehenden Modellschwäche ab?",
+            "anchors": {
+              "low": "Der Wert entsteht überwiegend unabhängig von dieser Schwäche.",
+              "medium": "Ein wesentlicher Teil hängt daran, andere wertvolle Bestandteile bleiben bestehen.",
+              "high": "Der Hauptnutzen besteht darin, eine konkrete Modellschwäche zu überbrücken."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: Zerlegung des Produktnutzens, Vergleich mit neueren Modellen, dokumentierter Zusammenhang zwischen Modellverbesserung und verlorenem Produktvorteil.\nDie konkrete Schwäche muss benannt werden; das Etikett „Wrapper“ ist keine Analyse."
+          },
+          {
+            "id": "B3",
+            "group": "B",
+            "text": "Wie nah liegt die Leistung am Angebot und Kundenzugang einer Plattform?",
+            "anchors": {
+              "low": "Wenige erkennbare wirtschaftliche Anreize oder erhebliche zusätzliche Ausführungsanforderungen sprechen derzeit gegen direkte Bündelung.",
+              "medium": "Angrenzende Angebote, passender Kundenzugang und plausible wirtschaftliche Anreize bestehen.",
+              "high": "Konkrete Veröffentlichungen, Integrationen oder vergleichbare bereits angebotene Leistungen zeigen unmittelbare Nähe."
+            },
+            "allowsNotApplicable": false,
+            "helpText": "Geeignete Belege: datierte Produktinformationen, Preis- und Bündelungsmodelle, dokumentierte Integrationen, vertriebliche Überschneidung.\nDer Befund beschreibt beobachtete Nähe. Er ist keine Markteintrittswahrscheinlichkeit. Fehlende öffentliche Informationen rechtfertigen allein keine niedrige Bewertung."
+          },
+          {
+            "id": "B4",
+            "group": "B",
+            "text": "Wie leicht können Kunden tatsächlich wechseln oder die Leistung selbst erbringen?",
+            "anchors": {
+              "low": "Erhebliche, konkret belegte Wechselhindernisse bestehen.",
+              "medium": "Migration, Prüfung, Schulung oder organisatorische Umstellung sind erforderlich.",
+              "high": "Eine brauchbare Alternative ist bereits im Arbeitsablauf verfügbar oder mit geringem Umstellungsaufwand einsetzbar."
+            },
+            "allowsNotApplicable": false,
+            "helpText": "Geeignete Belege: beobachtete Migration, Kundenversuch, Kündigungsgründe, Beschaffungsanforderungen, Aufwandsschätzung mit nachvollziehbarer Grundlage.\nDie Dauer des Kündigungsklicks ist nicht die Dauer eines fachlichen Anbieterwechsels."
+          },
+          {
+            "id": "C1",
+            "group": "C",
+            "text": "Gibt es schwer ersetzbare, nützliche eigene Daten?",
+            "anchors": {
+              "low": "Daten sind leicht zugänglich, ersetzbar oder liefern keinen relevanten zusätzlichen Nutzen.",
+              "medium": "Teilweise exklusiver Zugang oder plausibler Nutzen; Rechte, Qualität oder Wirkung sind noch offen.",
+              "high": "Nutzungsrechte, schwer ersetzbarer Zugang und ein relevanter Ergebnisvorteil sind nachvollziehbar vorhanden."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: Rechtebeschreibung, Vergleich mit und ohne diese Daten, laufender Zugang zu neuen Beobachtungen, Prüfung von Ersatzquellen."
+          },
+          {
+            "id": "C2",
+            "group": "C",
+            "text": "Wie tief ist das Angebot in Prozesse oder physische Ausführung eingebettet?",
+            "anchors": {
+              "low": "Leicht austauschbare Einzelleistung.",
+              "medium": "Integration oder Umsetzung verursacht nachvollziehbaren Aufwand.",
+              "high": "Schwer reproduzierbarer Zugang, Einbettung oder Betriebserfahrung ist wesentlich für den Kundennutzen."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: tatsächliche Prozessabhängigkeiten, Betriebswissen, Gerätezugang, Integrations- und Migrationsaufwand.\nAufwendige Projektarbeit allein beweist weder hohe Marge noch dauerhaften Schutz."
+          },
+          {
+            "id": "C3",
+            "group": "C",
+            "text": "Besteht ein schwer reproduzierbarer fachlicher Ergebnisvorsprung?",
+            "anchors": {
+              "low": "Standardverfahren oder leicht reproduzierbares Ergebnis.",
+              "medium": "Fachlicher Vorsprung vorhanden, aber begrenzt geprüft oder voraussichtlich leicht aufholbar.",
+              "high": "Validierter relevanter Vorsprung mit nachvollziehbaren Hindernissen oder Kosten für seine Reproduktion."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: geeignete Vergleichsaufgaben, unabhängige Prüfung, validiertes Verfahren, dokumentierte Fehler- und Qualitätsdaten.\nDeterminismus oder mathematische Formeln sind allein kein Vorteil; entscheidend sind Richtigkeit, Relevanz und Reproduzierbarkeit."
+          },
+          {
+            "id": "C4",
+            "group": "C",
+            "text": "Ist Vertrauen oder Verantwortungsübernahme tatsächlich kaufentscheidend?",
+            "anchors": {
+              "low": "Allgemeine Behauptung ohne konkrete Leistungsgrundlage.",
+              "medium": "Referenzen, passende Prozesse oder vertragliche Leistungen bestehen.",
+              "high": "Zuverlässigkeit, Qualifikation oder Verantwortungsübernahme ist nachweislich kaufentscheidend und schwer ersetzbar."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: Kundenentscheidungen, Leistungsnachweise, passende Qualifikationen, relevante Vereinbarungen und gelebte Betreuung.\nKeine automatische Höchstwertung durch Regulierung, einen Standort oder einen einzelnen Vertrag."
+          },
+          {
+            "id": "C5",
+            "group": "C",
+            "text": "Besteht ein echter Netzwerkeffekt?",
+            "anchors": {
+              "low": "Kein entsprechender Effekt.",
+              "medium": "Teilnehmer schaffen zusätzlichen Nutzen, sind aber leicht parallel nutzbar oder ersetzbar.",
+              "high": "Der Nutzen hängt wesentlich von einem schwer neu aufzubauenden aktiven Netzwerk ab."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: tatsächliche Transaktionen, wiederkehrende Interaktionen, Netzwerknutzen für einzelne Teilnehmer, Wechselverhalten.\nMehrbenutzerfähigkeit und ein mehrstufiger Freigabeprozess sind allein kein Netzwerkeffekt."
+          },
+          {
+            "id": "C6",
+            "group": "C",
+            "text": "Wie belastbar sind Kundenzugang und Kundenbindung?",
+            "anchors": {
+              "low": "Austauschbarer Zugang und geringe Bindung.",
+              "medium": "Direkter Zugang, erste Wiederholungskäufe oder teilweise Einbettung.",
+              "high": "Wiederholt bestätigte Bindung und schwer reproduzierbarer Zugang zu relevanten Käufern."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: Verlängerungen, Wiederholungskäufe, Vertriebskanäle, beobachtete Bindung trotz Alternativen.\nKundenlisten und laufende Vertragslaufzeiten allein reichen nicht; der Fortbestand der Beziehung muss begründet werden."
+          },
+          {
+            "id": "D1",
+            "group": "D",
+            "text": "Besteht ausreichende Kontrolle über Daten und Arbeitsstände?",
+            "anchors": {
+              "low": "Kritische Daten oder Zustände sind nicht ausreichend zugänglich oder wiederverwendbar.",
+              "medium": "Teilweiser Export; Rechte, Vollständigkeit oder Wiederverwendung sind ungeprüft.",
+              "high": "Benötigte Daten, Zustände und Rechte sind verfügbar; die Wiederverwendung wurde geprüft."
+            },
+            "allowsNotApplicable": false,
+            "helpText": "Geeignete Belege: Export und Wiederherstellung, Rechteübersicht, Datenflussbeschreibung."
+          },
+          {
+            "id": "D2",
+            "group": "D",
+            "text": "Ist ein Anbieter- oder Modellwechsel tatsächlich möglich?",
+            "anchors": {
+              "low": "Keine brauchbare Alternative für den kritischen Prozess.",
+              "medium": "Alternative ist benannt oder technisch angebunden, aber nicht ausreichend geprüft.",
+              "high": "Alternative wurde an relevanten Aufgaben auf Qualität, Kosten und Betrieb geprüft."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: Vergleichsergebnisse, dokumentierter Wechselversuch, bekannte Anpassungskosten.\nEine einheitliche API allein beweist keine fachliche Austauschbarkeit. Zwei Anbieter mit derselben kritischen Infrastruktur sind nicht automatisch unabhängige Ausweichmöglichkeiten."
+          },
+          {
+            "id": "D3",
+            "group": "D",
+            "text": "Wird die Qualität wiederholbar geprüft?",
+            "anchors": {
+              "low": "Beurteilung überwiegend anhand einzelner Beispiele oder subjektiver Eindrücke.",
+              "medium": "Prüfungen vorhanden, aber Lücken bei relevanten Aufgaben oder Fehlermöglichkeiten.",
+              "high": "Repräsentative Aufgaben, klare Anforderungen und wiederholbare Prüfungen bestehen."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: dokumentierte Prüfaufgaben, Akzeptanzgrenzen, Fehlerklassen, Ergebnisse nach Modelländerungen."
+          },
+          {
+            "id": "D4",
+            "group": "D",
+            "text": "Sind Handlungen des Systems angemessen begrenzt und nachvollziehbar?",
+            "anchors": {
+              "low": "Kritische Aktionen sind ohne passende Begrenzung, Freigabe oder Nachvollziehbarkeit möglich.",
+              "medium": "Teilweise Rechte, Freigaben und Protokolle bestehen; relevante Lücken sind offen.",
+              "high": "Rechte, Grenzen, Freigaben und Eingriffsmöglichkeiten passen zum tatsächlichen Einsatz und wurden geprüft."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: überprüfte Berechtigungen, Freigabeabläufe, Protokolle und Eingriffstests.\nDer Prüfbedarf richtet sich nach dem Einsatz: Textentwurf, Empfehlung und eigenständiges Ausführen geschäftlicher Aktionen sind unterschiedliche Fälle."
+          },
+          {
+            "id": "D5",
+            "group": "D",
+            "text": "Ist ein ausreichender Weiterbetrieb und Wiederanlauf vorbereitet?",
+            "anchors": {
+              "low": "Kritischer Ausfall ohne tragfähige Reaktion.",
+              "medium": "Ausweichverfahren sind beschrieben, aber ungeprüft.",
+              "high": "Mindestbetrieb und Wiederanlauf wurden unter relevanten Bedingungen erprobt."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: Wiederanlauftest, manueller Ersatzprozess, tolerierbare Ausfallzeit, Wiederherstellungsdauer."
+          },
+          {
+            "id": "D6",
+            "group": "D",
+            "text": "Kann sich das Unternehmen rechtzeitig anpassen?",
+            "anchors": {
+              "low": "Erforderliche Veränderungen passen nicht zu Ressourcen oder Entscheidungswegen.",
+              "medium": "Anpassung ist grundsätzlich möglich; Zeit, Verantwortung oder Budget bleiben unklar.",
+              "high": "Zuständigkeit, Ressourcen und zeitlicher Handlungsspielraum für relevante Änderungen sind plausibel vorhanden."
+            },
+            "allowsNotApplicable": false,
+            "helpText": "Geeignete Belege: konkrete Verantwortliche, verfügbare Kapazität, Umsetzungsplan und bisherige Änderungserfahrung."
+          }
+        ],
+        "rules": [
+          {
+            "id": "R01",
+            "triggerDescription": "A1 oder A2 offen, strittig oder ohne ausreichenden Beleg",
+            "outputDescription": "Kundenproblem, Käufer beziehungsweise Zahlungsbereitschaft validieren. Bei einer neuen Idee einen passenden kleinen Nachweis planen."
+          },
+          {
+            "id": "R02",
+            "triggerDescription": "A4 offen, mittel oder nicht ausreichend belegt",
+            "outputDescription": "Wirtschaftlichkeit und entscheidende Annahmen prüfen."
+          },
+          {
+            "id": "R03",
+            "triggerDescription": "B1 hoch und B4 hoch",
+            "outputDescription": "Kernleistung ist unter den dokumentierten Bedingungen stark austauschbar. Belegt nur, wenn beide Antworten belegt sind; sonst Hypothese."
+          },
+          {
+            "id": "R04",
+            "triggerDescription": "B2 hoch",
+            "outputDescription": "Abhängigkeit von einer Modellschwäche untersuchen; verbleibenden Kundennutzen benennen."
+          },
+          {
+            "id": "R05",
+            "triggerDescription": "B3 hoch",
+            "outputDescription": "Konkrete Plattformnähe prüfen; Bündelungsszenario bearbeiten. Kein automatisches Urteil über Kundenverlust."
+          },
+          {
+            "id": "R06",
+            "triggerDescription": "R03 aktiv; eine betroffene Bedrohung wurde zugeordnet; keine aktuell belegte Schutzwirkung für diese Bedrohung vorhanden",
+            "outputDescription": "Schutzwirkung ist offen. Fehlt schon die Bedrohungszuordnung, zunächst „Betroffene Bedrohung zuordnen“ ausgeben. Niemals automatisch „kein Schutz vorhanden“ behaupten."
+          },
+          {
+            "id": "R07",
+            "triggerDescription": "B1 und B4 belegt hoch, A3 belegt niedrig, A4 belegt niedrig",
+            "outputDescription": "Neuausrichtung oder Begrenzung weiterer Investitionen prüfen. Keine automatische Entscheidung und keine Schließungsempfehlung."
+          },
+          {
+            "id": "R08",
+            "triggerDescription": "Ein C-Faktor hoch, aber nicht ausreichend belegt",
+            "outputDescription": "Möglichen Vorteil als unbestätigt ausweisen; geeigneten Nachweis vorschlagen."
+          },
+          {
+            "id": "R09",
+            "triggerDescription": "C-Faktor hoch und belegt, aber keine aktuell geprüfte Schutzverknüpfung zu einer konkreten Bedrohung vorhanden",
+            "outputDescription": "Wirkung des Vorteils gegenüber dem betrachteten Risiko präzisieren und belegen."
+          },
+          {
+            "id": "R10",
+            "triggerDescription": "Eine als kritisch markierte D-Frage niedrig",
+            "outputDescription": "Konkrete Betriebsvoraussetzung vor dem betroffenen Einsatz prüfen. Andere Vorteile dürfen den Hinweis nicht ausgleichen."
+          },
+          {
+            "id": "R11",
+            "triggerDescription": "D2 oder D5 mittel",
+            "outputDescription": "Alternative beziehungsweise Ausweichverfahren praktisch erproben."
+          },
+          {
+            "id": "R12",
+            "triggerDescription": "D6 niedrig oder offen",
+            "outputDescription": "Verantwortung, Anpassungszeit und Ressourcen klären."
+          },
+          {
+            "id": "R13",
+            "triggerDescription": "Widerspruch ungelöst oder entscheidende Quelle erneut zu prüfen",
+            "outputDescription": "Fachlichen Konflikt beziehungsweise Aktualität als offene Entscheidungsvoraussetzung anzeigen."
+          },
+          {
+            "id": "R14",
+            "triggerDescription": "Keine inhaltlich bewertete Frage vorhanden",
+            "outputDescription": "„Noch nicht beurteilbar“; keine positive oder negative Geschäftsaussage."
+          },
+          {
+            "id": "R15",
+            "triggerDescription": "A1 oder A2 niedrig",
+            "outputDescription": "Negative Einschätzung zu Problemrelevanz oder Zahlungsbereitschaft prüfen. Bei ausreichendem Beleg als beobachtete negative Evidenz ausweisen, sonst als Hypothese."
+          },
+          {
+            "id": "R16",
+            "triggerDescription": "A4 niedrig",
+            "outputDescription": "Kosten, Erlösmodell oder Leistungsumfang überprüfen. Bei ausreichendem Beleg: Wirtschaftlichkeit unter den dokumentierten Bedingungen nicht tragfähig; sonst Hypothese."
+          }
+        ],
+        "notes": "Eigener methodischer Entwurf für einen Beratungspiloten. Kein kalibriertes Prognosemodell und keine Zertifizierung. Keine Gesamtbewertung oder Überlebenswahrscheinlichkeit."
+      },
+      "evaluationAsOf": "2026-11-06",
+      "createdAt": "2026-11-06T17:25:48.683Z",
+      "updatedAt": "2026-11-06T17:25:48.684Z",
+      "isExample": true,
+      "originAssessmentId": null,
+      "status": "draft",
+      "revisions": [],
+      "content": {
+        "actionPriority": 2,
+        "title": "Dokumentenprozess mit fachlicher Prüfung",
+        "customerAlias": "Fiktive Organisation",
+        "type": "existing",
+        "decisionQuestion": "Welche Bestandteile sollen wir weiterentwickeln?",
+        "customerSegment": "Fiktive B2B-Kunden",
+        "user": "Fachteam",
+        "economicBuyer": "Bereichsleitung",
+        "customerProblem": "Wiederkehrende Dokumenten- und Analyseaufgaben",
+        "currentAlternative": "Standardsoftware und manuelle Prüfung",
+        "paidOutcome": "Geprüfte, nutzbare Arbeitsergebnisse",
+        "revenueModel": "Fiktive monatliche Nutzung",
+        "costDescription": "Software, Betreuung, Fachprüfung und Vertrieb",
+        "marketContext": "Fiktiver Beratungspilot",
+        "excludedScope": "Keine Aussagen über reale Anbieter oder Kunden",
+        "horizonMonths": 18,
+        "owner": "Moderation",
+        "participants": [
+          "Fachbeitrag",
+          "Dokumentation"
+        ],
+        "valueSteps": [
+          {
+            "id": "ad618f2d-3f52-410a-8b6a-96072dc43f44",
+            "title": "Datenzugang",
+            "customerValue": "Passende und verlässliche Ergebnisse",
+            "requiredResources": "Fachwissen und passende Nutzungsrechte",
+            "currentAIUse": "Unterstützung bei Entwürfen",
+            "alternative": "Manuelle Bearbeitung",
+            "critical": true,
+            "openQuestions": "Im Pilot überprüfen"
+          },
+          {
+            "id": "d0f80662-57b5-49d5-949f-c33ba1a1d2fb",
+            "title": "Erstellung und Analyse",
+            "customerValue": "Passende und verlässliche Ergebnisse",
+            "requiredResources": "Fachwissen und passende Nutzungsrechte",
+            "currentAIUse": "Unterstützung bei Entwürfen",
+            "alternative": "Manuelle Bearbeitung",
+            "critical": true,
+            "openQuestions": "Im Pilot überprüfen"
+          },
+          {
+            "id": "4e2e6272-f5c9-49a9-9a56-c300b14be1d6",
+            "title": "Fachliche Prüfung",
+            "customerValue": "Passende und verlässliche Ergebnisse",
+            "requiredResources": "Fachwissen und passende Nutzungsrechte",
+            "currentAIUse": "Unterstützung bei Entwürfen",
+            "alternative": "Manuelle Bearbeitung",
+            "critical": true,
+            "openQuestions": "Im Pilot überprüfen"
+          },
+          {
+            "id": "eb5c2a0c-8934-492d-8ab9-6dc9104daccc",
+            "title": "Freigabe und Verantwortung",
+            "customerValue": "Passende und verlässliche Ergebnisse",
+            "requiredResources": "Fachwissen und passende Nutzungsrechte",
+            "currentAIUse": "Unterstützung bei Entwürfen",
+            "alternative": "Manuelle Bearbeitung",
+            "critical": true,
+            "openQuestions": "Im Pilot überprüfen"
+          }
+        ],
+        "answers": {
+          "A1": {
+            "questionId": "A1",
+            "revision": 2,
+            "state": "rated",
+            "rating": "high",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "substantiated",
+            "evidenceLinks": [
+              {
+                "evidenceId": "d78c25d1-02fb-4b1e-91f5-b798f2da36d3",
+                "relation": "supports",
+                "explanation": "Angenommener Vergleich trägt die dargestellte Beispielaussage."
+              }
+            ],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": {
+              "subjectRevision": 2,
+              "reviewedBy": "Beispielmoderation",
+              "reviewedAt": "2026-11-06",
+              "evidenceRevisions": {
+                "d78c25d1-02fb-4b1e-91f5-b798f2da36d3": 2
+              }
+            },
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "A2": {
+            "questionId": "A2",
+            "revision": 2,
+            "state": "rated",
+            "rating": "high",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "substantiated",
+            "evidenceLinks": [
+              {
+                "evidenceId": "d78c25d1-02fb-4b1e-91f5-b798f2da36d3",
+                "relation": "supports",
+                "explanation": "Angenommener Vergleich trägt die dargestellte Beispielaussage."
+              }
+            ],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": {
+              "subjectRevision": 2,
+              "reviewedBy": "Beispielmoderation",
+              "reviewedAt": "2026-11-06",
+              "evidenceRevisions": {
+                "d78c25d1-02fb-4b1e-91f5-b798f2da36d3": 2
+              }
+            },
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "A3": {
+            "questionId": "A3",
+            "revision": 2,
+            "state": "rated",
+            "rating": "high",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "substantiated",
+            "evidenceLinks": [
+              {
+                "evidenceId": "d78c25d1-02fb-4b1e-91f5-b798f2da36d3",
+                "relation": "supports",
+                "explanation": "Angenommener Vergleich trägt die dargestellte Beispielaussage."
+              }
+            ],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": {
+              "subjectRevision": 2,
+              "reviewedBy": "Beispielmoderation",
+              "reviewedAt": "2026-11-06",
+              "evidenceRevisions": {
+                "d78c25d1-02fb-4b1e-91f5-b798f2da36d3": 2
+              }
+            },
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "A4": {
+            "questionId": "A4",
+            "revision": 2,
+            "state": "rated",
+            "rating": "high",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "substantiated",
+            "evidenceLinks": [
+              {
+                "evidenceId": "d78c25d1-02fb-4b1e-91f5-b798f2da36d3",
+                "relation": "supports",
+                "explanation": "Angenommener Vergleich trägt die dargestellte Beispielaussage."
+              }
+            ],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": {
+              "subjectRevision": 2,
+              "reviewedBy": "Beispielmoderation",
+              "reviewedAt": "2026-11-06",
+              "evidenceRevisions": {
+                "d78c25d1-02fb-4b1e-91f5-b798f2da36d3": 2
+              }
+            },
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "B1": {
+            "questionId": "B1",
+            "revision": 2,
+            "state": "rated",
+            "rating": "medium",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "substantiated",
+            "evidenceLinks": [
+              {
+                "evidenceId": "d78c25d1-02fb-4b1e-91f5-b798f2da36d3",
+                "relation": "supports",
+                "explanation": "Angenommener Vergleich trägt die dargestellte Beispielaussage."
+              }
+            ],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": {
+              "subjectRevision": 2,
+              "reviewedBy": "Beispielmoderation",
+              "reviewedAt": "2026-11-06",
+              "evidenceRevisions": {
+                "d78c25d1-02fb-4b1e-91f5-b798f2da36d3": 2
+              }
+            },
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "B2": {
+            "questionId": "B2",
+            "revision": 2,
+            "state": "rated",
+            "rating": "medium",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "substantiated",
+            "evidenceLinks": [
+              {
+                "evidenceId": "d78c25d1-02fb-4b1e-91f5-b798f2da36d3",
+                "relation": "supports",
+                "explanation": "Angenommener Vergleich trägt die dargestellte Beispielaussage."
+              }
+            ],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": {
+              "subjectRevision": 2,
+              "reviewedBy": "Beispielmoderation",
+              "reviewedAt": "2026-11-06",
+              "evidenceRevisions": {
+                "d78c25d1-02fb-4b1e-91f5-b798f2da36d3": 2
+              }
+            },
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "B3": {
+            "questionId": "B3",
+            "revision": 2,
+            "state": "rated",
+            "rating": "medium",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "substantiated",
+            "evidenceLinks": [
+              {
+                "evidenceId": "d78c25d1-02fb-4b1e-91f5-b798f2da36d3",
+                "relation": "supports",
+                "explanation": "Angenommener Vergleich trägt die dargestellte Beispielaussage."
+              }
+            ],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": {
+              "subjectRevision": 2,
+              "reviewedBy": "Beispielmoderation",
+              "reviewedAt": "2026-11-06",
+              "evidenceRevisions": {
+                "d78c25d1-02fb-4b1e-91f5-b798f2da36d3": 2
+              }
+            },
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "B4": {
+            "questionId": "B4",
+            "revision": 2,
+            "state": "rated",
+            "rating": "medium",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "substantiated",
+            "evidenceLinks": [
+              {
+                "evidenceId": "d78c25d1-02fb-4b1e-91f5-b798f2da36d3",
+                "relation": "supports",
+                "explanation": "Angenommener Vergleich trägt die dargestellte Beispielaussage."
+              }
+            ],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": {
+              "subjectRevision": 2,
+              "reviewedBy": "Beispielmoderation",
+              "reviewedAt": "2026-11-06",
+              "evidenceRevisions": {
+                "d78c25d1-02fb-4b1e-91f5-b798f2da36d3": 2
+              }
+            },
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "C1": {
+            "questionId": "C1",
+            "revision": 2,
+            "state": "rated",
+            "rating": "high",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "substantiated",
+            "evidenceLinks": [
+              {
+                "evidenceId": "d78c25d1-02fb-4b1e-91f5-b798f2da36d3",
+                "relation": "supports",
+                "explanation": "Angenommener Vergleich trägt die dargestellte Beispielaussage."
+              }
+            ],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": {
+              "subjectRevision": 2,
+              "reviewedBy": "Beispielmoderation",
+              "reviewedAt": "2026-11-06",
+              "evidenceRevisions": {
+                "d78c25d1-02fb-4b1e-91f5-b798f2da36d3": 2
+              }
+            },
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "C2": {
+            "questionId": "C2",
+            "revision": 2,
+            "state": "rated",
+            "rating": "high",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "substantiated",
+            "evidenceLinks": [
+              {
+                "evidenceId": "d78c25d1-02fb-4b1e-91f5-b798f2da36d3",
+                "relation": "supports",
+                "explanation": "Angenommener Vergleich trägt die dargestellte Beispielaussage."
+              }
+            ],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": {
+              "subjectRevision": 2,
+              "reviewedBy": "Beispielmoderation",
+              "reviewedAt": "2026-11-06",
+              "evidenceRevisions": {
+                "d78c25d1-02fb-4b1e-91f5-b798f2da36d3": 2
+              }
+            },
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "C3": {
+            "questionId": "C3",
+            "revision": 2,
+            "state": "rated",
+            "rating": "high",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "substantiated",
+            "evidenceLinks": [
+              {
+                "evidenceId": "d78c25d1-02fb-4b1e-91f5-b798f2da36d3",
+                "relation": "supports",
+                "explanation": "Angenommener Vergleich trägt die dargestellte Beispielaussage."
+              }
+            ],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": {
+              "subjectRevision": 2,
+              "reviewedBy": "Beispielmoderation",
+              "reviewedAt": "2026-11-06",
+              "evidenceRevisions": {
+                "d78c25d1-02fb-4b1e-91f5-b798f2da36d3": 2
+              }
+            },
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "C4": {
+            "questionId": "C4",
+            "revision": 2,
+            "state": "rated",
+            "rating": "high",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "substantiated",
+            "evidenceLinks": [
+              {
+                "evidenceId": "d78c25d1-02fb-4b1e-91f5-b798f2da36d3",
+                "relation": "supports",
+                "explanation": "Angenommener Vergleich trägt die dargestellte Beispielaussage."
+              }
+            ],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": {
+              "subjectRevision": 2,
+              "reviewedBy": "Beispielmoderation",
+              "reviewedAt": "2026-11-06",
+              "evidenceRevisions": {
+                "d78c25d1-02fb-4b1e-91f5-b798f2da36d3": 2
+              }
+            },
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "C5": {
+            "questionId": "C5",
+            "revision": 2,
+            "state": "rated",
+            "rating": "high",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "substantiated",
+            "evidenceLinks": [
+              {
+                "evidenceId": "d78c25d1-02fb-4b1e-91f5-b798f2da36d3",
+                "relation": "supports",
+                "explanation": "Angenommener Vergleich trägt die dargestellte Beispielaussage."
+              }
+            ],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": {
+              "subjectRevision": 2,
+              "reviewedBy": "Beispielmoderation",
+              "reviewedAt": "2026-11-06",
+              "evidenceRevisions": {
+                "d78c25d1-02fb-4b1e-91f5-b798f2da36d3": 2
+              }
+            },
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "C6": {
+            "questionId": "C6",
+            "revision": 2,
+            "state": "rated",
+            "rating": "high",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "substantiated",
+            "evidenceLinks": [
+              {
+                "evidenceId": "d78c25d1-02fb-4b1e-91f5-b798f2da36d3",
+                "relation": "supports",
+                "explanation": "Angenommener Vergleich trägt die dargestellte Beispielaussage."
+              }
+            ],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": {
+              "subjectRevision": 2,
+              "reviewedBy": "Beispielmoderation",
+              "reviewedAt": "2026-11-06",
+              "evidenceRevisions": {
+                "d78c25d1-02fb-4b1e-91f5-b798f2da36d3": 2
+              }
+            },
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "D1": {
+            "questionId": "D1",
+            "revision": 2,
+            "state": "rated",
+            "rating": "high",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "substantiated",
+            "evidenceLinks": [
+              {
+                "evidenceId": "d78c25d1-02fb-4b1e-91f5-b798f2da36d3",
+                "relation": "supports",
+                "explanation": "Angenommener Vergleich trägt die dargestellte Beispielaussage."
+              }
+            ],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": {
+              "subjectRevision": 2,
+              "reviewedBy": "Beispielmoderation",
+              "reviewedAt": "2026-11-06",
+              "evidenceRevisions": {
+                "d78c25d1-02fb-4b1e-91f5-b798f2da36d3": 2
+              }
+            },
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "D2": {
+            "questionId": "D2",
+            "revision": 2,
+            "state": "rated",
+            "rating": "high",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "substantiated",
+            "evidenceLinks": [
+              {
+                "evidenceId": "d78c25d1-02fb-4b1e-91f5-b798f2da36d3",
+                "relation": "supports",
+                "explanation": "Angenommener Vergleich trägt die dargestellte Beispielaussage."
+              }
+            ],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": {
+              "subjectRevision": 2,
+              "reviewedBy": "Beispielmoderation",
+              "reviewedAt": "2026-11-06",
+              "evidenceRevisions": {
+                "d78c25d1-02fb-4b1e-91f5-b798f2da36d3": 2
+              }
+            },
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.683Z"
+          },
+          "D3": {
+            "questionId": "D3",
+            "revision": 2,
+            "state": "rated",
+            "rating": "high",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "substantiated",
+            "evidenceLinks": [
+              {
+                "evidenceId": "d78c25d1-02fb-4b1e-91f5-b798f2da36d3",
+                "relation": "supports",
+                "explanation": "Angenommener Vergleich trägt die dargestellte Beispielaussage."
+              }
+            ],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": {
+              "subjectRevision": 2,
+              "reviewedBy": "Beispielmoderation",
+              "reviewedAt": "2026-11-06",
+              "evidenceRevisions": {
+                "d78c25d1-02fb-4b1e-91f5-b798f2da36d3": 2
+              }
+            },
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.684Z"
+          },
+          "D4": {
+            "questionId": "D4",
+            "revision": 2,
+            "state": "rated",
+            "rating": "high",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "substantiated",
+            "evidenceLinks": [
+              {
+                "evidenceId": "d78c25d1-02fb-4b1e-91f5-b798f2da36d3",
+                "relation": "supports",
+                "explanation": "Angenommener Vergleich trägt die dargestellte Beispielaussage."
+              }
+            ],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": {
+              "subjectRevision": 2,
+              "reviewedBy": "Beispielmoderation",
+              "reviewedAt": "2026-11-06",
+              "evidenceRevisions": {
+                "d78c25d1-02fb-4b1e-91f5-b798f2da36d3": 2
+              }
+            },
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.684Z"
+          },
+          "D5": {
+            "questionId": "D5",
+            "revision": 2,
+            "state": "rated",
+            "rating": "high",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "substantiated",
+            "evidenceLinks": [
+              {
+                "evidenceId": "d78c25d1-02fb-4b1e-91f5-b798f2da36d3",
+                "relation": "supports",
+                "explanation": "Angenommener Vergleich trägt die dargestellte Beispielaussage."
+              }
+            ],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": {
+              "subjectRevision": 2,
+              "reviewedBy": "Beispielmoderation",
+              "reviewedAt": "2026-11-06",
+              "evidenceRevisions": {
+                "d78c25d1-02fb-4b1e-91f5-b798f2da36d3": 2
+              }
+            },
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.684Z"
+          },
+          "D6": {
+            "questionId": "D6",
+            "revision": 2,
+            "state": "rated",
+            "rating": "high",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "substantiated",
+            "evidenceLinks": [
+              {
+                "evidenceId": "d78c25d1-02fb-4b1e-91f5-b798f2da36d3",
+                "relation": "supports",
+                "explanation": "Angenommener Vergleich trägt die dargestellte Beispielaussage."
+              }
+            ],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": {
+              "subjectRevision": 2,
+              "reviewedBy": "Beispielmoderation",
+              "reviewedAt": "2026-11-06",
+              "evidenceRevisions": {
+                "d78c25d1-02fb-4b1e-91f5-b798f2da36d3": 2
+              }
+            },
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.684Z"
+          }
+        },
+        "evidence": [
+          {
+            "id": "d78c25d1-02fb-4b1e-91f5-b798f2da36d3",
+            "revision": 2,
+            "kind": "Sonstige Quelle",
+            "title": "Fiktive Pilotbeobachtung",
+            "authorOrOrigin": "Fiktives Beispielteam",
+            "url": null,
+            "internalReference": "DEMO / keine reale Quelle",
+            "observation": "Für dieses Beispiel angenommener Vergleich an fiktiven Aufgaben.",
+            "eventDate": null,
+            "recordedAt": "2026-11-06T17:25:48.683Z",
+            "reviewStatus": "reviewed",
+            "reviewedRevision": 2,
+            "reviewedBy": "Beispielmoderation",
+            "reviewedAt": "2026-11-06T17:25:48.683Z",
+            "reviewDueAt": null,
+            "scopeAndLimitations": "Ausschließlich Demonstration, keine reale Marktevidenz.",
+            "synthetic": true
+          }
+        ],
+        "threats": [
+          {
+            "id": "b86a52dc-53d3-4cdc-9724-079f3108b4b8",
+            "revision": 1,
+            "category": "Plattformbündelung",
+            "actor": "Fiktive Plattform",
+            "change": "Die Generierung wird im Standardangebot verfügbar.",
+            "valueStepIds": [
+              "d0f80662-57b5-49d5-949f-c33ba1a1d2fb"
+            ],
+            "economicMechanism": "Kunden könnten einfache Generierung selbst übernehmen.",
+            "basis": "scenario",
+            "questionIds": [
+              "B1",
+              "B3",
+              "B4"
+            ],
+            "evidenceLinks": []
+          }
+        ],
+        "protections": [],
+        "baseline": {
+          "period": "month",
+          "currency": "EUR",
+          "revenue": 100000,
+          "variableCosts": 40000,
+          "fixedCosts": 35000,
+          "sourceNote": "Fiktives Rechenbeispiel aus dem Briefing"
+        },
+        "scenarios": [
+          {
+            "id": "b764fbdd-6c1f-46dd-afd8-23f6bd8d4b97",
+            "template": "bundle",
+            "title": "Die Kernfunktion wird gebündelt",
+            "status": "open",
+            "notApplicableReason": "",
+            "assumption": "Ausdrücklich fiktive bedingte Annahme.",
+            "horizonMonths": 18,
+            "valueStepIds": [],
+            "customerReaction": "Kunden vergleichen den verbleibenden Nutzen.",
+            "remainingPaidValue": "Fachliche Prüfung und Verantwortungsübernahme",
+            "response": "Mit repräsentativen Aufgaben und Käufern validieren.",
+            "timeAndResourceNeeds": "",
+            "earlyIndicator": "Konkrete Nachfrage nach einer Alternative",
+            "evidenceLinks": [],
+            "financialStress": {
+              "priceChange": -0.2,
+              "volumeChange": -0.1,
+              "unitVariableCostChange": -0.25,
+              "fixedCostDelta": 5000,
+              "oneOffCost": null,
+              "assumptionNote": "Ausschließlich fiktive Demonstration",
+              "modelApplicable": true
+            },
+            "openQuestions": "",
+            "nextCheck": "Kundenaufgaben und Vergleichsalternative dokumentieren.",
+            "owner": "Moderation",
+            "dueAt": null,
+            "affectedCustomers": "",
+            "affectedRevenueParts": ""
+          },
+          {
+            "id": "bf4d41da-4ddc-41c8-b080-a831120004ae",
+            "template": "competitor",
+            "title": "Ein Branchenwettbewerber nutzt stärkere KI",
+            "status": "open",
+            "notApplicableReason": "",
+            "assumption": "Ausdrücklich fiktive bedingte Annahme.",
+            "horizonMonths": 18,
+            "valueStepIds": [],
+            "customerReaction": "Kunden vergleichen den verbleibenden Nutzen.",
+            "remainingPaidValue": "Fachliche Prüfung und Verantwortungsübernahme",
+            "response": "Mit repräsentativen Aufgaben und Käufern validieren.",
+            "timeAndResourceNeeds": "",
+            "earlyIndicator": "Konkrete Nachfrage nach einer Alternative",
+            "evidenceLinks": [],
+            "financialStress": null,
+            "openQuestions": "",
+            "nextCheck": "Kundenaufgaben und Vergleichsalternative dokumentieren.",
+            "owner": "Moderation",
+            "dueAt": null,
+            "affectedCustomers": "",
+            "affectedRevenueParts": ""
+          },
+          {
+            "id": "49b824a4-f16d-4b4f-bdf3-0d9bc102b7e7",
+            "template": "provider",
+            "title": "Der wichtigste KI-Dienst ist nicht nutzbar",
+            "status": "open",
+            "notApplicableReason": "",
+            "assumption": "Ausdrücklich fiktive bedingte Annahme.",
+            "horizonMonths": 18,
+            "valueStepIds": [],
+            "customerReaction": "Kunden vergleichen den verbleibenden Nutzen.",
+            "remainingPaidValue": "Fachliche Prüfung und Verantwortungsübernahme",
+            "response": "Mit repräsentativen Aufgaben und Käufern validieren.",
+            "timeAndResourceNeeds": "",
+            "earlyIndicator": "Konkrete Nachfrage nach einer Alternative",
+            "evidenceLinks": [],
+            "financialStress": null,
+            "openQuestions": "",
+            "nextCheck": "Kundenaufgaben und Vergleichsalternative dokumentieren.",
+            "owner": "Moderation",
+            "dueAt": null,
+            "affectedCustomers": "",
+            "affectedRevenueParts": ""
+          }
+        ],
+        "actions": [
+          {
+            "id": "86ffe3cd-d1ee-49f2-8d2f-ed05c64819c2",
+            "title": "Vergleich an Kundenaufgaben durchführen",
+            "description": "Begrenzten Pilot vereinbaren und Beobachtungen dokumentieren.",
+            "expectedEvidence": "Dokumentierte Kaufentscheidung und Ergebnisvergleich",
+            "owner": "Moderation",
+            "dueAt": null,
+            "status": "open",
+            "effortNote": "Im Workshop festlegen",
+            "linkedQuestionIds": [
+              "B1",
+              "B4"
+            ],
+            "linkedRuleIds": [],
+            "linkedFindingIds": [],
+            "linkedThreatIds": [],
+            "linkedScenarioIds": []
+          }
+        ],
+        "decision": {
+          "recommendation": "validate",
+          "rationale": "Entscheidende Grundlagen mit begrenztem Aufwand prüfen.",
+          "conditions": "Alle Angaben dieses Falls sind fiktiv.",
+          "dissent": "",
+          "findingResponses": [],
+          "decidedBy": "Beispielmoderation",
+          "decidedAt": "2026-11-06",
+          "reviewDueAt": null,
+          "provisional": true
+        },
+        "executiveSummary": {
+          "mainThreat": "Bündelung einfacher Funktionen",
+          "evidencedAdvantage": "Fiktiv geprüfte fachliche Ergebnisqualität",
+          "keyUnknown": "Verbleibender bezahlter Nutzen im Szenario",
+          "priorityActionIds": [
+            "86ffe3cd-d1ee-49f2-8d2f-ed05c64819c2"
+          ]
+        }
+      }
+    },
+    {
+      "id": "81cf94cf-490c-4523-af11-6ea2b40bfa70",
+      "schemaVersion": "1.0",
+      "methodologyVersion": "0.1",
+      "methodologySnapshot": {
+        "version": "0.1",
+        "questions": [
+          {
+            "id": "A1",
+            "group": "A",
+            "text": "Wie konkret und relevant ist das Kundenproblem?",
+            "anchors": {
+              "low": "Kein klarer Käufer oder kein relevanter Nachteil des bisherigen Zustands.",
+              "medium": "Problem und Käufer sind benannt; Häufigkeit oder Bedeutung sind noch ungeklärt.",
+              "high": "Konkreter Käufer, wiederkehrender Bedarf und nachvollziehbarer wirtschaftlicher oder operativer Nachteil."
+            },
+            "allowsNotApplicable": false,
+            "helpText": "Geeignete Belege: dokumentierte Kundenaufgaben, Prozessbeobachtung, Zeitverlust, Fehlerkosten, wiederkehrende konkrete Beschwerden."
+          },
+          {
+            "id": "A2",
+            "group": "A",
+            "text": "Welche Zahlungsbereitschaft besteht?",
+            "anchors": {
+              "low": "Ablehnung oder belegter fehlender Zahlungswille bei den untersuchten Zielkunden.",
+              "medium": "Interesse, Gespräche, unverbindliche Absichtserklärungen oder noch ungeprüfte Budgetannahmen.",
+              "high": "Tatsächliches Kaufverhalten wie bezahlter Pilot, Auftrag, budgetierte Nutzung oder Verlängerung."
+            },
+            "allowsNotApplicable": false,
+            "helpText": "Geeignete Belege: Aufträge, bezahlte Piloten, anonymisierte Umsatzdaten, Verlängerungen, dokumentierte Budgetentscheidung.\nFehlender Nachweis ist „unbekannt“ oder eine mittelstarke Hypothese; er ist nicht automatisch belegte Ablehnung."
+          },
+          {
+            "id": "A3",
+            "group": "A",
+            "text": "Welcher zusätzliche Nutzen besteht gegenüber der besten zugänglichen Alternative?",
+            "anchors": {
+              "low": "Kein für den Kunden relevanter Unterschied.",
+              "medium": "Nutzen ist plausibel oder nur in einem begrenzten Einsatzbereich gezeigt.",
+              "high": "Relevanter Vorteil bei Qualität, Zeit, Kosten oder Ergebnis ist nachvollziehbar demonstriert."
+            },
+            "allowsNotApplicable": false,
+            "helpText": "Geeignete Belege: Vergleich an echten Aufgaben, Kundenmessung, nachprüfbare Zeit- und Qualitätsdaten einschließlich Nacharbeit.\nDie Vergleichsalternative kann auch eine vorhandene Standardsoftware, Eigenleistung oder „nichts ändern“ sein."
+          },
+          {
+            "id": "A4",
+            "group": "A",
+            "text": "Ist die Wirtschaftlichkeit tragfähig?",
+            "anchors": {
+              "low": "Bekannte Kosten übersteigen realistisch erreichbaren Erlös; ein plausibler Verbesserungspfad fehlt.",
+              "medium": "Ein positiver Verlauf ist plausibel, aber wichtige Kosten-, Nachfrage- oder Amortisationsannahmen sind noch offen.",
+              "high": "Relevante Kosten sind berücksichtigt und ein nachvollziehbarer Weg zu einem positiven wirtschaftlichen Ergebnis besteht."
+            },
+            "allowsNotApplicable": false,
+            "helpText": "Geeignete Belege: bestehender Deckungsbeitrag, belastbare Kostenstruktur oder offengelegter Business Case mit validierten Teilannahmen.\nEinführung, Vertrieb, Betreuung, Qualitätssicherung und Anpassungen dürfen nicht stillschweigend als kostenlos gelten."
+          },
+          {
+            "id": "B1",
+            "group": "B",
+            "text": "Wie weit können zugängliche KI-Systeme die bezahlte Kernleistung bereits erbringen?",
+            "anchors": {
+              "low": "Sie übernehmen überwiegend nebensächliche Teilaufgaben.",
+              "medium": "Sie übernehmen wesentliche Teile, aber relevante Lücken bei Ergebnis, Ausführung oder Kundenanforderungen bleiben.",
+              "high": "Sie ermöglichen eine weitgehend gleichwertige Kernleistung innerhalb der betrachteten Kundenanforderungen."
+            },
+            "allowsNotApplicable": false,
+            "helpText": "Geeignete Belege: aktueller Vergleich des vollständigen relevanten Arbeitsablaufs, einschließlich Prüfung, Fehlern und Nacharbeit.\nEin überzeugendes Einzelbeispiel oder die Reproduktion einer Oberfläche genügt nicht als Nachweis der gesamten Leistung."
+          },
+          {
+            "id": "B2",
+            "group": "B",
+            "text": "Wie stark hängt der heutige Vorteil von einer vorübergehenden Modellschwäche ab?",
+            "anchors": {
+              "low": "Der Wert entsteht überwiegend unabhängig von dieser Schwäche.",
+              "medium": "Ein wesentlicher Teil hängt daran, andere wertvolle Bestandteile bleiben bestehen.",
+              "high": "Der Hauptnutzen besteht darin, eine konkrete Modellschwäche zu überbrücken."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: Zerlegung des Produktnutzens, Vergleich mit neueren Modellen, dokumentierter Zusammenhang zwischen Modellverbesserung und verlorenem Produktvorteil.\nDie konkrete Schwäche muss benannt werden; das Etikett „Wrapper“ ist keine Analyse."
+          },
+          {
+            "id": "B3",
+            "group": "B",
+            "text": "Wie nah liegt die Leistung am Angebot und Kundenzugang einer Plattform?",
+            "anchors": {
+              "low": "Wenige erkennbare wirtschaftliche Anreize oder erhebliche zusätzliche Ausführungsanforderungen sprechen derzeit gegen direkte Bündelung.",
+              "medium": "Angrenzende Angebote, passender Kundenzugang und plausible wirtschaftliche Anreize bestehen.",
+              "high": "Konkrete Veröffentlichungen, Integrationen oder vergleichbare bereits angebotene Leistungen zeigen unmittelbare Nähe."
+            },
+            "allowsNotApplicable": false,
+            "helpText": "Geeignete Belege: datierte Produktinformationen, Preis- und Bündelungsmodelle, dokumentierte Integrationen, vertriebliche Überschneidung.\nDer Befund beschreibt beobachtete Nähe. Er ist keine Markteintrittswahrscheinlichkeit. Fehlende öffentliche Informationen rechtfertigen allein keine niedrige Bewertung."
+          },
+          {
+            "id": "B4",
+            "group": "B",
+            "text": "Wie leicht können Kunden tatsächlich wechseln oder die Leistung selbst erbringen?",
+            "anchors": {
+              "low": "Erhebliche, konkret belegte Wechselhindernisse bestehen.",
+              "medium": "Migration, Prüfung, Schulung oder organisatorische Umstellung sind erforderlich.",
+              "high": "Eine brauchbare Alternative ist bereits im Arbeitsablauf verfügbar oder mit geringem Umstellungsaufwand einsetzbar."
+            },
+            "allowsNotApplicable": false,
+            "helpText": "Geeignete Belege: beobachtete Migration, Kundenversuch, Kündigungsgründe, Beschaffungsanforderungen, Aufwandsschätzung mit nachvollziehbarer Grundlage.\nDie Dauer des Kündigungsklicks ist nicht die Dauer eines fachlichen Anbieterwechsels."
+          },
+          {
+            "id": "C1",
+            "group": "C",
+            "text": "Gibt es schwer ersetzbare, nützliche eigene Daten?",
+            "anchors": {
+              "low": "Daten sind leicht zugänglich, ersetzbar oder liefern keinen relevanten zusätzlichen Nutzen.",
+              "medium": "Teilweise exklusiver Zugang oder plausibler Nutzen; Rechte, Qualität oder Wirkung sind noch offen.",
+              "high": "Nutzungsrechte, schwer ersetzbarer Zugang und ein relevanter Ergebnisvorteil sind nachvollziehbar vorhanden."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: Rechtebeschreibung, Vergleich mit und ohne diese Daten, laufender Zugang zu neuen Beobachtungen, Prüfung von Ersatzquellen."
+          },
+          {
+            "id": "C2",
+            "group": "C",
+            "text": "Wie tief ist das Angebot in Prozesse oder physische Ausführung eingebettet?",
+            "anchors": {
+              "low": "Leicht austauschbare Einzelleistung.",
+              "medium": "Integration oder Umsetzung verursacht nachvollziehbaren Aufwand.",
+              "high": "Schwer reproduzierbarer Zugang, Einbettung oder Betriebserfahrung ist wesentlich für den Kundennutzen."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: tatsächliche Prozessabhängigkeiten, Betriebswissen, Gerätezugang, Integrations- und Migrationsaufwand.\nAufwendige Projektarbeit allein beweist weder hohe Marge noch dauerhaften Schutz."
+          },
+          {
+            "id": "C3",
+            "group": "C",
+            "text": "Besteht ein schwer reproduzierbarer fachlicher Ergebnisvorsprung?",
+            "anchors": {
+              "low": "Standardverfahren oder leicht reproduzierbares Ergebnis.",
+              "medium": "Fachlicher Vorsprung vorhanden, aber begrenzt geprüft oder voraussichtlich leicht aufholbar.",
+              "high": "Validierter relevanter Vorsprung mit nachvollziehbaren Hindernissen oder Kosten für seine Reproduktion."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: geeignete Vergleichsaufgaben, unabhängige Prüfung, validiertes Verfahren, dokumentierte Fehler- und Qualitätsdaten.\nDeterminismus oder mathematische Formeln sind allein kein Vorteil; entscheidend sind Richtigkeit, Relevanz und Reproduzierbarkeit."
+          },
+          {
+            "id": "C4",
+            "group": "C",
+            "text": "Ist Vertrauen oder Verantwortungsübernahme tatsächlich kaufentscheidend?",
+            "anchors": {
+              "low": "Allgemeine Behauptung ohne konkrete Leistungsgrundlage.",
+              "medium": "Referenzen, passende Prozesse oder vertragliche Leistungen bestehen.",
+              "high": "Zuverlässigkeit, Qualifikation oder Verantwortungsübernahme ist nachweislich kaufentscheidend und schwer ersetzbar."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: Kundenentscheidungen, Leistungsnachweise, passende Qualifikationen, relevante Vereinbarungen und gelebte Betreuung.\nKeine automatische Höchstwertung durch Regulierung, einen Standort oder einen einzelnen Vertrag."
+          },
+          {
+            "id": "C5",
+            "group": "C",
+            "text": "Besteht ein echter Netzwerkeffekt?",
+            "anchors": {
+              "low": "Kein entsprechender Effekt.",
+              "medium": "Teilnehmer schaffen zusätzlichen Nutzen, sind aber leicht parallel nutzbar oder ersetzbar.",
+              "high": "Der Nutzen hängt wesentlich von einem schwer neu aufzubauenden aktiven Netzwerk ab."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: tatsächliche Transaktionen, wiederkehrende Interaktionen, Netzwerknutzen für einzelne Teilnehmer, Wechselverhalten.\nMehrbenutzerfähigkeit und ein mehrstufiger Freigabeprozess sind allein kein Netzwerkeffekt."
+          },
+          {
+            "id": "C6",
+            "group": "C",
+            "text": "Wie belastbar sind Kundenzugang und Kundenbindung?",
+            "anchors": {
+              "low": "Austauschbarer Zugang und geringe Bindung.",
+              "medium": "Direkter Zugang, erste Wiederholungskäufe oder teilweise Einbettung.",
+              "high": "Wiederholt bestätigte Bindung und schwer reproduzierbarer Zugang zu relevanten Käufern."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: Verlängerungen, Wiederholungskäufe, Vertriebskanäle, beobachtete Bindung trotz Alternativen.\nKundenlisten und laufende Vertragslaufzeiten allein reichen nicht; der Fortbestand der Beziehung muss begründet werden."
+          },
+          {
+            "id": "D1",
+            "group": "D",
+            "text": "Besteht ausreichende Kontrolle über Daten und Arbeitsstände?",
+            "anchors": {
+              "low": "Kritische Daten oder Zustände sind nicht ausreichend zugänglich oder wiederverwendbar.",
+              "medium": "Teilweiser Export; Rechte, Vollständigkeit oder Wiederverwendung sind ungeprüft.",
+              "high": "Benötigte Daten, Zustände und Rechte sind verfügbar; die Wiederverwendung wurde geprüft."
+            },
+            "allowsNotApplicable": false,
+            "helpText": "Geeignete Belege: Export und Wiederherstellung, Rechteübersicht, Datenflussbeschreibung."
+          },
+          {
+            "id": "D2",
+            "group": "D",
+            "text": "Ist ein Anbieter- oder Modellwechsel tatsächlich möglich?",
+            "anchors": {
+              "low": "Keine brauchbare Alternative für den kritischen Prozess.",
+              "medium": "Alternative ist benannt oder technisch angebunden, aber nicht ausreichend geprüft.",
+              "high": "Alternative wurde an relevanten Aufgaben auf Qualität, Kosten und Betrieb geprüft."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: Vergleichsergebnisse, dokumentierter Wechselversuch, bekannte Anpassungskosten.\nEine einheitliche API allein beweist keine fachliche Austauschbarkeit. Zwei Anbieter mit derselben kritischen Infrastruktur sind nicht automatisch unabhängige Ausweichmöglichkeiten."
+          },
+          {
+            "id": "D3",
+            "group": "D",
+            "text": "Wird die Qualität wiederholbar geprüft?",
+            "anchors": {
+              "low": "Beurteilung überwiegend anhand einzelner Beispiele oder subjektiver Eindrücke.",
+              "medium": "Prüfungen vorhanden, aber Lücken bei relevanten Aufgaben oder Fehlermöglichkeiten.",
+              "high": "Repräsentative Aufgaben, klare Anforderungen und wiederholbare Prüfungen bestehen."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: dokumentierte Prüfaufgaben, Akzeptanzgrenzen, Fehlerklassen, Ergebnisse nach Modelländerungen."
+          },
+          {
+            "id": "D4",
+            "group": "D",
+            "text": "Sind Handlungen des Systems angemessen begrenzt und nachvollziehbar?",
+            "anchors": {
+              "low": "Kritische Aktionen sind ohne passende Begrenzung, Freigabe oder Nachvollziehbarkeit möglich.",
+              "medium": "Teilweise Rechte, Freigaben und Protokolle bestehen; relevante Lücken sind offen.",
+              "high": "Rechte, Grenzen, Freigaben und Eingriffsmöglichkeiten passen zum tatsächlichen Einsatz und wurden geprüft."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: überprüfte Berechtigungen, Freigabeabläufe, Protokolle und Eingriffstests.\nDer Prüfbedarf richtet sich nach dem Einsatz: Textentwurf, Empfehlung und eigenständiges Ausführen geschäftlicher Aktionen sind unterschiedliche Fälle."
+          },
+          {
+            "id": "D5",
+            "group": "D",
+            "text": "Ist ein ausreichender Weiterbetrieb und Wiederanlauf vorbereitet?",
+            "anchors": {
+              "low": "Kritischer Ausfall ohne tragfähige Reaktion.",
+              "medium": "Ausweichverfahren sind beschrieben, aber ungeprüft.",
+              "high": "Mindestbetrieb und Wiederanlauf wurden unter relevanten Bedingungen erprobt."
+            },
+            "allowsNotApplicable": true,
+            "helpText": "Geeignete Belege: Wiederanlauftest, manueller Ersatzprozess, tolerierbare Ausfallzeit, Wiederherstellungsdauer."
+          },
+          {
+            "id": "D6",
+            "group": "D",
+            "text": "Kann sich das Unternehmen rechtzeitig anpassen?",
+            "anchors": {
+              "low": "Erforderliche Veränderungen passen nicht zu Ressourcen oder Entscheidungswegen.",
+              "medium": "Anpassung ist grundsätzlich möglich; Zeit, Verantwortung oder Budget bleiben unklar.",
+              "high": "Zuständigkeit, Ressourcen und zeitlicher Handlungsspielraum für relevante Änderungen sind plausibel vorhanden."
+            },
+            "allowsNotApplicable": false,
+            "helpText": "Geeignete Belege: konkrete Verantwortliche, verfügbare Kapazität, Umsetzungsplan und bisherige Änderungserfahrung."
+          }
+        ],
+        "rules": [
+          {
+            "id": "R01",
+            "triggerDescription": "A1 oder A2 offen, strittig oder ohne ausreichenden Beleg",
+            "outputDescription": "Kundenproblem, Käufer beziehungsweise Zahlungsbereitschaft validieren. Bei einer neuen Idee einen passenden kleinen Nachweis planen."
+          },
+          {
+            "id": "R02",
+            "triggerDescription": "A4 offen, mittel oder nicht ausreichend belegt",
+            "outputDescription": "Wirtschaftlichkeit und entscheidende Annahmen prüfen."
+          },
+          {
+            "id": "R03",
+            "triggerDescription": "B1 hoch und B4 hoch",
+            "outputDescription": "Kernleistung ist unter den dokumentierten Bedingungen stark austauschbar. Belegt nur, wenn beide Antworten belegt sind; sonst Hypothese."
+          },
+          {
+            "id": "R04",
+            "triggerDescription": "B2 hoch",
+            "outputDescription": "Abhängigkeit von einer Modellschwäche untersuchen; verbleibenden Kundennutzen benennen."
+          },
+          {
+            "id": "R05",
+            "triggerDescription": "B3 hoch",
+            "outputDescription": "Konkrete Plattformnähe prüfen; Bündelungsszenario bearbeiten. Kein automatisches Urteil über Kundenverlust."
+          },
+          {
+            "id": "R06",
+            "triggerDescription": "R03 aktiv; eine betroffene Bedrohung wurde zugeordnet; keine aktuell belegte Schutzwirkung für diese Bedrohung vorhanden",
+            "outputDescription": "Schutzwirkung ist offen. Fehlt schon die Bedrohungszuordnung, zunächst „Betroffene Bedrohung zuordnen“ ausgeben. Niemals automatisch „kein Schutz vorhanden“ behaupten."
+          },
+          {
+            "id": "R07",
+            "triggerDescription": "B1 und B4 belegt hoch, A3 belegt niedrig, A4 belegt niedrig",
+            "outputDescription": "Neuausrichtung oder Begrenzung weiterer Investitionen prüfen. Keine automatische Entscheidung und keine Schließungsempfehlung."
+          },
+          {
+            "id": "R08",
+            "triggerDescription": "Ein C-Faktor hoch, aber nicht ausreichend belegt",
+            "outputDescription": "Möglichen Vorteil als unbestätigt ausweisen; geeigneten Nachweis vorschlagen."
+          },
+          {
+            "id": "R09",
+            "triggerDescription": "C-Faktor hoch und belegt, aber keine aktuell geprüfte Schutzverknüpfung zu einer konkreten Bedrohung vorhanden",
+            "outputDescription": "Wirkung des Vorteils gegenüber dem betrachteten Risiko präzisieren und belegen."
+          },
+          {
+            "id": "R10",
+            "triggerDescription": "Eine als kritisch markierte D-Frage niedrig",
+            "outputDescription": "Konkrete Betriebsvoraussetzung vor dem betroffenen Einsatz prüfen. Andere Vorteile dürfen den Hinweis nicht ausgleichen."
+          },
+          {
+            "id": "R11",
+            "triggerDescription": "D2 oder D5 mittel",
+            "outputDescription": "Alternative beziehungsweise Ausweichverfahren praktisch erproben."
+          },
+          {
+            "id": "R12",
+            "triggerDescription": "D6 niedrig oder offen",
+            "outputDescription": "Verantwortung, Anpassungszeit und Ressourcen klären."
+          },
+          {
+            "id": "R13",
+            "triggerDescription": "Widerspruch ungelöst oder entscheidende Quelle erneut zu prüfen",
+            "outputDescription": "Fachlichen Konflikt beziehungsweise Aktualität als offene Entscheidungsvoraussetzung anzeigen."
+          },
+          {
+            "id": "R14",
+            "triggerDescription": "Keine inhaltlich bewertete Frage vorhanden",
+            "outputDescription": "„Noch nicht beurteilbar“; keine positive oder negative Geschäftsaussage."
+          },
+          {
+            "id": "R15",
+            "triggerDescription": "A1 oder A2 niedrig",
+            "outputDescription": "Negative Einschätzung zu Problemrelevanz oder Zahlungsbereitschaft prüfen. Bei ausreichendem Beleg als beobachtete negative Evidenz ausweisen, sonst als Hypothese."
+          },
+          {
+            "id": "R16",
+            "triggerDescription": "A4 niedrig",
+            "outputDescription": "Kosten, Erlösmodell oder Leistungsumfang überprüfen. Bei ausreichendem Beleg: Wirtschaftlichkeit unter den dokumentierten Bedingungen nicht tragfähig; sonst Hypothese."
+          }
+        ],
+        "notes": "Eigener methodischer Entwurf für einen Beratungspiloten. Kein kalibriertes Prognosemodell und keine Zertifizierung. Keine Gesamtbewertung oder Überlebenswahrscheinlichkeit."
+      },
+      "evaluationAsOf": "2026-11-06",
+      "createdAt": "2026-11-06T17:25:48.684Z",
+      "updatedAt": "2026-11-06T17:25:48.684Z",
+      "isExample": true,
+      "originAssessmentId": null,
+      "status": "draft",
+      "revisions": [],
+      "content": {
+        "actionPriority": 2,
+        "title": "Branchenanalyse mit exklusivem Datenzugang",
+        "customerAlias": "Fiktive Organisation",
+        "type": "idea",
+        "decisionQuestion": "Sollen wir einen bezahlten Pilot vorbereiten?",
+        "customerSegment": "Fiktive B2B-Kunden",
+        "user": "Fachteam",
+        "economicBuyer": "Bereichsleitung",
+        "customerProblem": "Wiederkehrende Dokumenten- und Analyseaufgaben",
+        "currentAlternative": "Standardsoftware und manuelle Prüfung",
+        "paidOutcome": "Branchenbezogene Entscheidungsvorlage",
+        "revenueModel": "Fiktive monatliche Nutzung",
+        "costDescription": "Software, Betreuung, Fachprüfung und Vertrieb",
+        "marketContext": "Fiktiver Beratungspilot",
+        "excludedScope": "Keine Aussagen über reale Anbieter oder Kunden",
+        "horizonMonths": 18,
+        "owner": "Moderation",
+        "participants": [
+          "Fachbeitrag",
+          "Dokumentation"
+        ],
+        "valueSteps": [
+          {
+            "id": "85b483a2-be16-4699-8c62-44455238a6e7",
+            "title": "Datenzugang",
+            "customerValue": "Passende und verlässliche Ergebnisse",
+            "requiredResources": "Fachwissen und passende Nutzungsrechte",
+            "currentAIUse": "Unterstützung bei Entwürfen",
+            "alternative": "Manuelle Bearbeitung",
+            "critical": true,
+            "openQuestions": "Im Pilot überprüfen"
+          },
+          {
+            "id": "d1a1cca1-c555-4a35-b76d-b0658315a44b",
+            "title": "Erstellung und Analyse",
+            "customerValue": "Passende und verlässliche Ergebnisse",
+            "requiredResources": "Fachwissen und passende Nutzungsrechte",
+            "currentAIUse": "Unterstützung bei Entwürfen",
+            "alternative": "Manuelle Bearbeitung",
+            "critical": true,
+            "openQuestions": "Im Pilot überprüfen"
+          },
+          {
+            "id": "a37535f6-976a-4ecb-9037-405d1e35ad66",
+            "title": "Fachliche Prüfung",
+            "customerValue": "Passende und verlässliche Ergebnisse",
+            "requiredResources": "Fachwissen und passende Nutzungsrechte",
+            "currentAIUse": "Unterstützung bei Entwürfen",
+            "alternative": "Manuelle Bearbeitung",
+            "critical": true,
+            "openQuestions": "Im Pilot überprüfen"
+          },
+          {
+            "id": "7021ff0e-4e71-4870-b5f0-dcee5d253ceb",
+            "title": "Freigabe und Verantwortung",
+            "customerValue": "Passende und verlässliche Ergebnisse",
+            "requiredResources": "Fachwissen und passende Nutzungsrechte",
+            "currentAIUse": "Unterstützung bei Entwürfen",
+            "alternative": "Manuelle Bearbeitung",
+            "critical": true,
+            "openQuestions": "Im Pilot überprüfen"
+          }
+        ],
+        "answers": {
+          "A1": {
+            "questionId": "A1",
+            "revision": 2,
+            "state": "unknown",
+            "rating": null,
+            "rationale": "",
+            "evidenceLevel": null,
+            "evidenceLinks": [],
+            "scope": "",
+            "openCheck": "Zahlungsbereitschaft in einem kleinen Pilot prüfen.",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.684Z"
+          },
+          "A2": {
+            "questionId": "A2",
+            "revision": 2,
+            "state": "unknown",
+            "rating": null,
+            "rationale": "",
+            "evidenceLevel": null,
+            "evidenceLinks": [],
+            "scope": "",
+            "openCheck": "Zahlungsbereitschaft in einem kleinen Pilot prüfen.",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.684Z"
+          },
+          "A3": {
+            "questionId": "A3",
+            "revision": 2,
+            "state": "unknown",
+            "rating": null,
+            "rationale": "",
+            "evidenceLevel": null,
+            "evidenceLinks": [],
+            "scope": "",
+            "openCheck": "Zahlungsbereitschaft in einem kleinen Pilot prüfen.",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.684Z"
+          },
+          "A4": {
+            "questionId": "A4",
+            "revision": 2,
+            "state": "unknown",
+            "rating": null,
+            "rationale": "",
+            "evidenceLevel": null,
+            "evidenceLinks": [],
+            "scope": "",
+            "openCheck": "Zahlungsbereitschaft in einem kleinen Pilot prüfen.",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.684Z"
+          },
+          "B1": {
+            "questionId": "B1",
+            "revision": 2,
+            "state": "rated",
+            "rating": "medium",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.684Z"
+          },
+          "B2": {
+            "questionId": "B2",
+            "revision": 2,
+            "state": "rated",
+            "rating": "medium",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.684Z"
+          },
+          "B3": {
+            "questionId": "B3",
+            "revision": 2,
+            "state": "rated",
+            "rating": "medium",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.684Z"
+          },
+          "B4": {
+            "questionId": "B4",
+            "revision": 2,
+            "state": "rated",
+            "rating": "medium",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.684Z"
+          },
+          "C1": {
+            "questionId": "C1",
+            "revision": 2,
+            "state": "rated",
+            "rating": "high",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.684Z"
+          },
+          "C2": {
+            "questionId": "C2",
+            "revision": 2,
+            "state": "rated",
+            "rating": "medium",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.684Z"
+          },
+          "C3": {
+            "questionId": "C3",
+            "revision": 2,
+            "state": "rated",
+            "rating": "medium",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.684Z"
+          },
+          "C4": {
+            "questionId": "C4",
+            "revision": 2,
+            "state": "rated",
+            "rating": "medium",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.684Z"
+          },
+          "C5": {
+            "questionId": "C5",
+            "revision": 2,
+            "state": "rated",
+            "rating": "medium",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.684Z"
+          },
+          "C6": {
+            "questionId": "C6",
+            "revision": 2,
+            "state": "rated",
+            "rating": "medium",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.684Z"
+          },
+          "D1": {
+            "questionId": "D1",
+            "revision": 2,
+            "state": "rated",
+            "rating": "medium",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.684Z"
+          },
+          "D2": {
+            "questionId": "D2",
+            "revision": 2,
+            "state": "rated",
+            "rating": "medium",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.684Z"
+          },
+          "D3": {
+            "questionId": "D3",
+            "revision": 2,
+            "state": "rated",
+            "rating": "medium",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.684Z"
+          },
+          "D4": {
+            "questionId": "D4",
+            "revision": 2,
+            "state": "rated",
+            "rating": "medium",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.684Z"
+          },
+          "D5": {
+            "questionId": "D5",
+            "revision": 2,
+            "state": "rated",
+            "rating": "medium",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.684Z"
+          },
+          "D6": {
+            "questionId": "D6",
+            "revision": 2,
+            "state": "rated",
+            "rating": "medium",
+            "rationale": "Fiktive Annahme zur Demonstration der Methode.",
+            "evidenceLevel": "assumption",
+            "evidenceLinks": [],
+            "scope": "Nur dieses Beispiel",
+            "openCheck": "",
+            "criticalForDecision": false,
+            "valueStepIds": [],
+            "notApplicableReason": "",
+            "disputed": false,
+            "positions": [],
+            "substantiationReview": null,
+            "conflictResolution": null,
+            "assessedBy": "",
+            "assessedAt": "2026-11-06T17:25:48.684Z"
+          }
+        },
+        "evidence": [
+          {
+            "id": "0d96d603-fddf-4028-bbf9-35cb373fd733",
+            "revision": 2,
+            "kind": "Sonstige Quelle",
+            "title": "Fiktive Pilotbeobachtung",
+            "authorOrOrigin": "Fiktives Beispielteam",
+            "url": null,
+            "internalReference": "DEMO / keine reale Quelle",
+            "observation": "Für dieses Beispiel angenommener Vergleich an fiktiven Aufgaben.",
+            "eventDate": null,
+            "recordedAt": "2026-11-06T17:25:48.684Z",
+            "reviewStatus": "reviewed",
+            "reviewedRevision": 2,
+            "reviewedBy": "Beispielmoderation",
+            "reviewedAt": "2026-11-06T17:25:48.684Z",
+            "reviewDueAt": null,
+            "scopeAndLimitations": "Ausschließlich Demonstration, keine reale Marktevidenz.",
+            "synthetic": true
+          }
+        ],
+        "threats": [
+          {
+            "id": "81824521-55a6-4add-a905-4821c984d495",
+            "revision": 1,
+            "category": "Plattformbündelung",
+            "actor": "Fiktive Plattform",
+            "change": "Die Generierung wird im Standardangebot verfügbar.",
+            "valueStepIds": [
+              "d1a1cca1-c555-4a35-b76d-b0658315a44b"
+            ],
+            "economicMechanism": "Kunden könnten einfache Generierung selbst übernehmen.",
+            "basis": "scenario",
+            "questionIds": [
+              "B1",
+              "B3",
+              "B4"
+            ],
+            "evidenceLinks": []
+          }
+        ],
+        "protections": [],
+        "baseline": null,
+        "scenarios": [
+          {
+            "id": "a47d1c63-9307-4976-986c-dc28fbf89155",
+            "template": "bundle",
+            "title": "Die Kernfunktion wird gebündelt",
+            "status": "open",
+            "notApplicableReason": "",
+            "assumption": "Ausdrücklich fiktive bedingte Annahme.",
+            "horizonMonths": 18,
+            "valueStepIds": [],
+            "customerReaction": "Kunden vergleichen den verbleibenden Nutzen.",
+            "remainingPaidValue": "Noch zu prüfen",
+            "response": "Mit repräsentativen Aufgaben und Käufern validieren.",
+            "timeAndResourceNeeds": "",
+            "earlyIndicator": "Konkrete Nachfrage nach einer Alternative",
+            "evidenceLinks": [],
+            "financialStress": null,
+            "openQuestions": "",
+            "nextCheck": "Kundenaufgaben und Vergleichsalternative dokumentieren.",
+            "owner": "Moderation",
+            "dueAt": null,
+            "affectedCustomers": "",
+            "affectedRevenueParts": ""
+          },
+          {
+            "id": "a8563ed2-78bd-46c8-a67a-0a22e25fc4e3",
+            "template": "competitor",
+            "title": "Ein Branchenwettbewerber nutzt stärkere KI",
+            "status": "open",
+            "notApplicableReason": "",
+            "assumption": "Ausdrücklich fiktive bedingte Annahme.",
+            "horizonMonths": 18,
+            "valueStepIds": [],
+            "customerReaction": "Kunden vergleichen den verbleibenden Nutzen.",
+            "remainingPaidValue": "Noch zu prüfen",
+            "response": "Mit repräsentativen Aufgaben und Käufern validieren.",
+            "timeAndResourceNeeds": "",
+            "earlyIndicator": "Konkrete Nachfrage nach einer Alternative",
+            "evidenceLinks": [],
+            "financialStress": null,
+            "openQuestions": "",
+            "nextCheck": "Kundenaufgaben und Vergleichsalternative dokumentieren.",
+            "owner": "Moderation",
+            "dueAt": null,
+            "affectedCustomers": "",
+            "affectedRevenueParts": ""
+          },
+          {
+            "id": "75dbbe4b-cc08-430b-8019-57eaa6de26dc",
+            "template": "provider",
+            "title": "Der wichtigste KI-Dienst ist nicht nutzbar",
+            "status": "open",
+            "notApplicableReason": "",
+            "assumption": "Ausdrücklich fiktive bedingte Annahme.",
+            "horizonMonths": 18,
+            "valueStepIds": [],
+            "customerReaction": "Kunden vergleichen den verbleibenden Nutzen.",
+            "remainingPaidValue": "Noch zu prüfen",
+            "response": "Mit repräsentativen Aufgaben und Käufern validieren.",
+            "timeAndResourceNeeds": "",
+            "earlyIndicator": "Konkrete Nachfrage nach einer Alternative",
+            "evidenceLinks": [],
+            "financialStress": null,
+            "openQuestions": "",
+            "nextCheck": "Kundenaufgaben und Vergleichsalternative dokumentieren.",
+            "owner": "Moderation",
+            "dueAt": null,
+            "affectedCustomers": "",
+            "affectedRevenueParts": ""
+          },
+          {
+            "id": "fc5359c8-c137-4e7c-bb40-8ae74d3489a0",
+            "template": "demand",
+            "title": "Die Zahlungsbereitschaft bestätigt sich nicht",
+            "status": "open",
+            "notApplicableReason": "",
+            "assumption": "Ausdrücklich fiktive bedingte Annahme.",
+            "horizonMonths": 18,
+            "valueStepIds": [],
+            "customerReaction": "Kunden vergleichen den verbleibenden Nutzen.",
+            "remainingPaidValue": "Noch zu prüfen",
+            "response": "Mit repräsentativen Aufgaben und Käufern validieren.",
+            "timeAndResourceNeeds": "",
+            "earlyIndicator": "Konkrete Nachfrage nach einer Alternative",
+            "evidenceLinks": [],
+            "financialStress": null,
+            "openQuestions": "",
+            "nextCheck": "Kundenaufgaben und Vergleichsalternative dokumentieren.",
+            "owner": "Moderation",
+            "dueAt": null,
+            "affectedCustomers": "",
+            "affectedRevenueParts": ""
+          }
+        ],
+        "actions": [
+          {
+            "id": "b821fbb4-5ee0-455a-9978-c4e56e3b956e",
+            "title": "Zahlungsbereitschaft prüfen",
+            "description": "Begrenzten Pilot vereinbaren und Beobachtungen dokumentieren.",
+            "expectedEvidence": "Dokumentierte Kaufentscheidung und Ergebnisvergleich",
+            "owner": "Moderation",
+            "dueAt": null,
+            "status": "open",
+            "effortNote": "Im Workshop festlegen",
+            "linkedQuestionIds": [
+              "A1",
+              "A2"
+            ],
+            "linkedRuleIds": [],
+            "linkedFindingIds": [],
+            "linkedThreatIds": [],
+            "linkedScenarioIds": []
+          }
+        ],
+        "decision": {
+          "recommendation": "validate",
+          "rationale": "Entscheidende Grundlagen mit begrenztem Aufwand prüfen.",
+          "conditions": "Alle Angaben dieses Falls sind fiktiv.",
+          "dissent": "",
+          "findingResponses": [],
+          "decidedBy": "Beispielmoderation",
+          "decidedAt": "2026-11-06",
+          "reviewDueAt": null,
+          "provisional": true
+        },
+        "executiveSummary": {
+          "mainThreat": "Bündelung einfacher Funktionen",
+          "evidencedAdvantage": "Noch kein aktuell belegter Vorteil",
+          "keyUnknown": "Zahlungsbereitschaft",
+          "priorityActionIds": [
+            "b821fbb4-5ee0-455a-9978-c4e56e3b956e"
+          ]
+        }
+      }
+    }
+  ]
+}
