@@ -264,10 +264,15 @@ export default function QuickApp() {
   };
   const update = (fn: (c: QuickCheck) => void) => {
     if (!current) return;
-    const c = structuredClone(current);
-    fn(c);
-    c.updatedAt = new Date().toISOString();
-    setChecks((list) => list.map((x) => (x.id === c.id ? c : x)));
+    setChecks((list) =>
+      list.map((x) => {
+        if (x.id !== current.id) return x;
+        const c = structuredClone(x);
+        fn(c);
+        c.updatedAt = new Date().toISOString();
+        return c;
+      }),
+    );
   };
   const onStep = (step: number) => {
     update((c) => {
@@ -589,17 +594,20 @@ export default function QuickApp() {
             )}
             {current.view === "questions" ? (
               <Question
+                key={`${current.id}:${current.step}`}
                 check={current}
                 onAnswer={(v: QuickAnswer) => {
                   update((c) => {
                     answerCheck(c, current.methodologySnapshot[c.step].id, v);
-                    if (v !== null) {
-                      if (c.step === c.methodologySnapshot.length - 1)
-                        c.view = "results";
-                      else c.step += 1;
-                    }
                   });
-                  if (v !== null) window.scrollTo(0, 0);
+                }}
+                onAdvance={() => {
+                  update((c) => {
+                    if (c.step === c.methodologySnapshot.length - 1)
+                      c.view = "results";
+                    else c.step += 1;
+                  });
+                  window.scrollTo(0, 0);
                 }}
                 onStep={onStep}
               />

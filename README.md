@@ -9,7 +9,7 @@ Repository: https://github.com/Fliegenbart/e23-resilienz-check
 ## Nutzung
 
 1. Bestehendes Angebot oder neue Idee auswählen und starten.
-2. Zwölf Einschätzungen anklicken. Nach jedem Wert und auch bei „Weiß ich noch nicht“ folgt automatisch die nächste Frage, nach der letzten das Ergebnis. Höhere Werte bedeuten immer mehr Risiko. Konkrete Anker erklären die Enden jeder Skala.
+2. Zwölf Einschätzungen anklicken. Die Auswahl wird kurz gelb bestätigt; nach etwa einer halben Sekunde folgt automatisch die nächste Frage, nach der letzten das Ergebnis. Das gilt auch für „Weiß ich noch nicht“. Höhere Werte bedeuten immer mehr Risiko. Konkrete Anker erklären die Enden jeder Skala.
 3. Das Ergebnis ansehen, einzelne Antworten bei Bedarf ändern und den Bericht über „Ergebnis als PDF“ drucken bzw. als PDF speichern.
 4. Über „Bisherige Checks“ fortsetzen, JSON sichern oder eine Sicherung importieren.
 

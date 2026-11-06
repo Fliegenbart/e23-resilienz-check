@@ -1,20 +1,37 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { QuickCheck, QuickAnswer } from "./model";
 import { QUICK_QUESTIONS, QUICK_GROUPS } from "./model";
 import { Arrow } from "./ui";
+const CONFIRM_DELAY_MS = 450;
 export function Question({
   check,
   onAnswer,
+  onAdvance,
   onStep,
 }: {
   check: QuickCheck;
   onAnswer: (value: QuickAnswer) => void;
+  onAdvance: () => void;
   onStep: (step: number) => void;
 }) {
   const q = QUICK_QUESTIONS[check.step],
     value = check.answers[q.id],
     heading = useRef<HTMLHeadingElement>(null);
   const group = QUICK_GROUPS.find((g) => g.id === q.group)!;
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [confirming, setConfirming] = useState(false);
+  useEffect(
+    () => () => {
+      if (timer.current !== null) clearTimeout(timer.current);
+    },
+    [],
+  );
+  const chooseAnswer = (answer: Exclude<QuickAnswer, null>) => {
+    if (timer.current !== null) return;
+    onAnswer(answer);
+    setConfirming(true);
+    timer.current = setTimeout(onAdvance, CONFIRM_DELAY_MS);
+  };
   useEffect(() => {
     heading.current?.focus({ preventScroll: true });
   }, [q.id]);
@@ -33,12 +50,24 @@ export function Question({
         </span>
         <span>{group.title}</span>
       </div>
-      <div className="question-stage" key={q.id}>
+      <div
+        className={`question-stage${confirming ? " is-confirming" : ""}`}
+        key={q.id}
+        style={
+          confirming
+            ? { animationDuration: `${CONFIRM_DELAY_MS}ms` }
+            : undefined
+        }
+      >
         <h1 ref={heading} tabIndex={-1}>
           {q.text}
         </h1>
         <p className="question-help">{q.help}</p>
-        <fieldset className="scale" aria-labelledby="scale-label">
+        <fieldset
+          className="scale"
+          aria-labelledby="scale-label"
+          disabled={confirming}
+        >
           <legend id="scale-label" className="sr-only">
             Ihre Einschätzung: 1 bedeutet niedriges Risiko, 10 hohes Risiko
           </legend>
@@ -55,12 +84,12 @@ export function Question({
                   checked={value === n}
                   readOnly
                   onClick={(event) => {
-                    if (event.detail < 2) onAnswer(n);
+                    if (event.detail < 2) chooseAnswer(n);
                   }}
                   onKeyDown={(event) => {
                     if (event.key === " " || event.key === "Enter") {
                       event.preventDefault();
-                      onAnswer(n);
+                      chooseAnswer(n);
                     }
                   }}
                   aria-label={String(n)}
@@ -103,15 +132,16 @@ export function Question({
         <button
           className="text-link back"
           onClick={() => onStep(Math.max(0, check.step - 1))}
-          disabled={check.step === 0}
+          disabled={check.step === 0 || confirming}
         >
           <Arrow direction="left" />
           Zurück
         </button>
         <button
           className={`unknown-choice ${value === "unknown" ? "selected" : ""}`}
+          disabled={confirming}
           onClick={(event) => {
-            if (event.detail < 2) onAnswer("unknown");
+            if (event.detail < 2) chooseAnswer("unknown");
           }}
         >
           Weiß ich noch nicht
@@ -121,6 +151,7 @@ export function Question({
         {QUICK_GROUPS.map((g, i) => (
           <button
             key={g.id}
+            disabled={confirming}
             onClick={() => onStep(i * 3)}
             aria-current={q.group === g.id ? "step" : undefined}
           >
