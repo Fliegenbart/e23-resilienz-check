@@ -55,7 +55,16 @@ export function Question({
                   name={q.id}
                   value={n}
                   checked={value === n}
-                  onChange={() => onAnswer(n)}
+                  readOnly
+                  onClick={(event) => {
+                    if (event.detail < 2) onAnswer(n);
+                  }}
+                  onKeyDown={(event) => {
+                    if (event.key === " " || event.key === "Enter") {
+                      event.preventDefault();
+                      onAnswer(n);
+                    }
+                  }}
                   aria-label={String(n)}
                 />
                 <span>{n}</span>
@@ -88,7 +97,7 @@ export function Question({
           ) : value === "unknown" ? (
             "Als offene Einschätzung markiert."
           ) : (
-            "Wählen Sie den Punkt, der Ihr Angebot am besten beschreibt."
+            "Ein Klick wählt Ihre Antwort und führt direkt weiter."
           )}
         </p>
       </div>

@@ -590,11 +590,17 @@ export default function QuickApp() {
             {current.view === "questions" ? (
               <Question
                 check={current}
-                onAnswer={(v: QuickAnswer) =>
-                  update((c) =>
-                    answerCheck(c, current.methodologySnapshot[c.step].id, v),
-                  )
-                }
+                onAnswer={(v: QuickAnswer) => {
+                  update((c) => {
+                    answerCheck(c, current.methodologySnapshot[c.step].id, v);
+                    if (typeof v === "number") {
+                      if (c.step === c.methodologySnapshot.length - 1)
+                        c.view = "results";
+                      else c.step += 1;
+                    }
+                  });
+                  if (typeof v === "number") window.scrollTo(0, 0);
+                }}
                 onStep={onStep}
                 onFinish={() => {
                   update((c) => {
