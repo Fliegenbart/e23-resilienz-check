@@ -626,9 +626,6 @@ small {
   gap: 20px;
   min-height: 125px;
 }
-.question-actions .button {
-  min-width: 175px;
-}
 .unknown-choice {
   font-size: 14px;
   text-decoration: underline;
@@ -1721,25 +1718,17 @@ small {
     padding: 10px 0 25px;
     min-height: 0;
   }
-  .question-actions .button {
-    min-width: 0;
-    grid-column: 2;
-    grid-row: 1;
-    padding: 14px 16px;
-    gap: 15px;
-    font-size: 14px;
-  }
   .question-actions .back {
     grid-column: 1;
     grid-row: 1;
     font-size: 13px;
   }
   .question-actions .unknown-choice {
-    grid-column: 1/-1;
-    grid-row: 2;
+    grid-column: 2;
+    grid-row: 1;
     font-size: 12px;
     padding: 6px;
-    justify-self: center;
+    justify-self: end;
   }
   .section-nav {
     gap: 12px;

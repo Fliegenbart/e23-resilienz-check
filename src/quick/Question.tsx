@@ -6,12 +6,10 @@ export function Question({
   check,
   onAnswer,
   onStep,
-  onFinish,
 }: {
   check: QuickCheck;
   onAnswer: (value: QuickAnswer) => void;
   onStep: (step: number) => void;
-  onFinish: () => void;
 }) {
   const q = QUICK_QUESTIONS[check.step],
     value = check.answers[q.id],
@@ -112,19 +110,11 @@ export function Question({
         </button>
         <button
           className={`unknown-choice ${value === "unknown" ? "selected" : ""}`}
-          onClick={() => onAnswer("unknown")}
+          onClick={(event) => {
+            if (event.detail < 2) onAnswer("unknown");
+          }}
         >
           Weiß ich noch nicht
-        </button>
-        <button
-          className="button primary"
-          disabled={value === null}
-          onClick={() =>
-            check.step === 11 ? onFinish() : onStep(check.step + 1)
-          }
-        >
-          {check.step === 11 ? "Ergebnis ansehen" : "Weiter"}
-          <Arrow />
         </button>
       </div>
       <nav className="section-nav" aria-label="Bereiche des Checks">
