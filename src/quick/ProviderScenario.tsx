@@ -16,7 +16,8 @@ export function ProviderScenario({
   onChange?: (settings: ProviderScenarioSettings) => void;
 }) {
   const id = useId();
-  const { settings, capability, price } = evaluateProviderScenario(check);
+  const { settings, capability, price, benefit } =
+    evaluateProviderScenario(check);
   const axes = [
     {
       key: "capabilityPace" as const,
@@ -67,6 +68,11 @@ export function ProviderScenario({
               aria-live={print ? undefined : "polite"}
             >
               {result.text}
+              {key === "capabilityPace" && benefit && (
+                <span className="provider-scenario-benefit">
+                  {benefit.text}
+                </span>
+              )}
             </p>
           </div>
         ))}

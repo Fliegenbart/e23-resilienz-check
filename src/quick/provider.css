@@ -169,6 +169,17 @@
   margin: 0 auto;
   padding: 40px 4vw;
 }
+.provider-benefit {
+  margin-top: 32px;
+}
+.provider-scenario-benefit {
+  display: block;
+  margin-top: 8px;
+}
+.benefit-high,
+.benefit-partial {
+  color: #345c40;
+}
 .provider-result-intro {
   margin-bottom: 36px;
 }

@@ -1,13 +1,21 @@
-import { PROVIDER_PREMISE, PROVIDER_BOUNDARIES } from "./provider-questions";
-import { ROUTE_LABELS, PROTECTION_LABELS } from "./provider-analysis";
-import { PROVIDER_SCENARIO_METHOD } from "./provider-scenario";
+import {
+  PROVIDER_METHOD,
+  providerPremise,
+  PROVIDER_BOUNDARIES,
+  isProviderV4,
+} from "./provider-questions";
+import { ProviderRules } from "./ProviderRules";
 
-export function ProviderMethodContent() {
+export function ProviderMethodContent({
+  version = PROVIDER_METHOD,
+}: {
+  version?: string;
+}) {
   return (
     <>
       <p className="section-index">Annahmen und Grundlagen</p>
       <h2>Was wir prüfen.</h2>
-      <p>{PROVIDER_PREMISE}</p>
+      <p>{providerPremise(version)}</p>
       <p>{PROVIDER_BOUNDARIES}</p>
       <h3>So entsteht Ihr Ergebnis</h3>
       <p>
@@ -16,40 +24,13 @@ export function ProviderMethodContent() {
         ausdrücken. Maßgeblich sind die beiden Texte an der Skala.
       </p>
       <p>
-        Wir betrachten drei Wege getrennt: digitale Arbeit übernehmen, im
-        vorhandenen Paket mitliefern und Ihre Oberfläche umgehen. Eigene
-        Vorteile werden davon nicht abgezogen.
+        {isProviderV4(version)
+          ? "Was KI übernehmen kann, was Sie schützt und wie Sie selbst profitieren: drei getrennte Befunde."
+          : "Wir betrachten drei Wege getrennt: digitale Arbeit übernehmen, im vorhandenen Paket mitliefern und Ihre Oberfläche umgehen. Eigene Vorteile werden davon nicht abgezogen."}
       </p>
       <details>
         <summary>Die Auswertungsregeln im Detail</summary>
-        <h3>Szenario: nächste zwei Jahre</h3>
-        <p>{PROVIDER_SCENARIO_METHOD}</p>
-        <p>
-          Digitale Arbeit: Fragen 1, 2 und 3. Mitliefern: Fragen 1, 2 und 4.
-          Oberfläche umgehen: Fragen 4, 5 und 6.
-        </p>
-        <ul>
-          <li>Alle drei Werte 7–10: „{ROUTE_LABELS.high}“.</li>
-          <li>
-            Alle mindestens 4, aber nicht alle mindestens 7: „
-            {ROUTE_LABELS.partial}“.
-          </li>
-          <li>Mindestens ein Wert 1–3: „{ROUTE_LABELS.barrier}“.</li>
-          <li>Mindestens eine offene Antwort: „{ROUTE_LABELS.unknown}“.</li>
-        </ul>
-        <p>
-          Schutzfaktoren aus Fragen 7–10: 1–3 „{PROTECTION_LABELS.weak}“, 4–6 „
-          {PROTECTION_LABELS.limited}“, 7–10 „{PROTECTION_LABELS.strong}“.
-          Fragen 11 und 12 prüfen zusätzlich Vergleich und Kaufentscheidung.
-          Erst beide Werte ab 7 stützen einen bezahlten Vorteil nach Ihren
-          Angaben. Sie bestätigen nicht automatisch jeden einzelnen
-          Schutzfaktor.
-        </p>
-        <p>
-          Dies sind eigene qualitative Gesprächsregeln. Sie ergeben weder eine
-          Übernahmewahrscheinlichkeit noch eine Unternehmensbewertung. Eine
-          sichtbare Hürde kann durch weitere Entwicklung kleiner werden.
-        </p>
+        <ProviderRules version={version} />
       </details>
       <h3>Was die Quellen beitragen</h3>
       <p>

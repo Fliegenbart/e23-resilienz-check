@@ -1,6 +1,26 @@
 # Übergabe an einen neuen Codex-Chat
 
-## Aktueller Stand: Plattform-Check 0.5.1
+## Aktueller Stand: Resilience-Assessment 0.6.0
+
+Stand: 7. November 2026. Dieser Abschnitt ersetzt die nachfolgenden historischen Angaben. David hat die Überarbeitung der zwölf Fragen und der Auswertung sowie die erneute Veröffentlichung auf Vercel ausdrücklich beauftragt. Minimalismus bleibt verbindlich: kurze Fragen, kurze Skalenanker, Hilfen unter „Details“, Befunde und Schritte aufklappbar.
+
+- Neue Methode `quick-check-4.0`: Q1 digitale Leistung, Q2 beim Kunden verfügbare Daten/Programme, Q3 vorhandene Plattform, Q4 Vorteil durch heutige KI-Schwächen, Q5 exklusive Daten, Q6 Netzwerke, Q7 Ausführung vor Ort, Q8 verbindliche Ergebnisverantwortung, Q9 Wechselaufwand, Q10 Rechte/Zugänge, Q11 eigener Nutzen besserer KI, Q12 Weiterzahlung nach KI-Vergleich.
+- Risiken getrennt: Arbeit übernehmen Q1/Q2, im Paket mitliefern Q1/Q2/Q3, KI-Vorsprung einholen Q4. Fehlende erforderliche Antworten haben Vorrang und lassen den Weg offen; sonst alle ab 7 hoch, alle ab 4 teilweise, mindestens ein Wert bis 3 mit Hürden.
+- Sechs mögliche Schutzfaktoren Q5–Q10, eigener Nutzen Q11 und Belege Q12 bleiben unabhängig. Weder Schutz noch eigener Nutzen werden vom Risiko abgezogen. Kein Gesamtscore, keine Überlebenswahrscheinlichkeit, kein automatischer Schutz durch präzise Berechnungen, Datenschutz oder Zusagen.
+- Szenario weiterhin genau zwei Jahre und zwei unabhängige Tempi. „KI wird besser“ zeigt mögliche Übernahme UND eigenen Nutzen. „KI wird günstiger“ betrifft Preis-/Bündelungsdruck anhand Q1/Q2 bzw. Q1/Q2/Q3. Keine Preiswirkung aus Q4/Q11 ableiten. Struktur und Schutz bleiben unverändert.
+- Bildschirm und Bericht nutzen dieselben Befunde, Szenarien und versionierten Regeln. Neue Dateien: `provider-analysis-4.ts`, `ProviderRules.tsx`. Die bestehende Schnittstelle `provider-analysis.ts` routet exakt nach gespeicherter Methode.
+- V3.1-Fragen in `methods/quick-check-3.1.json`, V3.0/V3.1-Regeln und Szenarioauswertung in `methods/provider-analysis-3.ts` eingefroren. Keine alten Antworten umdeuten. Alte Checks zeigen einen kurzen Hinweis und können separat neu gestartet werden. V1/V2 bleiben unverändert.
+- JSON-Schema 1.1, fünf Methoden, Szenarioformat `provider-scenario-1.0`. Strenge Snapshot-/Methodenprüfung bleibt bestehen. Business-Beschreibung und Diktat sind unverändert; Text wird gespeichert, nicht von KI ausgewertet.
+
+Validierung vor Veröffentlichung: **152 Tests in 14 Dateien bestanden**, TypeScript/Vite erfolgreich, Diff sauber. Zuerst 17 fehlgeschlagene V4-Regressionen reproduziert, dann implementiert. Prüfungen decken Grenzwerte, unabhängige Befunde, unbekannte Antworten, alle neun Tempokombinationen, V3-Historie, JSON und Bildschirm-/Berichtsinhalte ab. Browser auf `http://localhost:5183/`: vollständiger neuer Check mit Beschreibung, offene Frage, Korrektur per Tastatur, Tempi schnell/langsam, Neuladen und Wiederöffnung, alter 3.1-Check mit ursprünglicher Auswertung. Desktop 1280, Mobil 390/320 px ohne horizontalen Überlauf, keine Konsolenfehler. Nutzerdaten unter `127.0.0.1` nicht bearbeitet. Screenshots außerhalb des Repositories im bestehenden `e23-plattform-check`-Prüfverzeichnis, Präfix `v4-`.
+
+Grenzen: Native PDF-Ausgabe weiterhin nicht visuell abgenommen; Berichtsinhalte automatisiert geprüft. Diktat wurde bisher mit simulierten Browserereignissen geprüft, keine echte Mikrofonaufnahme gestartet.
+
+Veröffentlichung ausdrücklich autorisiert über Git-Branch `flux` → Vercel. Arbeitsbranch `codex/quick-check`. Produktionsadresse: https://e23-resilienz-check.vercel.app. Deployment nach Push separat auf READY und auf der öffentlichen Seite prüfen; bei späteren Aufgaben aktuellen Remote-/Deployment-Stand erneut ermitteln. Letzter vor dieser Änderung geprüfter Produktionscommit: `e4bd89f` (0.5.1).
+
+---
+
+## Historischer Stand: Plattform-Check 0.5.1
 
 Stand: 7. November 2026. **Dieser Abschnitt ersetzt die unten dokumentierte frühere Produktrichtung.** Der neue Umbau ist umgesetzt; David hat die Veröffentlichung auf Vercel ausdrücklich beauftragt. Arbeitsbranch: `codex/quick-check`, Produktionsbranch: `flux`. Die öffentliche Adresse ist `https://e23-resilienz-check.vercel.app`. Deployment- und Remote-Stand bei einem späteren Auftrag erneut prüfen.
 

@@ -1,5 +1,20 @@
 # Plattform-Check Implementation Plan
 
+## Folgeauftrag: zwölf Fragen und neue Auswertung (0.6.0)
+
+David hat die Umsetzung der Analyse seines eingefügten Textes bestätigt und die Veröffentlichung erneut beauftragt. Neue Methode 4.0 statt Umdeutung alter Antworten. Die folgende ältere Planung dokumentiert 3.x.
+
+- [x] V3.1-Fragen und V3-Auswertung einschließlich Szenariotexten einfrieren; V1/V2/3.0 erhalten.
+- [x] Genau zwölf kurze Fragen: digitaler Anteil, Kundenmittel, Plattform, heutige KI-Schwächen, eigene Daten, Netzwerk, reale Ausführung, Verantwortung, Wechselaufwand, Rechte, eigener KI-Nutzen, bezahlter KI-Vergleich.
+- [x] Auswertung: drei Risiken (Q1/Q2, Q1/Q2/Q3, Q4), sechs Schutzfaktoren (Q5–Q10), eigener Nutzen (Q11), Belege (Q12). Keine Verrechnung und keine vermeintlichen Überlebensprozente aus dem Text übernehmen.
+- [x] Beide Tempi und zwei Jahre erhalten; eigener Nutzen reagiert separat auf das Fähigkeitstempo. Günstigere KI überwindet keine Fähigkeitslücke.
+- [x] Darstellung minimal halten, neue Befunde und versionierte Regeln gemeinsam für Bildschirm und Bericht verwenden.
+- [x] TDD: 17 V4-Prüfungen zuerst fehlgeschlagen. Danach insgesamt 152 Tests in 14 Dateien bestanden, Build und Diff erfolgreich. Alter V3.1-Katalog, Regeln und Szenarien mit expliziten historischen Fixtures geprüft.
+- [x] Browser: Beschreibung → zwölf Fragen (eine offen) → Ergebnis → Korrektur mit Tastatur → schnell/langsam → Reload/Wiederöffnung. Früheren V3.1-Check und Methodendialog geprüft. Desktop 1280, Mobil 390/320 px ohne Überbreite, Konsole leer. Belege `v4-frage-mobil.jpg`, `v4-ergebnis-desktop.jpg`, `v4-ergebnis-mobil.jpg`, `v4-ergebnis-schmal.jpg` außerhalb des Repositories. Native PDF-/Mikrofon-Grenzen gelten weiter.
+- Veröffentlichung über `flux` ist autorisiert; READY und öffentliche URL nach dem Push prüfen.
+
+## Ursprüngliche Planung (3.x)
+
 **Goal:** Die bestätigte Leitfrage beantworten: Was können die KI-Anbieter übernehmen und was schützt das Geschäft?
 
 **Architecture:** Neue, eigenständige Methode `quick-check-3.1` mit zwölf konkreten Fragen und drei regelbasierten Angriffswegen. Der erste Fragenstand 3.0 bleibt eingefroren. Vier mögliche Schutzfaktoren und zwei Belegfragen bleiben von den Angriffswegen getrennt. Bestehende Methoden, Szenarien, Speicherung und Exporte bleiben erhalten; V3 erhält keine historische Durchschnittsnote.

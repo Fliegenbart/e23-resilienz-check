@@ -4,7 +4,9 @@ import {
   evaluateProvider,
   ROUTE_LABELS,
   PROTECTION_LABELS,
+  BENEFIT_LABELS,
 } from "./provider-analysis";
+import { isProviderV4 } from "./provider-questions";
 import { Arrow } from "./ui";
 import { ProviderScenario } from "./ProviderScenario";
 import type { ProviderScenarioSettings } from "./provider-scenario";
@@ -93,25 +95,48 @@ export function ProviderFindings({
   return (
     <>
       <div className="provider-findings-grid">
-        <section className="provider-section">
-          <h2>Was KI übernehmen könnte</h2>
-          {r.routes.map((route) => (
-            <Finding
-              key={route.id}
-              title={route.title}
-              status={ROUTE_LABELS[route.level]}
-              tone={`route-${route.level}`}
-              print={print}
-            >
-              <p>{route.description}</p>
-              <AnswerBasis
-                check={check}
-                ids={route.questionIds}
+        <div>
+          <section className="provider-section">
+            <h2>Was KI übernehmen könnte</h2>
+            {r.routes.map((route) => (
+              <Finding
+                key={route.id}
+                title={route.title}
+                status={ROUTE_LABELS[route.level]}
+                tone={`route-${route.level}`}
                 print={print}
-              />
-            </Finding>
-          ))}
-        </section>
+              >
+                <p>{route.description}</p>
+                <AnswerBasis
+                  check={check}
+                  ids={route.questionIds}
+                  print={print}
+                />
+              </Finding>
+            ))}
+          </section>
+          {r.benefit && (
+            <section className="provider-section provider-benefit">
+              <h2>Was Sie gewinnen können</h2>
+              <Finding
+                title={r.benefit.title}
+                status={BENEFIT_LABELS[r.benefit.level]}
+                tone={`benefit-${r.benefit.level}`}
+                print={print}
+              >
+                <p>{r.benefit.description}</p>
+                <p>
+                  <strong>Prüfen:</strong> {r.benefit.test}
+                </p>
+                <AnswerBasis
+                  check={check}
+                  ids={[r.benefit.questionId]}
+                  print={print}
+                />
+              </Finding>
+            </section>
+          )}
+        </div>
         <section className="provider-section">
           <h2>Was Sie schützen kann</h2>
           {r.protections.map((p) => (
@@ -151,16 +176,20 @@ export function ProviderFindings({
             </summary>
             <p>{r.evidenceText}</p>
             <div>
+              {!isProviderV4(check.methodologyVersion) && (
+                <span>
+                  Vergleich{" "}
+                  <strong>
+                    {typeof check.answers.Q11 === "number"
+                      ? `${check.answers.Q11}/10`
+                      : "offen"}
+                  </strong>
+                </span>
+              )}
               <span>
-                Vergleich{" "}
-                <strong>
-                  {typeof check.answers.Q11 === "number"
-                    ? `${check.answers.Q11}/10`
-                    : "offen"}
-                </strong>
-              </span>
-              <span>
-                Kaufentscheidung{" "}
+                {isProviderV4(check.methodologyVersion)
+                  ? "Kauf nach KI-Vergleich"
+                  : "Kaufentscheidung"}{" "}
                 <strong>
                   {typeof check.answers.Q12 === "number"
                     ? `${check.answers.Q12}/10`

@@ -61,7 +61,7 @@ function Method({
         <Close />
       </button>
       {isProviderMethod(version) ? (
-        <ProviderMethodContent />
+        <ProviderMethodContent version={version} />
       ) : (
         <>
           <p className="section-index">Transparente Berechnung</p>
@@ -477,11 +477,10 @@ export default function QuickApp() {
       <div id="quick-content" className="quick-content">
         {page === "check" &&
           current &&
-          !isProviderMethod(current.methodologyVersion) && (
+          current.methodologyVersion !== QUICK_METHOD && (
             <div className="method-version-note no-print">
               <span>
-                Sie sehen einen früheren Check mit seinen ursprünglichen Fragen.
-                Das neue Assessment beginnt mit einer eigenen Bewertung.
+                Früherer Check. Fragen und Auswertung bleiben unverändert.
               </span>
               <button
                 className="text-link"

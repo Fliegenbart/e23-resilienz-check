@@ -3,7 +3,7 @@ import type { QuickCheck, QuickAnswer } from "./model";
 import { groupsForCheck } from "./model";
 import {
   isProviderMethod,
-  PROVIDER_PREMISE,
+  providerPremise,
   PROVIDER_BOUNDARIES,
 } from "./provider-questions";
 import { EXPERT_PREMISE, EXPERT_BOUNDARIES } from "./expert-team";
@@ -206,7 +206,7 @@ export function Question({
           <p>{q.help}</p>
           {q.example && <p>{q.example}</p>}
           <p className="provider-question-assumption">
-            {PROVIDER_PREMISE} {PROVIDER_BOUNDARIES}
+            {providerPremise(check.methodologyVersion)} {PROVIDER_BOUNDARIES}
           </p>
         </details>
       )}

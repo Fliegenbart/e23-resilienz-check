@@ -9,6 +9,7 @@ import {
 } from "../src/quick/model";
 import { EXPERT_QUESTIONS } from "../src/quick/expert-questions";
 import providerV3 from "../src/quick/methods/quick-check-3.0.json";
+import providerV31 from "../src/quick/methods/quick-check-3.1.json";
 import type { QuickQuestion } from "../src/quick/model";
 import * as analysis from "../src/quick/provider-analysis";
 import { ProviderResults } from "../src/quick/ProviderResults";
@@ -16,6 +17,8 @@ import { QuickReport } from "../src/quick/Report";
 
 function rated(value = 9) {
   const check = createCheck("existing");
+  check.methodologyVersion = "quick-check-3.1";
+  check.methodologySnapshot = structuredClone(providerV31) as QuickQuestion[];
   check.methodologySnapshot.forEach((q) => answerCheck(check, q.id, value));
   check.view = "results";
   return check;

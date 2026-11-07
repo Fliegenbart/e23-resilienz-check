@@ -1,6 +1,7 @@
 import { z } from "zod";
 import oldQuestions from "./methods/quick-check-1.0.json";
 import providerV3 from "./methods/quick-check-3.0.json";
+import providerV31 from "./methods/quick-check-3.1.json";
 import { EXPERT_QUESTIONS } from "./expert-questions";
 import {
   PROVIDER_METHOD,
@@ -41,6 +42,7 @@ export const QUICK_METHODS: Record<string, QuickQuestion[]> = {
   "quick-check-1.0": oldQuestions as QuickQuestion[],
   "quick-check-2.0": EXPERT_QUESTIONS,
   "quick-check-3.0": providerV3 as QuickQuestion[],
+  "quick-check-3.1": providerV31 as QuickQuestion[],
   [QUICK_METHOD]: QUICK_QUESTIONS,
 };
 export interface QuickCheck {
@@ -164,6 +166,7 @@ const checkSchema = z
       "quick-check-1.0",
       "quick-check-2.0",
       "quick-check-3.0",
+      "quick-check-3.1",
       QUICK_METHOD,
     ]),
     methodologySnapshot: z.array(questionSchema).length(12),
@@ -220,7 +223,7 @@ export function serializeChecks(checks: QuickCheck[]) {
     {
       format: "e23-quick-check",
       schemaVersion: QUICK_SCHEMA,
-      appVersion: "0.5.1",
+      appVersion: "0.6.0",
       exportedAt: new Date().toISOString(),
       checks,
     },
@@ -283,7 +286,7 @@ export function checkTitle(c: QuickCheck) {
 }
 export function exampleCheck() {
   const c = createCheck("existing");
-  const values = [9, 9, 8, 10, 8, 9, 8, 1, 2, 6, 3, 4];
+  const values = [9, 9, 8, 8, 8, 2, 1, 7, 6, 2, 9, 3];
   QUICK_QUESTIONS.forEach((q, i) => answerCheck(c, q.id, values[i]));
   c.isExample = true;
   c.view = "results";

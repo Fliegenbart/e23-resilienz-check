@@ -8,6 +8,7 @@ import {
   type QuickQuestion,
 } from "../src/quick/model";
 import providerV3 from "../src/quick/methods/quick-check-3.0.json";
+import providerV31 from "../src/quick/methods/quick-check-3.1.json";
 import { EXPERT_QUESTIONS } from "../src/quick/expert-questions";
 import { evaluateProvider } from "../src/quick/provider-analysis";
 import { createElement } from "react";
@@ -19,6 +20,8 @@ import { createScenarioWorkspace } from "../src/quick/scenario-model";
 
 function rated(values: number[]) {
   const c = createCheck("existing");
+  c.methodologyVersion = "quick-check-3.1";
+  c.methodologySnapshot = structuredClone(providerV31) as QuickQuestion[];
   c.methodologySnapshot.forEach((q, i) => answerCheck(c, q.id, values[i]));
   return c;
 }
@@ -26,7 +29,7 @@ function rated(values: number[]) {
 describe("Plattform-Check", () => {
   it("beginnt mit konkreten Fragen einer neuen Methode", () => {
     const c = createCheck("existing");
-    expect(c.methodologyVersion).toBe("quick-check-3.1");
+    expect(c.methodologyVersion).toBe("quick-check-4.0");
     expect(c.view).toBe("questions");
     expect(c.methodologySnapshot[0].text).toContain("digital");
   });
