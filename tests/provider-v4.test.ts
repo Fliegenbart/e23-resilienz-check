@@ -182,6 +182,7 @@ describe("Zwölf Fragen zu KI-Risiko, Schutz und eigenem Nutzen", () => {
         onExport() {},
         onScenarioChange() {},
         onDescriptionChange() {},
+        onAnalysisChange() {},
       }),
     );
     const report = renderToStaticMarkup(createElement(QuickReport, { check }));

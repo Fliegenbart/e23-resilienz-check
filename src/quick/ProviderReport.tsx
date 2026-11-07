@@ -5,9 +5,12 @@ import { providerPremise, PROVIDER_BOUNDARIES } from "./provider-questions";
 import { ProviderFindings } from "./ProviderResults";
 import { ProviderScenario } from "./ProviderScenario";
 import { ProviderRules } from "./ProviderRules";
+import { currentBusinessAnalysis } from "./business-analysis";
+import { BusinessAnalysisFindings } from "./BusinessAnalysis";
 
 export function ProviderReport({ check }: { check: QuickCheck }) {
   const r = evaluateProvider(check);
+  const personal = currentBusinessAnalysis(check);
   return (
     <article className="quick-print-report provider-print-report">
       <header className="print-brand">
@@ -18,8 +21,17 @@ export function ProviderReport({ check }: { check: QuickCheck }) {
         {checkTitle(check)}
         {check.isExample ? " · Fiktives Beispiel" : ""}
       </p>
-      <h1>{r.headline}</h1>
-      <p>{r.summary}</p>
+      <h1>{personal?.result.headline ?? r.headline}</h1>
+      <p>{personal?.result.summary ?? r.summary}</p>
+      {personal && (
+        <p>KI-Auswertung aus Ihrer Beschreibung und Ihren Antworten.</p>
+      )}
+      {check.businessAnalysis && !personal && (
+        <p>
+          Die frühere KI-Auswertung ist nicht mehr aktuell und hier nicht
+          enthalten.
+        </p>
+      )}
       <p>{r.answered} von 12 eingeschätzt. Ergebnis auf Basis Ihrer Angaben.</p>
       {check.businessDescription?.trim() && (
         <section className="print-business-description">
@@ -28,6 +40,7 @@ export function ProviderReport({ check }: { check: QuickCheck }) {
         </section>
       )}
       <ProviderScenario check={check} print />
+      {personal && <BusinessAnalysisFindings analysis={personal} print />}
       <section className="print-block">
         <h2>Grundannahme des Stresstests</h2>
         <p>{providerPremise(check.methodologyVersion)}</p>

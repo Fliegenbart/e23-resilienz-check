@@ -160,6 +160,7 @@ describe("Zwei-Jahres-Szenario", () => {
         onExport() {},
         onScenarioChange() {},
         onDescriptionChange() {},
+        onAnalysisChange() {},
       }),
     );
     const report = renderToStaticMarkup(createElement(QuickReport, { check }));

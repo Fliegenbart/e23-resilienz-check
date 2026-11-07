@@ -1,4 +1,4 @@
-import type { GroupId, QuickQuestion } from "./model";
+import type { GroupId, QuickQuestion } from "./model.js";
 
 export const PROVIDER_METHOD = "quick-check-4.0";
 export function isProviderMethod(version: string) {

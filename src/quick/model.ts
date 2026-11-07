@@ -1,21 +1,25 @@
 import { z } from "zod";
-import oldQuestions from "./methods/quick-check-1.0.json";
-import providerV3 from "./methods/quick-check-3.0.json";
-import providerV31 from "./methods/quick-check-3.1.json";
-import { EXPERT_QUESTIONS } from "./expert-questions";
+import oldQuestions from "./methods/quick-check-1.0.json" with { type: "json" };
+import providerV3 from "./methods/quick-check-3.0.json" with { type: "json" };
+import providerV31 from "./methods/quick-check-3.1.json" with { type: "json" };
+import { EXPERT_QUESTIONS } from "./expert-questions.js";
 import {
   PROVIDER_METHOD,
   PROVIDER_QUESTIONS,
   PROVIDER_GROUPS,
   isProviderMethod,
-} from "./provider-questions";
-import { scenarioWorkspaceSchema } from "./scenario-model";
-import type { ScenarioWorkspace } from "./scenario-model";
+} from "./provider-questions.js";
+import { scenarioWorkspaceSchema } from "./scenario-model.js";
+import type { ScenarioWorkspace } from "./scenario-model.js";
 import {
   providerScenarioSchema,
   type ProviderScenarioSettings,
-} from "./provider-scenario";
-import { BUSINESS_DESCRIPTION_MAX_LENGTH } from "./business-description";
+} from "./provider-scenario.js";
+import { BUSINESS_DESCRIPTION_MAX_LENGTH } from "./business-description.js";
+import {
+  businessAnalysisSchema,
+  type BusinessAnalysis,
+} from "./business-analysis.js";
 export const QUICK_METHOD = PROVIDER_METHOD;
 export const QUICK_SCHEMA = "1.1";
 export type GroupId = "value" | "competition" | "advantage" | "control";
@@ -59,6 +63,7 @@ export interface QuickCheck {
   scenarios?: ScenarioWorkspace;
   providerScenario?: ProviderScenarioSettings;
   businessDescription?: string;
+  businessAnalysis?: BusinessAnalysis;
   isExample: boolean;
   originId: string | null;
 }
@@ -189,10 +194,17 @@ const checkSchema = z
       .string()
       .max(BUSINESS_DESCRIPTION_MAX_LENGTH)
       .optional(),
+    businessAnalysis: businessAnalysisSchema.optional(),
     isExample: z.boolean(),
     originId: z.string().nullable(),
   })
   .strict()
+  .refine(
+    (c) =>
+      c.businessAnalysis === undefined ||
+      (c.methodologyVersion === "quick-check-4.0" && c.schemaVersion === "1.1"),
+    "Individuelle Business-Auswertungen gehören zur Methode 4.0 mit Schema 1.1.",
+  )
   .refine(
     (c) =>
       (c.view !== "scenarios" || c.scenarios !== undefined) &&
@@ -223,7 +235,7 @@ export function serializeChecks(checks: QuickCheck[]) {
     {
       format: "e23-quick-check",
       schemaVersion: QUICK_SCHEMA,
-      appVersion: "0.6.0",
+      appVersion: "0.7.0",
       exportedAt: new Date().toISOString(),
       checks,
     },

@@ -1,21 +1,24 @@
-import type { QuickCheck } from "./model";
-import { isProviderV4 } from "./provider-questions";
+import type { QuickCheck } from "./model.js";
+import { isProviderV4 } from "./provider-questions.js";
 import {
   evaluateProvider as evaluateV3,
   evaluateProviderScenario as scenarioV3,
-} from "./methods/provider-analysis-3";
+} from "./methods/provider-analysis-3.js";
 import {
   evaluateProviderV4,
   evaluateProviderScenarioV4,
   type ProviderBenefit,
-} from "./provider-analysis-4";
+} from "./provider-analysis-4.js";
 
-export { ROUTE_LABELS, PROTECTION_LABELS } from "./methods/provider-analysis-3";
+export {
+  ROUTE_LABELS,
+  PROTECTION_LABELS,
+} from "./methods/provider-analysis-3.js";
 export type {
   RouteLevel,
   ProtectionLevel,
-} from "./methods/provider-analysis-3";
-export { BENEFIT_LABELS } from "./provider-analysis-4";
+} from "./methods/provider-analysis-3.js";
+export { BENEFIT_LABELS } from "./provider-analysis-4.js";
 
 // Dispatch by the saved method. Old answer IDs never acquire new meanings.
 export function evaluateProvider(

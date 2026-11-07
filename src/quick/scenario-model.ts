@@ -1,5 +1,5 @@
 import { z } from "zod";
-import oldSnapshot from "./methods/scenario-stress-1.0.json";
+import oldSnapshot from "./methods/scenario-stress-1.0.json" with { type: "json" };
 export const SCENARIO_METHOD = "scenario-stress-2.0";
 export type ScenarioAnswer = number | "unknown" | null;
 export type ScenarioQuestionId =

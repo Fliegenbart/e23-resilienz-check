@@ -1,6 +1,6 @@
 // Frozen evaluation for quick-check-3.0 and quick-check-3.1.
-import type { QuickCheck } from "../model";
-import { DEFAULT_PROVIDER_SCENARIO } from "../provider-scenario";
+import type { QuickCheck } from "../model.js";
+import { DEFAULT_PROVIDER_SCENARIO } from "../provider-scenario.js";
 
 export type RouteLevel = "high" | "partial" | "barrier" | "unknown";
 export const ROUTE_LABELS: Record<RouteLevel, string> = {

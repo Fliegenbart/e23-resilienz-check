@@ -148,6 +148,7 @@ describe("Plattform-Check", () => {
         onExport() {},
         onScenarioChange() {},
         onDescriptionChange() {},
+        onAnalysisChange() {},
       }),
     );
     const report = renderToStaticMarkup(

@@ -18,6 +18,14 @@ export function ProviderMethodContent({
       <p>{providerPremise(version)}</p>
       <p>{PROVIDER_BOUNDARIES}</p>
       <h3>So entsteht Ihr Ergebnis</h3>
+      {isProviderV4(version) && (
+        <p>
+          Auf Wunsch bezieht eine KI-Auswertung Ihre Business-Beschreibung,
+          Antworten und das gewählte Szenario auf Ihr Angebot. Sie ergänzt den
+          Check ohne externe Recherche. Geänderte Angaben erfordern eine neue
+          KI-Auswertung.
+        </p>
+      )}
       <p>
         Jede Skala beschreibt eine konkrete Eigenschaft Ihres Angebots. Eine
         hohe Zahl kann Übernahme erleichtern oder einen eigenen Vorteil

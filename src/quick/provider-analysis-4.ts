@@ -1,10 +1,10 @@
-import type { QuickCheck } from "./model";
+import type { QuickCheck } from "./model.js";
 import type {
   RouteLevel,
   ProtectionLevel,
-} from "./methods/provider-analysis-3";
-import { DEFAULT_PROVIDER_SCENARIO } from "./provider-scenario";
-import { isProviderV4 } from "./provider-questions";
+} from "./methods/provider-analysis-3.js";
+import { DEFAULT_PROVIDER_SCENARIO } from "./provider-scenario.js";
+import { isProviderV4 } from "./provider-questions.js";
 
 type BenefitLevel = "high" | "partial" | "low" | "unknown";
 export interface ProviderBenefit {

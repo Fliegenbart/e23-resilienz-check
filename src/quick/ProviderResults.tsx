@@ -11,6 +11,14 @@ import { Arrow } from "./ui";
 import { ProviderScenario } from "./ProviderScenario";
 import type { ProviderScenarioSettings } from "./provider-scenario";
 import { BusinessDescription } from "./BusinessDescription";
+import {
+  BusinessAnalysisControl,
+  BusinessAnalysisFindings,
+} from "./BusinessAnalysis";
+import {
+  currentBusinessAnalysis,
+  type BusinessAnalysis,
+} from "./business-analysis";
 
 function AnswerBasis({
   check,
@@ -230,6 +238,7 @@ export function ProviderResults({
   onExport,
   onScenarioChange,
   onDescriptionChange,
+  onAnalysisChange,
 }: {
   check: QuickCheck;
   onEdit: (step: number) => void;
@@ -238,8 +247,10 @@ export function ProviderResults({
   onExport: () => void;
   onScenarioChange: (settings: ProviderScenarioSettings) => void;
   onDescriptionChange: (text: string) => void;
+  onAnalysisChange: (analysis: BusinessAnalysis) => void;
 }) {
   const r = evaluateProvider(check);
+  const personal = currentBusinessAnalysis(check);
   const [answersOpen, setAnswersOpen] = useState(false);
   const [descriptionOpen, setDescriptionOpen] = useState(false);
   return (
@@ -249,9 +260,15 @@ export function ProviderResults({
           Ihr Ergebnis · {r.answered}/12 beantwortet
           {check.isExample ? " · Beispiel" : ""}
         </p>
-        <h1>{r.headline}</h1>
-        <p className="provider-result-summary">{r.summary}</p>
-        <p className="provider-context">Auswertung Ihrer zwölf Antworten.</p>
+        <h1>{personal?.result.headline ?? r.headline}</h1>
+        <p className="provider-result-summary">
+          {personal?.result.summary ?? r.summary}
+        </p>
+        <p className="provider-context">
+          {personal
+            ? "KI-Auswertung aus Ihrer Beschreibung und Ihren Antworten."
+            : "Auswertung Ihrer zwölf Antworten."}
+        </p>
         {r.unknown.length > 0 && (
           <button
             className="button secondary"
@@ -284,8 +301,21 @@ export function ProviderResults({
           </div>
         )}
       </section>
+      {isProviderV4(check.methodologyVersion) && (
+        <BusinessAnalysisControl check={check} onComplete={onAnalysisChange} />
+      )}
       <ProviderScenario check={check} onChange={onScenarioChange} />
-      <ProviderFindings check={check} />
+      {personal ? (
+        <>
+          <BusinessAnalysisFindings analysis={personal} />
+          <details className="business-analysis-overview">
+            <summary>Die zwölf Antworten im Überblick</summary>
+            <ProviderFindings check={check} />
+          </details>
+        </>
+      ) : (
+        <ProviderFindings check={check} />
+      )}
       <footer className="provider-result-tools">
         <button className="button primary" onClick={onPrint}>
           Ergebnis als PDF <Arrow />

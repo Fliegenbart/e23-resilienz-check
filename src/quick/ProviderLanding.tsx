@@ -56,7 +56,7 @@ export function ProviderLanding({
         </div>
       </section>
       <footer className="landing-footer">
-        <span>Antworten bleiben in diesem Browser.</span>
+        <span>Checks werden in diesem Browser gespeichert.</span>
         <button className="text-link" onClick={onExample}>
           Beispiel ansehen
         </button>

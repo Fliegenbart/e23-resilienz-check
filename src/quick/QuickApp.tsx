@@ -20,6 +20,7 @@ import { isProviderMethod } from "./provider-questions";
 import { ProviderLanding } from "./ProviderLanding";
 import { ProviderResults } from "./ProviderResults";
 import { ProviderMethodContent } from "./ProviderMethod";
+import { analysisMatches } from "./business-analysis";
 import { History } from "./History";
 import { QuickReport } from "./Report";
 import { Arrow, Close } from "./ui";
@@ -622,6 +623,12 @@ export default function QuickApp() {
                 onDescriptionChange={(text) =>
                   update((c) => {
                     c.businessDescription = text;
+                  })
+                }
+                onAnalysisChange={(analysis) =>
+                  update((c) => {
+                    if (analysisMatches(c, analysis))
+                      c.businessAnalysis = analysis;
                   })
                 }
                 onScenarioChange={(settings) =>

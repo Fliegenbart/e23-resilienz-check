@@ -1,6 +1,22 @@
 # Übergabe an einen neuen Codex-Chat
 
-## Aktueller Stand: Resilience-Assessment 0.6.0
+## Aktueller Stand: Resilience-Assessment 0.7.0
+
+Stand: 7. November 2026. David möchte konkrete Aussagen zu seinem Geschäft aus Business-Beschreibung und zwölf Antworten. Die frühere Veröffentlichungserlaubnis und die Vorgabe kurzer, konkreter Texte gelten weiter.
+
+- Optionaler Klick „Mein Business auswerten“ im Ergebnis. Sendet ausschließlich Beschreibung, Antworten und Zwei-Jahres-Szenario an OpenAI über Vercel. Hinweis direkt am Button; keine automatische Übertragung beim Tippen oder bei Szenarioänderungen.
+- Fester Serveraufruf: GPT-5.2, nur OpenAI-Route mit Zero-Data-Retention-Filter, Vercel-OIDC, AI SDK 7. Keine lokal exportierten Zugangsdaten. Claude war im vorhandenen Free-Credit-Tarif gesperrt; GPT-5.2 ist freigegeben. Kein Guthaben gekauft und keine automatische Aufladung aktiviert.
+- Kurzes Ergebnis: mögliche Übernahme, Schutzbedingung, eigener KI-Nutzen, ein Praxistest. Maximal 180 sichtbare Wörter. Herkunftszitate und Fragebezüge aufklappbar. Keine externe Recherche, keine bewiesenen Geschäftsprognosen. Fehlende Informationen oder Widersprüche bleiben sichtbar.
+- `businessAnalysis` enthält Version, Datum, Modell und exakten Eingabestand. Änderungen an Beschreibung, Antworten oder beiden Tempi machen die Analyse veraltet; sie wird nicht als aktuelles Ergebnis angezeigt oder gedruckt. JSON und IndexedDB erhalten sie. Alte Methoden werden nicht neu interpretiert.
+- API in `api/business-analysis.ts`, Generator/HTTP-Validierung in `server/business-analysis.ts`, gemeinsame Schemas in `src/quick/business-analysis.ts`, UI in `BusinessAnalysis.tsx`. Native Node-Imports benötigen `.js`-Endungen und JSON-Importattribute; Fragen und historische Auswertungsregeln wurden nicht verändert.
+- Projektbudget: maximal 5 USD pro Monat. WAF: fünf POST-Aufrufe auf `/api/business-analysis` pro Minute und IP; aktives Projekt `prj_dmsZxfaIZ8ikyKVYI2jBgmjYmp9f`. Größe 20 KiB, Modelllaufzeit 45 Sekunden, maximal 4.000 Ausgabetokens einschließlich Reasoning. Fehlerprotokoll enthält nur Status und feste Fehlerkategorie, keine Geschäftstexte oder vollständigen Anbieterfehler.
+- Prüfen mit `npm test -- --pool=threads`, `npm run test:api`, `npm run build`, `git diff --check`. API-Smoke-Test kompiliert und lädt die tatsächliche Serverfunktion unter nativem Node ohne Modellaufruf. `npm run dev` startet nur Vite.
+
+Details und Abnahme: `docs/superpowers/plans/2026-11-07-business-auswertung.md`. Produktion bleibt https://e23-resilienz-check.vercel.app; Git-Branch `flux` löst automatisch eine Veröffentlichung aus. Den tatsächlichen Live-Stand bei Wiederaufnahme über Vercel prüfen.
+
+---
+
+## Historischer Stand: Resilience-Assessment 0.6.0
 
 Stand: 7. November 2026. Dieser Abschnitt ersetzt die nachfolgenden historischen Angaben. David hat die Überarbeitung der zwölf Fragen und der Auswertung sowie die erneute Veröffentlichung auf Vercel ausdrücklich beauftragt. Minimalismus bleibt verbindlich: kurze Fragen, kurze Skalenanker, Hilfen unter „Details“, Befunde und Schritte aufklappbar.
 

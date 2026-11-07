@@ -119,6 +119,107 @@
 .provider-business-context .business-description {
   margin: 8px 0 28px;
 }
+.business-analysis-control {
+  margin: -8px 0 28px;
+}
+.business-analysis-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+.business-analysis-disclosure {
+  max-width: 640px;
+  margin: 12px 0 0;
+  color: #55565c;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.business-analysis-status {
+  font-size: 14px;
+  line-height: 1.5;
+}
+.business-analysis-status:empty {
+  display: none;
+}
+.business-analysis-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 36px 40px;
+}
+.business-analysis-finding {
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+}
+.business-analysis-finding + .business-analysis-finding {
+  margin-top: 20px;
+}
+.business-analysis-finding h3 {
+  font-size: 20px;
+  line-height: 1.3;
+  margin: 0 0 10px;
+}
+.business-analysis-finding p {
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+}
+.business-analysis-open {
+  margin-top: 32px;
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+}
+.business-analysis-open h2 {
+  font-size: 18px;
+  margin: 0 0 12px;
+}
+.business-analysis-open ul {
+  padding-left: 20px;
+  line-height: 1.6;
+}
+.business-analysis-basis {
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 28px 0;
+}
+.business-analysis-basis summary,
+.business-analysis-overview > summary {
+  cursor: pointer;
+  padding: 12px 0;
+}
+.business-analysis-basis p > * {
+  display: block;
+}
+.business-analysis-overview {
+  border-top: 1px solid var(--line);
+  margin-top: 32px;
+}
+.business-analysis-overview > summary {
+  font-size: 14px;
+}
+.business-analysis-overview[open] > summary {
+  margin-bottom: 20px;
+}
+@media (max-width: 800px) {
+  .business-analysis-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+  }
+}
+@media print {
+  .business-analysis-grid {
+    display: block;
+  }
+  .business-analysis-finding h3 {
+    font-size: 12pt;
+  }
+  .business-analysis-finding p {
+    font-size: 10pt;
+  }
+  .business-analysis-basis {
+    font-size: 9pt;
+  }
+}
 .print-business-description p {
   white-space: pre-wrap;
   overflow-wrap: anywhere;

@@ -1,4 +1,4 @@
-import type { QuickQuestion } from "./model";
+import type { QuickQuestion } from "./model.js";
 
 export const EXPERT_QUESTIONS: QuickQuestion[] = [
   {
