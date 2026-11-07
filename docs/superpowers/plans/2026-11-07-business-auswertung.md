@@ -33,3 +33,9 @@ Lokaler OIDC-Download wurde von der automatischen Freigabeprüfung abgelehnt. Ke
 - Reale API-Aufrufe auf Vorschau `dpl_3SKVbsv1ErkNcyKpmsTGegzGVhYv`: zwei erfundene Geschäftsbeschreibungen, beide HTTP 200. Dokumentenprüfung: 134 sichtbare Wörter zu Prüfzeugnissen, Haftung und Dokumentvergleich. Pumpenwartung: 146 Wörter zu Berichten, Vor-Ort-Einsatz, Messreihen und Fallvergleich. Kein reales Nutzerbusiness übertragen.
 - Alle Modellantworten wurden gegen Ausgabeform, exakte Herkunftszitate und 180-Wort-Limit geprüft. Alte Methoden und Fragen unverändert; native ESM-Importanpassungen ändern keine Bewertungsregeln.
 - Lokal über `localhost:5183`: Beschreibung, kompletter Zwölf-Fragen-Ablauf, Klick-Aktion und verständlicher Fehler bei fehlender lokaler API geprüft. Öffentliche Browserprüfung folgt auf den Produktionsbuild. Echte Spracheingabe und nativer PDF-Dialog wurden nicht neu getestet; Berichtsinhalt automatisiert geprüft.
+
+## Öffentliche Browserabnahme
+
+Produktionsbuild `dpl_5VeHaatN3jnkBCq2amUMEPFVmffq` zu Commit `616d2a1` war READY. Über die öffentliche Adresse geprüft: synthetische Beschreibung → zwölf Antworten → Anfrage abbrechen → neu anfragen → konkrete KI-Auswertung. Beschreibung ändern blendet die alte Auswertung aus; Originaltext wiederherstellen macht sie wieder passend. Schnelleres Fähigkeitstempo markiert die Analyse veraltet; Aktualisieren liefert eine passende neue Analyse. Neuladen und Wiederöffnen erhalten Analyse und Szenario. Herkunftsbezüge aufklappbar. 390 und 320 Pixel ohne horizontalen Überlauf, keine Browserwarnungen oder Fehler. Desktopansicht ebenfalls gesichtet.
+
+Die Live-Prüfung führte zu einer letzten Textpräzisierung: Der Übernahme-Befund muss im Titel die übernehmbare Tätigkeit nennen; Schutzargumente gehören ausschließlich in den Schutzbereich. Keine Änderung der Fragen oder Bewertungsregeln.

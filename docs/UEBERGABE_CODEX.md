@@ -54,7 +54,7 @@ Textkorrektur im selben Auftrag: David will deutlich mehr Minimalismus und direk
 - Ergebnis: eine kurze Kernaussage, nebeneinander Übernahme und Schutz, darunter bis zu drei kurze Schritte. Befunde, Belege und Schritte sind aufklappbar; der Druckbericht öffnet dieselben Details vollständig. Fehlende Antworten und Belege bleiben im geschlossenen Ergebnis sichtbar. Antwortkorrektur führt unmittelbar zurück zum aktualisierten Ergebnis.
 - Auf ausdrücklichen Folgeauftrag: im Ergebnis „Nächste 2 Jahre“, zwei unabhängige Auswahlzeilen „KI wird besser“ / „KI wird günstiger“, jeweils langsam/mittel/schnell, Standard mittel/mittel. Je ein kurzer Hinweis reagiert auf das Tempo und den stärksten erkennbaren Übernahmeweg. Fähigkeiten betreffen Übernahme, Kosten Preis-/Bündelungsdruck. Keine neuen Fragen, Preisfaktoren oder Wahrscheinlichkeiten. Grundbefunde und Schutz bleiben getrennt und unverändert. Regeln in `provider-scenario.ts`, Auswertung in `provider-analysis.ts`, gemeinsame Bildschirm-/Druckansicht in `ProviderScenario.tsx`.
 - Weiterer Folgeauftrag: optionales Feld „Was macht Ihr Business?“ direkt vor dem Start, mit „Diktieren“/„Stopp“. Bis 5.000 Zeichen; ab Start als `businessDescription` beim Check gespeichert, in JSON und Bericht enthalten, im Ergebnis unter „Ihr Business“ bearbeitbar. Beschreibung dient als Kontext und wird nicht durch KI ausgewertet; zwölf Antworten bleiben Bewertungsbasis. `BusinessDescription.tsx` + `dictation.ts`: Browser-Web-Speech-API einschließlich WebKit, de-DE, keine eigene API und keine Audiodatei. Audio kann zum Browser-Sprachdienst gehen; Hinweis direkt am Feld. Mikrofon erst auf Klick. Bei fehlender Unterstützung, verweigerter Berechtigung oder Dienstfehler bleibt Texteingabe möglich. Beim Stopp letzte Ergebnisse abwarten, beim Verlassen abbrechen, veraltete Events ignorieren.
-- ARK Invest, *Big Ideas 2026*, S. 20/34 (Tokenkosten), 33 (Aufgabenhorizonte), 26–28 (Agenten als Zugangsschicht), 36 (Spezialisten). Nur als Hintergrund; keine Marktprognosen im Ergebnis. Ergänzende offizielle Quellen stehen in `ProviderMethod.tsx` und im Bericht.
+- ARK Invest, _Big Ideas 2026_, S. 20/34 (Tokenkosten), 33 (Aufgabenhorizonte), 26–28 (Agenten als Zugangsschicht), 36 (Spezialisten). Nur als Hintergrund; keine Marktprognosen im Ergebnis. Ergänzende offizielle Quellen stehen in `ProviderMethod.tsx` und im Bericht.
 
 ### Kompatibilität und Dateien
 
@@ -178,20 +178,20 @@ React 19, TypeScript, Vite, Zod, Vitest, IndexedDB; keine zusätzlich erforderli
 
 **Einstieg ist `src/main.tsx` → `src/quick/QuickApp.tsx`.** Die älteren Komponenten unter `src/features` sind nicht die aktuelle Hauptoberfläche.
 
-| Datei | Verantwortung |
-|---|---|
-| `src/quick/QuickApp.tsx` | Navigation, Checkzustand, Autosave-Anbindung, Importvorschau, Export, Drucken, Versionshinweis |
-| `src/quick/ExpertIntro.tsx`, `expert-team.ts` | Gedankenexperiment und gemeinsame Annahmetexte |
-| `src/quick/expert-questions.ts` | Neue zwölf Fragen, Anker, Erklärungen, Beispiele und Maßnahmen |
-| `src/quick/model.ts` | Checkdaten, Methodenregister, Score, JSON-Validierung/Export und Kopien |
-| `src/quick/Question.tsx`, `Results.tsx`, `History.tsx` | Einzelne Fragen, Ergebnis und gespeicherte Checks |
-| `src/quick/scenario-model.ts` | Szenariokataloge, Snapshotregister, Kontexte, Antworten, Risiko/Chance und Kostenrechnung |
-| `src/quick/ScenarioPage.tsx`, `ScenarioInterview.tsx` | Auswahl, Annahmen, Interview und Vergleich |
-| `src/quick/expert-scenario-guidance.ts`, `scenario-guidance.ts` | Neue Erklärungen/Beispiele und Hilfe für frühere Szenarien |
-| `src/quick/Report.tsx`, `ScenarioReport.tsx`, `print.css` | Tatsächlicher Druck-/PDF-Bericht |
-| `src/quick/storage.ts` | IndexedDB und geordnete Schreibvorgänge |
-| `src/quick/styles.css`, `expert.css`, `scenario.css` | Aktuelles Design und responsive Ansichten |
-| `src/quick/Legacy.tsx` | Lesbares Archiv der ursprünglichen ausführlichen Analysen |
+| Datei                                                           | Verantwortung                                                                                  |
+| --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `src/quick/QuickApp.tsx`                                        | Navigation, Checkzustand, Autosave-Anbindung, Importvorschau, Export, Drucken, Versionshinweis |
+| `src/quick/ExpertIntro.tsx`, `expert-team.ts`                   | Gedankenexperiment und gemeinsame Annahmetexte                                                 |
+| `src/quick/expert-questions.ts`                                 | Neue zwölf Fragen, Anker, Erklärungen, Beispiele und Maßnahmen                                 |
+| `src/quick/model.ts`                                            | Checkdaten, Methodenregister, Score, JSON-Validierung/Export und Kopien                        |
+| `src/quick/Question.tsx`, `Results.tsx`, `History.tsx`          | Einzelne Fragen, Ergebnis und gespeicherte Checks                                              |
+| `src/quick/scenario-model.ts`                                   | Szenariokataloge, Snapshotregister, Kontexte, Antworten, Risiko/Chance und Kostenrechnung      |
+| `src/quick/ScenarioPage.tsx`, `ScenarioInterview.tsx`           | Auswahl, Annahmen, Interview und Vergleich                                                     |
+| `src/quick/expert-scenario-guidance.ts`, `scenario-guidance.ts` | Neue Erklärungen/Beispiele und Hilfe für frühere Szenarien                                     |
+| `src/quick/Report.tsx`, `ScenarioReport.tsx`, `print.css`       | Tatsächlicher Druck-/PDF-Bericht                                                               |
+| `src/quick/storage.ts`                                          | IndexedDB und geordnete Schreibvorgänge                                                        |
+| `src/quick/styles.css`, `expert.css`, `scenario.css`            | Aktuelles Design und responsive Ansichten                                                      |
+| `src/quick/Legacy.tsx`                                          | Lesbares Archiv der ursprünglichen ausführlichen Analysen                                      |
 
 Neue Datenbank: `e23-quick-check`, Version 1, Store `workspace`, Schlüssel `checks`. Ursprüngliche Datenbank `ki-resilienz-check` bleibt getrennt. Browserprofil und Origin bestimmen den Speicher: localhost und Vercel teilen keine Daten. Browserantworten sind **keine GitHub-Daten**. Für ihren Umzug JSON verwenden.
 
