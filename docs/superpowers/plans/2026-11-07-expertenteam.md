@@ -16,7 +16,7 @@
 - [x] `scenario-model.ts`: neue sechs Szenarien in Teams, Fähigkeiten und körperlicher Ausführung erklären. Kontrollierte Paare und Kostenformel bleiben erhalten. Vier konkrete Hürdenfragen und eine separate Chance; stärkere Denkfähigkeiten nicht als heutige Verfügbarkeit darstellen.
 - [x] `ScenarioPage.tsx`, `ScenarioInterview.tsx`, `scenario-guidance.ts`, `ScenarioReport.tsx`: passende Begriffe, konkrete Skalenhilfen, versionstreue historische Ansicht. Kostenrechner separat als technische KI-Kostenrechnung kennzeichnen.
 - [x] README und App-Version aktualisieren. Tests, Build, Import/Export, Speicherung, V1/V2-Druckinhalt sowie Desktop und 390px Mobilansicht prüfen.
-- [ ] Änderungen committen, auf `flux` pushen, Vercel-Produktionsstatus und Alias bestätigen.
+- [x] Änderungen committen, auf `flux` pushen, Vercel-Produktionsstatus und Alias bestätigen.
 
 ## Abnahme
 
@@ -30,4 +30,6 @@
 
 ## Verifikation vor Veröffentlichung
 
-83 Tests in 9 Dateien und Produktionsbuild erfolgreich. Im Browser: alle zwölf neuen Fragen durchlaufen (zwölfmal 5 ergibt 44), gelbe Bestätigung und automatische Weiterleitung geprüft; Szenario 3 mit physischen Leistungen und 6 Monaten zunächst mit unbekanntem Kundenzugang ohne Gesamtwert, danach mit Antworten 8/8/8/7 und Chance 9 ergibt Risiko 75 und separate Chance 9. JSON-Export und Import als Kopie sowie Neuladen erhalten die Werte. Ein vorhandener V1-Stand zeigt seine ursprüngliche Frage und bietet einen ausdrücklichen neuen Expertenteam-Check an. Desktop 1280px und Mobilansicht 390px ohne horizontales Überlaufen; keine relevanten Konsolenfehler. Tatsächlicher Browser-PDF-Export mit 8 A4-Seiten visuell geprüft; Gedankenexperiment, beide Methodenstände, alle Antworten und Scorewerte enthalten. Abnahmedateien liegen außerhalb des Repositorys. Die Veröffentlichung wird nach dem Push über Vercel geprüft.
+83 Tests in 9 Dateien und Produktionsbuild erfolgreich. Im Browser: alle zwölf neuen Fragen durchlaufen (zwölfmal 5 ergibt 44), gelbe Bestätigung und automatische Weiterleitung geprüft; Szenario 3 mit physischen Leistungen und 6 Monaten zunächst mit unbekanntem Kundenzugang ohne Gesamtwert, danach mit Antworten 8/8/8/7 und Chance 9 ergibt Risiko 75 und separate Chance 9. JSON-Export und Import als Kopie sowie Neuladen erhalten die Werte. Ein vorhandener V1-Stand zeigt seine ursprüngliche Frage und bietet einen ausdrücklichen neuen Expertenteam-Check an. Desktop 1280px und Mobilansicht 390px ohne horizontales Überlaufen; keine relevanten Konsolenfehler. Tatsächlicher Browser-PDF-Export mit 8 A4-Seiten visuell geprüft; Gedankenexperiment, beide Methodenstände, alle Antworten und Scorewerte enthalten. Abnahmedateien wurden für die Übergabe zusätzlich unter `docs/qa/expertenteam-v2/` gesichert.
+
+Veröffentlichung abgeschlossen: Implementierungscommit `0b10b2c54272a2109045a748918e7acff5585e11` auf GitHub-Branch `flux`; Vercel-Deployment `dpl_6FkxLGCTNRhwptmfcNGfZvxxo1xW` unter `e23-resilienz-check-cdtlpcng1-davids-projects-f2bdba89.vercel.app` mit Status Ready, Ziel Production und Alias `https://e23-resilienz-check.vercel.app`. Bei Erstellung der Übergabe erneut bestätigt.

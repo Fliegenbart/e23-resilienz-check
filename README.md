@@ -6,6 +6,8 @@ Anwendung: https://e23-resilienz-check.vercel.app
 
 Repository: https://github.com/Fliegenbart/e23-resilienz-check
 
+Übergabe an einen neuen Codex-Chat: [docs/UEBERGABE_CODEX.md](docs/UEBERGABE_CODEX.md). Aktuelle Abnahmebilder und Demo-PDF: [docs/qa/expertenteam-v2](docs/qa/expertenteam-v2/README.md).
+
 ## Nutzung
 
 1. Bestehendes Angebot oder neue Idee auswählen, das Expertenteam-Gedankenexperiment lesen und starten.

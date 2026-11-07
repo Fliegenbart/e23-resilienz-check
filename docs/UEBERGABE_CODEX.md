@@ -1,0 +1,198 @@
+# Übergabe an einen neuen Codex-Chat
+
+Stand: 7. November 2026 · Anwendungsversion 0.4.0
+
+## 1. Projekt und verifizierter Stand
+
+Du übernimmst den **e23 KI-Resilienz-Check** von David Wegener. Das Projekt ist eigenständig und strikt von ViralFlux getrennt.
+
+- Lokaler Projektordner: `/Users/davidwegener/Documents/e23_resilienz`
+- Repository: https://github.com/Fliegenbart/e23-resilienz-check
+- Produktionsbranch auf GitHub: **`flux`**, nicht `main`.
+- Aktueller lokaler Arbeitsbranch bei Übergabe: `codex/quick-check`.
+- Öffentliche Anwendung: https://e23-resilienz-check.vercel.app
+- Letzter fachlicher Implementierungscommit: `0b10b2c54272a2109045a748918e7acff5585e11` – Expertenteam-Modell mit versionstreuer Historie.
+- Vorherige relevante Commits: `382ec83` (Erklärungen und Beispiele), `a60c1ae` (Szenariosimulation).
+
+Bei Erstellung dieser Übergabe waren lokaler HEAD und GitHub `refs/heads/flux` auf demselben Implementierungscommit. Der Arbeitsbaum war sauber. Vercel meldete das zugehörige Produktionsdeployment als **Ready**, einschließlich des öffentlichen Alias. Dieser Übergabe und den Abnahmedateien folgt ein eigener Dokumentationscommit. Den aktuellen Remote-Stand bei Wiederaufnahme erneut prüfen.
+
+**Der zuletzt beauftragte Produktumbau ist umgesetzt und veröffentlicht. Es besteht kein ausdrücklich offener neuer Feature-Auftrag.** Übernimm den Kontext und setze an Davids nächster konkreter Bitte an.
+
+## 2. Was David mit dem Produkt erreichen will
+
+Das Werkzeug soll Unternehmern verständlich zeigen, wodurch ihr konkretes Angebot bei sehr günstiger, leistungsfähiger digitaler Arbeit angreifbar wird und wo belastbare Vorteile oder eigene Chancen liegen.
+
+David hat die ursprüngliche ausführliche Workshopanwendung als zu kompliziert empfunden. Seine verbindliche Richtung:
+
+- Keine erforderlichen Textfelder oder langen Formulare.
+- Eine Frage pro Bildschirm, anklickbare Werte von 1 bis 10 und „Weiß ich noch nicht“.
+- Nach Auswahl etwa **450 ms gelbe Bestätigung**, dann automatisch weiter. Das gilt auch für unbekannte Antworten. Kein zusätzlicher Weiter-Button.
+- Hochwertiger Consulting-Auftritt, an EY orientiert: Weiß, Graphit, Gelb, große klare Typografie, zurückhaltende Animationen und gute mobile Bedienung. Der dritte damalige Entwurf wurde ausgewählt (`design/03-ergebnis.png`).
+- Konkrete Erklärungen und Beispiele sichtbar an den Fragen. Wichtige Hilfen nicht ausschließlich hinter einem kleinen Info-Symbol verstecken.
+- Deutsch und verständlich; keine Entwicklerdetails im normalen Kundenablauf.
+
+**Die wichtigste letzte Änderung:** Menschen können abstrakte „KI-Fähigkeiten“ kaum bewerten. Eine Frage wie „Wie leicht kann KI Ihre Kernleistung ersetzen?“ verlangt bereits das Ergebnis, das der Check erarbeiten soll. Stattdessen sollen Nutzer greifbare Nachbau-, Zugangs-, Wechsel- und Umsetzungshürden beurteilen.
+
+## 3. Das freigegebene Expertenteam-Gedankenexperiment
+
+Neue Checks beginnen mit:
+
+> Ihr stärkster Wettbewerber bekommt zehn Weltklasseexperten Ihres Fachgebiets. Sie arbeiten sechs Monate lang rund um die Uhr, praktisch kostenlos. Sie können recherchieren, entwickeln, testen und aus Fehlern lernen. Ihr Auftrag: Ihren Kunden denselben Nutzen bieten wie Sie.
+
+Das Team erhält keine exklusiven Daten, Nutzungsrechte, Kundenbeziehungen, Maschinen oder Zulassungen automatisch. Es kann Fehler machen. Körperliche Ausführung bleibt eine eigene Hürde; zusätzliche Robotik wird gesondert angenommen.
+
+Im stärkeren Szenario reicht die angenommene Fähigkeit bis zu den klügsten Forschern und Wissenschaftlern des Fachgebiets, bis auf Nobelpreisniveau, wo dieser Vergleich passt. **Das ist ausdrücklich eine Stresstest-Annahme, keine Behauptung über heute gemessene Systeme oder einen vorhergesagten Zeitpunkt.** Keine erfundenen Eintrittswahrscheinlichkeiten und keine automatische Ableitung von Superintelligenz aus sinkenden Rechenkosten.
+
+Davids „ja“ bestätigte diesen Umbau. Er ist bereits umgesetzt; nicht erneut nach einer grundsätzlichen Freigabe für dasselbe Konzept fragen.
+
+## 4. Aktueller Funktionsumfang und Bewertung
+
+### Zwölf-Fragen-Check
+
+Vier Bereiche mit je drei Fragen: Kundenwert, Wettbewerb, Differenzierung, Handlungsfähigkeit. Neue Fragen liegen in `src/quick/expert-questions.ts`. Sie betreffen beobachteten Bedarf, tatsächliche Käufe, vollständige Kosten, Nachbau durch das Expertenteam, Bündelung in bestehenden Produkten, Wechsel zu einer günstigen Alternative, besondere Daten/Zugänge, Kundennutzen, Zugang zu Käufern, Dienstausfall, Fehlerprüfung und Anpassung innerhalb von sechs Monaten.
+
+Formel: `round(100 × Summe(Antwort − 1) / 108)`.
+
+- Alle zwölf Fragen gleich gewichtet; höhere Werte bedeuten mehr Risiko bzw. größere Lücken.
+- Gesamtscore erst bei zwölf numerischen Antworten. Unbekannt oder leer ist nicht 0 und nicht niedriges Risiko.
+- Teilbereiche erst bei drei numerischen Antworten.
+- Einzelwerte 9/10 zusätzlich sichtbar, auch bei niedrigem Durchschnitt.
+- Risikobänder: 0–24 niedrig, 25–49 mittel, 50–74 erhöht, 75–100 hoch.
+- Eigene Beratungsheuristik auf Basis von Selbsteinschätzungen, kein empirisch kalibriertes Prognosemodell.
+
+### Sechs Zukunftsszenarien
+
+1. Dasselbe Expertenteam, günstiger: gleiche Fähigkeiten, digitale Arbeit 10× günstiger, keine neue Robotik.
+2. Expertenteams für alle: gleiche Fähigkeiten, 100× günstiger, keine neue Robotik.
+3. Die klügsten Forscher im Team: höhere Fähigkeiten, 100× günstiger, keine neue Robotik.
+4. Das Team bekommt Roboter: gleiche Fähigkeiten, 100× günstiger, Routine-Robotik.
+5. Forscherteam mit Robotern: höhere Fähigkeiten, 100× günstiger, dieselbe Routine-Robotik.
+6. Das Team kann auch körperlich handeln: höhere Fähigkeiten, 100× günstiger, flexible Robotik.
+
+Kontrollierte Vergleiche: 1/2 Kosten, 2/3 Fähigkeiten, 2/4 Robotik, 4/5 Fähigkeiten, 5/6 flexible körperliche Ausführung. Diese Trennung erhalten.
+
+Anklickbare Einstellungen: digitales/gemischtes/physisches Angebot; **6, 18 oder 36 Monate Anpassungszeit**. In Szenarien gilt das gewählte Fenster, nicht pauschal die sechs Monate des Grundchecks. Eigene Firma, Kunden und Wettbewerber erhalten Zugang zu denselben angenommenen Fähigkeiten.
+
+Jedes Szenario hat vier Risikoantworten und eine separate Chancenfrage. Risikoformel: `round(100 × Summe(Antwort − 1) / 36)`; nur bei vier numerischen Risikoantworten. **Die eigene Chance 1–10 wird niemals vom Risiko abgezogen.** Keine rechnerische Differenz zwischen Szenarioscore und Zwölf-Fragen-Score: unterschiedliche Fragebögen.
+
+Neue Bewertungen kopieren Einstellungen und Szenarioannahmen. Andere Einstellungen für einen neuen Durchlauf verändern frühere Stände nicht. Bis zu 60 Szenariostände pro Check.
+
+Optionaler technischer Kostenrechner: heutiger KI-Kostenanteil unbekannt/0/25/50/75/100 %. Formel für die Gesamtkostenersparnis: `Anteil × (1 − 1 / Faktor)`. 25 % und Faktor 10 ergeben 22,5 %, Faktor 100 ergibt 24,75 %. Unbekannt erzeugt keine Zahl. Andere Kosten bleiben gleich; keine pauschale Umrechnung in Personalabbau, Umsatz, Marge oder Robotikkosten.
+
+## 5. Historie und Daten dürfen nicht stillschweigend verändert werden
+
+Aktuelle Methoden: `quick-check-2.0` und `scenario-stress-2.0`. JSON-Schema: `1.1`, ältere Exporte `1.0` bleiben lesbar.
+
+Originale V1-Kataloge sind eingefroren:
+
+- `src/quick/methods/quick-check-1.0.json`
+- `src/quick/methods/scenario-stress-1.0.json`
+
+Fragen, Antworten, Maßnahmen, Anzeige und PDF müssen jeweils den gespeicherten Methodenstand verwenden. V1-Antworten werden nicht auf V2-Fragen übertragen. Alte und neue Stände können gemeinsam gespeichert/importiert/exportiert werden. Falsche Versions-/Snapshot-Zuordnungen werden abgewiesen.
+
+Bei älteren Checks erklärt ein sichtbarer Hinweis den früheren Fragenstand und bietet **„Neuen Expertenteam-Check starten“** an. Deshalb ist es korrekt, wenn eine alte Bewertung noch die ursprüngliche KI-Frage zeigt. Für neue Fragen einen neuen Check starten. Scores unterschiedlicher Methoden nicht unmittelbar vergleichen.
+
+Bei späteren inhaltlichen Änderungen an Fragen, Ankern oder Szenarioannahmen erneut versionieren, frühere Kataloge erhalten und Regressionen für Anzeige, Berechnung, Import und Bericht prüfen. Aktuelle Historie nutzt `check.methodologySnapshot`; Szenarioauswertung erhält den Workspace mit dem zugehörigen Snapshot.
+
+## 6. Architektur und wichtige Dateien
+
+React 19, TypeScript, Vite, Zod, Vitest, IndexedDB; keine zusätzlich erforderliche KI-Verbindung, kein Backend, Login oder API-Schlüssel.
+
+**Einstieg ist `src/main.tsx` → `src/quick/QuickApp.tsx`.** Die älteren Komponenten unter `src/features` sind nicht die aktuelle Hauptoberfläche.
+
+| Datei | Verantwortung |
+|---|---|
+| `src/quick/QuickApp.tsx` | Navigation, Checkzustand, Autosave-Anbindung, Importvorschau, Export, Drucken, Versionshinweis |
+| `src/quick/ExpertIntro.tsx`, `expert-team.ts` | Gedankenexperiment und gemeinsame Annahmetexte |
+| `src/quick/expert-questions.ts` | Neue zwölf Fragen, Anker, Erklärungen, Beispiele und Maßnahmen |
+| `src/quick/model.ts` | Checkdaten, Methodenregister, Score, JSON-Validierung/Export und Kopien |
+| `src/quick/Question.tsx`, `Results.tsx`, `History.tsx` | Einzelne Fragen, Ergebnis und gespeicherte Checks |
+| `src/quick/scenario-model.ts` | Szenariokataloge, Snapshotregister, Kontexte, Antworten, Risiko/Chance und Kostenrechnung |
+| `src/quick/ScenarioPage.tsx`, `ScenarioInterview.tsx` | Auswahl, Annahmen, Interview und Vergleich |
+| `src/quick/expert-scenario-guidance.ts`, `scenario-guidance.ts` | Neue Erklärungen/Beispiele und Hilfe für frühere Szenarien |
+| `src/quick/Report.tsx`, `ScenarioReport.tsx`, `print.css` | Tatsächlicher Druck-/PDF-Bericht |
+| `src/quick/storage.ts` | IndexedDB und geordnete Schreibvorgänge |
+| `src/quick/styles.css`, `expert.css`, `scenario.css` | Aktuelles Design und responsive Ansichten |
+| `src/quick/Legacy.tsx` | Lesbares Archiv der ursprünglichen ausführlichen Analysen |
+
+Neue Datenbank: `e23-quick-check`, Version 1, Store `workspace`, Schlüssel `checks`. Ursprüngliche Datenbank `ki-resilienz-check` bleibt getrennt. Browserprofil und Origin bestimmen den Speicher: localhost und Vercel teilen keine Daten. Browserantworten sind **keine GitHub-Daten**. Für ihren Umzug JSON verwenden.
+
+Importgrenze: 5 MiB. Vollständige Prüfung vor Übernahme, Vorschau, standardmäßig zusätzliche Kopien. Gleichnamige IDs nur über die ausdrücklich gewählte Ersetzen-Option überschreiben. Paralleles Bearbeiten desselben Bestands in mehreren Fenstern wird nicht unterstützt.
+
+PDF nutzt die Druckansicht des tatsächlichen Reports und `window.print()`, keinen externen PDF-Dienst. Ausgegebene Scores sind statisch, auch wenn der Bildschirmwert animiert hochzählt.
+
+## 7. Lokal arbeiten und veröffentlichen
+
+Node.js >= 22.12.0. Bei fehlenden Abhängigkeiten `npm ci`, sonst vorhandene Installation verwenden.
+
+```sh
+cd /Users/davidwegener/Documents/e23_resilienz
+git status --short
+git log -3 --oneline
+npm run dev
+```
+
+Lokale Adresse: **http://127.0.0.1:5179/**, in `vite.config.ts` fest eingestellt. Andere offene localhost-Tabs nicht ungeprüft diesem Projekt zuordnen. Ein vorher gestarteter Server kann noch laufen; zuerst prüfen.
+
+```sh
+npm test -- --pool=threads
+npm run build
+git diff --check
+```
+
+Der Thread-Pool lief in der letzten Sitzung schnell; der standardmäßige Fork-Pool war auf diesem Rechner zeitweise sehr langsam. Kein aktueller Testfehler.
+
+GitHub veröffentlicht `flux` automatisch auf Vercel. Bisher wurde vom lokalen Arbeitsbranch mit `git push origin HEAD:flux` veröffentlicht. Vor einem neuen Push Remote und Arbeitsbaum prüfen; keine fremden Änderungen überschreiben.
+
+Vercel-Projekt: `e23-resilienz-check`, Scope `davids-projects-f2bdba89`, Projekt-ID `prj_dmsZxfaIZ8ikyKVYI2jBgmjYmp9f`. CLI war als `fliegenbart` angemeldet; Anmeldestatus bei Bedarf erneut prüfen. `.vercel` ist absichtlich ignoriert; ein frischer Checkout muss gegebenenfalls mit dem bestehenden Projekt verknüpft werden.
+
+Build: `npm ci --no-audit --no-fund` → `npm run build` → `dist`. Konfiguration in `vercel.json`; `.vercelignore` schließt u. a. Dokumentation, Beispiele und Designbilder vom Deploymentpaket aus.
+
+```sh
+vercel ls e23-resilienz-check --scope davids-projects-f2bdba89
+vercel inspect e23-resilienz-check.vercel.app --scope davids-projects-f2bdba89
+```
+
+Ein Push ist noch kein Beleg für ein fertiges Deployment: Ready, Produktionsziel und öffentlichen Alias bestätigen. Die letzte Fassung wurde vor dem Push lokal im Browser geprüft; danach wurde der Vercel-Status kontrolliert. Keine Behauptung, nach jedem Push sämtliche Tests erneut auf der öffentlichen Instanz durchgeführt zu haben.
+
+## 8. Geprüfte Ergebnisse und reproduzierbare Grenzen
+
+Letzte fachliche Abnahme am 7. November 2026:
+
+- **83 Tests in 9 Dateien bestanden**, TypeScript-/Vite-Produktionsbuild erfolgreich, `git diff --check` sauber.
+- Tests insbesondere in `tests/quick.test.ts`, `scenario.test.ts`, `method-versions.test.ts`, `quick-storage.test.ts`.
+- Alle zwölf neuen Fragen im Browser durchlaufen. Zwölfmal 5 ergibt endgültig **44/100**; nicht einen Zwischenstand der Zahlenanimation ablesen.
+- Auswahl nach etwa 220 ms vollständig gelb (`rgb(255, 230, 0)`), während der Bestätigung gesperrt; automatische Weiterleitung funktioniert.
+- Szenario 3, physisches Angebot, sechs Monate: mit unbekannter Einkaufs-Auswahl kein Gesamtscore, Chance 9 separat. Nach Antworten **8/8/8/7** ergibt sich **Risiko 75/100**, Chance bleibt **9/10**.
+- Tatsächlichen JSON-Download als zusätzliche Kopie importiert; Neuladen erhält Werte und Methoden.
+- Vorhandener V1-Stand zeigt alte Fragen und bietet einen neuen Expertenteam-Check an.
+- Desktop 1280 px und Mobilansicht 390 px geprüft, kein horizontales Überlaufen, keine relevanten Konsolenfehler.
+- Tatsächlichen Browser-PDF-Export mit **8 A4-Seiten** erstellt und visuell geprüft. Gedankenexperiment, Methodenversionen, Fragen, Antworten und Werte enthalten; Bereichstabelle zusammengehalten.
+
+Aktuelle Abnahmebilder und Demo-PDF liegen unter **`docs/qa/expertenteam-v2/`**. Die Zahlen darin sind fiktive Prüfdaten, keine Kundenanalyse. Die Dateien direkt in `docs/qa/`, die Beispiele unter `examples/` und `tests/browser-check.mjs` stammen dagegen aus der ursprünglichen ausführlichen Version und sind kein Abnahmenachweis für den aktuellen Quick-Check.
+
+Nicht als neu geprüft darstellen: andere Browser, alle Gerätegrößen, gleichzeitiges Bearbeiten in mehreren Fenstern, empirische Prognosegüte oder automatische Risikofeststellung. Zurückhaltende Animationen und CSS für reduzierte Bewegung sind vorhanden, wurden zuletzt nicht auf jedem Betriebssystem interaktiv geprüft.
+
+## 9. Ursprüngliche Unterlagen und Prioritäten
+
+Lesereihenfolge: dieses Briefing → `README.md` → neue Fragen und Modelle → passende Tests. Weitere Hintergründe:
+
+- `docs/Briefing.md`: vollständiges ursprüngliches Claude-Code-Briefing. Bei Übergabe bytegleich mit `/Users/davidwegener/Downloads/KI_Resilienz_Check_Briefing_Claude_Code.md`, SHA-256 `bdad4bcae2a015a1eaaa597bb9e714f5c007e51606010d03359cf983a45ae932`.
+- `design/Neuentwurf.md`, `docs/Quick-Check-Plan.md`: vereinfachte Oberfläche und freigegebene Gestaltung.
+- `design/Szenario-Modell.md`, `docs/superpowers/plans/2026-11-07-szenarien.md`: erster Szenarioaufbau; teilweise durch das Expertenteam-Modell weiterentwickelt.
+- `docs/superpowers/plans/2026-11-07-expertenteam.md`: letzte Umsetzung und Abnahme.
+
+Das Originalbriefing mit 20 ausführlichen Fragen beschreibt die historische erste Fassung. **Spätere ausdrückliche Nutzerentscheidungen für den einfachen Zwölf-Fragen-Check und das Expertenteam haben Vorrang.** Das Originaldokument nicht als Anlass nehmen, ungefragt die alte Formularanwendung wiederherzustellen.
+
+David hat außerdem den ARK-Invest-Bericht „Big Ideas 2026“ zur Diskussion der Entwicklung eingebracht. Die Datei lag lokal unter `/tmp/codex-remote-attachments/01a1b1b2-e377-7311-b794-d190711229db/FA499547-3745-470F-B785-B5BCF2B2C6CF/1-ARKInvest-BigIdeas2026.pdf`. Sie ist **nicht** ins Repository kopiert und nicht Voraussetzung für Betrieb oder Weiterentwicklung. Ihre Aussagen nicht ungeprüft als aktuelle Fakten oder Validierung des Scores wiedergeben.
+
+## 10. Arbeitsweise im nächsten Chat
+
+1. Kontext übernehmen, aktuelle Git-/Remote-Lage prüfen, anschließend auf Davids nächste Bitte eingehen.
+2. Änderungen am passenden aktuellen Modul vornehmen; historische Kataloge und Browserdaten erhalten.
+3. Verständlichkeit und wenige Klicks haben Vorrang. Keine zusätzlichen Pflichtformulare oder abstrakten KI-Selbsteinschätzungen einführen.
+4. Für funktionale Änderungen relevante Tests ergänzen/ausführen, Build prüfen und betroffenen Ablauf im Browser auf Desktop und mobil ansehen. Reversible reine Textkorrekturen brauchen keine spiegelbildlichen Tests.
+5. User-Autorisierung aus dem laufenden Auftrag beachten. Keine wiederholten grundsätzlichen Bestätigungen für bereits freigegebene Arbeit verlangen. Neue externe Mitteilungen oder sachfremde Änderungen sind nicht Teil dieser Übergabe.
+6. Änderungen, die veröffentlicht werden sollen, sauber committen und pushen, danach den tatsächlichen Vercel-Status bestätigen. Einen Fehler oder einen ungeprüften Teil offen benennen.
+
+Die Übernahme selbst ist kein Auftrag, weitere Features, neue Chat-Threads, Automationen, externe KI-Anbindungen oder ein anderes Hosting einzurichten.
