@@ -6,6 +6,7 @@ import type {
   ScenarioAnswer,
 } from "./scenario-model";
 import { Arrow } from "./ui";
+import { scenarioGuidance } from "./scenario-guidance";
 export type ScenarioUpdate = (fn: (w: ScenarioWorkspace) => void) => void;
 export function ScenarioInterview({
   workspace,
@@ -17,7 +18,8 @@ export function ScenarioInterview({
   onChange: ScenarioUpdate;
 }) {
   const q = workspace.methodSnapshot.questions[run.step],
-    value = run.answers[q.id];
+    value = run.answers[q.id],
+    guidance = scenarioGuidance(q.id, run.context.profile);
   const preset = workspace.methodSnapshot.catalog.find(
     (s) => s.id === run.presetId,
   )!;
@@ -91,12 +93,47 @@ export function ScenarioInterview({
             ? `Wie groß ist das Risiko, Ihr Angebot innerhalb von ${run.context.horizon} Monaten nicht anpassen zu können?`
             : q.text}
         </h1>
-        <p className="question-help">
+        <div className="scenario-question-guide" id="scenario-question-guide">
+          <div>
+            <h2>Was ist gemeint?</h2>
+            <p>{guidance.meaning}</p>
+          </div>
+          <div className="scenario-question-example">
+            <h2>Zum Beispiel</h2>
+            <p>{guidance.example}</p>
+          </div>
+        </div>
+        <details className="scenario-rating-help" key={q.id}>
+          <summary>Wie ordne ich meine Antwort auf der Skala ein?</summary>
+          <dl>
+            <div>
+              <dt>1</dt>
+              <dd>{guidance.low}</dd>
+            </div>
+            <div>
+              <dt>5</dt>
+              <dd>{guidance.middle}</dd>
+            </div>
+            <div>
+              <dt>10</dt>
+              <dd>{guidance.high}</dd>
+            </div>
+          </dl>
+          <p>
+            Für eine begründete Einschätzung fehlen Ihnen Informationen? Wählen
+            Sie „Weiß ich noch nicht“.
+          </p>
+        </details>
+        <p className="question-help" id="scenario-scale-direction">
           {q.id === "opportunity"
-            ? "Hier bedeutet ein hoher Wert eine große eigene Chance. Dieser Wert wird nicht vom Risiko abgezogen."
-            : "Bewerten Sie die Wirkung auf Ihr konkretes Angebot, wenn die oben genannten Bedingungen eintreten."}
+            ? "Je höher der Wert, desto größer Ihre eigene Chance. Sie wird separat vom Risiko bewertet."
+            : "Je höher der Wert, desto größer das Risiko für Ihr Angebot in diesem Szenario."}
         </p>
-        <fieldset className="scale" disabled={confirming}>
+        <fieldset
+          className="scale"
+          disabled={confirming}
+          aria-describedby="scenario-scale-direction"
+        >
           <legend className="sr-only">
             {q.id === "opportunity"
               ? "Eigene Chance von 1 bis 10"
