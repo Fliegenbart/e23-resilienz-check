@@ -13,6 +13,7 @@ import {
   checkTitle,
 } from "./model";
 import { loadChecks, saveChecks } from "./storage";
+import { ExpertIntro } from "./ExpertIntro";
 import { Question } from "./Question";
 import { Results } from "./Results";
 import { History } from "./History";
@@ -35,7 +36,13 @@ function download(filename: string, text: string) {
   a.remove();
   setTimeout(() => URL.revokeObjectURL(u), 1000);
 }
-function Method({ onClose }: { onClose: () => void }) {
+function Method({
+  onClose,
+  version,
+}: {
+  onClose: () => void;
+  version: string;
+}) {
   const ref = useRef<HTMLDialogElement>(null);
   useEffect(() => {
     ref.current?.showModal();
@@ -89,7 +96,7 @@ function Method({ onClose }: { onClose: () => void }) {
         Grenzen sind methodische Orientierungswerte, keine empirisch kalibrierte
         Prognose oder Überlebenswahrscheinlichkeit.
       </p>
-      <small>Methodenversion {QUICK_METHOD}</small>
+      <small>Methodenversion {version}</small>
     </dialog>
   );
 }
@@ -198,7 +205,11 @@ export default function QuickApp() {
   const current = checks.find((c) => c.id === selected);
   const resume = [...checks]
     .filter(
-      (c) => !c.isExample && (c.view === "questions" || c.view === "scenarios"),
+      (c) =>
+        !c.isExample &&
+        (c.view === "intro" ||
+          c.view === "questions" ||
+          c.view === "scenarios"),
     )
     .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))[0];
   useEffect(() => {
@@ -446,6 +457,27 @@ export default function QuickApp() {
         </nav>
       </header>
       <div id="quick-content" className="quick-content">
+        {page === "check" &&
+          current?.methodologyVersion === "quick-check-1.0" && (
+            <div className="method-version-note no-print">
+              <span>
+                Sie sehen einen früheren Check mit seinen ursprünglichen Fragen.
+                Das neue Expertenteam-Gedankenexperiment beginnt mit einer
+                eigenen Bewertung.
+              </span>
+              <button
+                className="text-link"
+                onClick={() => {
+                  const c = createCheck(current.type);
+                  setChecks((list) => [...list, c]);
+                  open(c.id);
+                }}
+              >
+                Neuen Expertenteam-Check starten
+                <Arrow />
+              </button>
+            </div>
+          )}
         {error && (
           <div className="error-banner no-print" role="alert">
             <strong>Bitte beachten</strong>
@@ -478,14 +510,14 @@ export default function QuickApp() {
                 <h1>
                   Wie stark
                   <br />
-                  verändert KI
+                  ist
                   <br />
                   <span className="highlight-word">Ihr Geschäft?</span>
                 </h1>
                 <p className="landing-description">
-                  12 Fragen. Eine klare Einschätzung.
+                  Zehn Weltklasseexperten. Sechs Monate.
                   <br />
-                  Ihre nächsten Schritte.
+                  Was schützt Ihr Angebot?
                 </p>
                 <fieldset className="case-type">
                   <legend>Was möchten Sie einschätzen?</legend>
@@ -571,7 +603,7 @@ export default function QuickApp() {
                 <span>01</span>
                 <h2>Einschätzen</h2>
                 <p>
-                  Ein konkretes Angebot. Zwölf klare Fragen. Keine Formulare.
+                  Ein Expertenteam greift Ihr Angebot an. Zwölf konkrete Fragen.
                 </p>
               </div>
               <div>
@@ -641,7 +673,10 @@ export default function QuickApp() {
                       c.view =
                         calculateRisk(c).processed === 12
                           ? "results"
-                          : "questions";
+                          : calculateRisk(c).processed === 0 &&
+                              c.methodologyVersion === QUICK_METHOD
+                            ? "intro"
+                            : "questions";
                     });
                     window.scrollTo(0, 0);
                   }}
@@ -649,6 +684,15 @@ export default function QuickApp() {
                   onPrint={() => window.print()}
                 />
               </Suspense>
+            ) : current.view === "intro" ? (
+              <ExpertIntro
+                onStart={() => {
+                  update((c) => {
+                    c.view = "questions";
+                  });
+                  window.scrollTo(0, 0);
+                }}
+              />
             ) : current.view === "questions" ? (
               <Question
                 key={`${current.id}:${current.step}`}
@@ -695,7 +739,16 @@ export default function QuickApp() {
           if (f) void readFile(f);
         }}
       />
-      {method && <Method onClose={() => setMethod(false)} />}{" "}
+      {method && (
+        <Method
+          version={
+            page === "check" && current
+              ? current.methodologyVersion
+              : QUICK_METHOD
+          }
+          onClose={() => setMethod(false)}
+        />
+      )}{" "}
       {preview && (
         <ImportDialog
           preview={preview}

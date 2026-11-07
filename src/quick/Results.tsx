@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { QuickCheck } from "./model";
-import { calculateRisk, riskLabel, QUICK_QUESTIONS } from "./model";
+import { calculateRisk, riskLabel, QUICK_METHOD } from "./model";
 import { Arrow, useReducedMotion } from "./ui";
 function Count({ value }: { value: number }) {
   const reduced = useReducedMotion();
@@ -53,6 +53,7 @@ export function Results({
   onScenarios: () => void;
 }) {
   const r = calculateRisk(check);
+  const questions = check.methodologySnapshot;
   const [answersOpen, setAnswersOpen] = useState(false);
   const strongest = [...r.groups]
     .filter((g) => g.score !== null)
@@ -62,7 +63,12 @@ export function Results({
     <main className="results-page">
       <section className="result-overview">
         <div className="score-panel">
-          <h1>Ihr KI-Risikoprofil</h1>
+          <h1>Ihr Risikoprofil</h1>
+          <p className="example-label">
+            {check.methodologyVersion === QUICK_METHOD
+              ? "Expertenteam-Gedankenexperiment · 6 Monate"
+              : "Frühere Methode · ursprünglicher Fragenstand"}
+          </p>
           {check.isExample && (
             <p className="example-label">Fiktives Beispiel</p>
           )}
@@ -82,7 +88,7 @@ export function Results({
               </p>
               <p className="score-explanation">
                 {r.score < 25
-                  ? "Ihre Angaben zeigen derzeit wenig Druck. Sichern Sie Ihre Stärken und prüfen Sie Veränderungen regelmäßig."
+                  ? "Ihre Angaben zeigen unter den bewerteten Annahmen wenige Lücken. Sichern Sie Ihre Stärken und prüfen Sie Veränderungen regelmäßig."
                   : `Besonders relevant sind ${strongest.map((g) => g.title).join(" und ")}.`}
               </p>
               <div
@@ -112,7 +118,7 @@ export function Results({
               </p>
               <button
                 className="button primary"
-                onClick={() => onEdit(QUICK_QUESTIONS.indexOf(r.unknown[0]))}
+                onClick={() => onEdit(questions.indexOf(r.unknown[0]))}
               >
                 Offene Fragen beantworten
                 <Arrow />
@@ -133,9 +139,7 @@ export function Results({
               <button
                 className="text-link"
                 onClick={() =>
-                  onEdit(
-                    QUICK_QUESTIONS.findIndex((q) => q.id === r.critical[0].id),
-                  )
+                  onEdit(questions.findIndex((q) => q.id === r.critical[0].id))
                 }
               >
                 Ansehen
@@ -201,7 +205,7 @@ export function Results({
                 className="priority-row"
                 key={q.id}
                 onClick={() =>
-                  onEdit(QUICK_QUESTIONS.findIndex((x) => x.id === q.id))
+                  onEdit(questions.findIndex((x) => x.id === q.id))
                 }
               >
                 <span className="priority-number">
@@ -216,7 +220,7 @@ export function Results({
               ? r.unknown.slice(0, 3).map((q, i) => ({
                   title: q.text,
                   text: "Diese Einschätzung ist noch offen.",
-                  step: QUICK_QUESTIONS.indexOf(q),
+                  step: questions.indexOf(q),
                   i,
                 }))
               : [
@@ -256,8 +260,8 @@ export function Results({
         <div className="result-footer">
           <div>
             <p>
-              Einschätzung auf Basis Ihrer Antworten · {r.answered} von 12
-              beantwortet
+              Einschätzung auf Basis Ihrer Antworten ·{" "}
+              {check.methodologyVersion} · {r.answered} von 12 beantwortet
             </p>
             <button className="text-link" onClick={onMethod}>
               So wird der Score berechnet
@@ -286,8 +290,8 @@ export function Results({
           <p className="section-index">Den nächsten Schritt vorausdenken</p>
           <h2>Wie verändert sich Ihr Geschäft, wenn …?</h2>
           <p>
-            Sechs Szenarien zu günstigeren oder stärkeren Agenten und
-            zusätzlicher Robotik.
+            Sechs Szenarien: dieselben Experten günstiger, stärkere
+            Forscherteams und zusätzliche Roboter.
           </p>
         </div>
         <button className="button primary" onClick={onScenarios}>
@@ -298,7 +302,7 @@ export function Results({
       {answersOpen && (
         <section className="answer-summary">
           <h2>Ihre zwölf Einschätzungen</h2>
-          {QUICK_QUESTIONS.map((q, i) => (
+          {questions.map((q, i) => (
             <button
               className="answer-summary-row"
               key={q.id}

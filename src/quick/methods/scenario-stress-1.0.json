@@ -1,0 +1,118 @@
+{
+  "catalog": [
+    {
+      "id": "s1",
+      "title": "Gleiche Intelligenz, günstiger",
+      "short": "Günstiger",
+      "story": "Die heutigen Agentenfähigkeiten und Fehlerquoten bleiben gleich. Dieselbe KI-Leistung kostet nur noch ein Zehntel. Auch Wettbewerber und Kunden erhalten diesen Zugang.",
+      "question": "Welche heute schon möglichen Aufgaben werden dadurch wirtschaftlich interessant?",
+      "assumptions": {
+        "costFactor": 10,
+        "intelligence": "same",
+        "robots": "none"
+      }
+    },
+    {
+      "id": "s2",
+      "title": "Digitale Leistung wird Massenware",
+      "short": "Massenware",
+      "story": "Die Agenten bleiben auf dem heutigen Leistungsniveau. Ihre Nutzung kostet nur noch ein Hundertstel. Bei gleichem KI-Budget werden hundertmal so viele gleichartige KI-Durchläufe finanzierbar.",
+      "question": "Was verändert sich, wenn bisher teure digitale Arbeit in viel größerer Menge finanzierbar wird?",
+      "assumptions": {
+        "costFactor": 100,
+        "intelligence": "same",
+        "robots": "none"
+      }
+    },
+    {
+      "id": "s3",
+      "title": "Agenten bewältigen mehr",
+      "short": "Stärkere Agenten",
+      "story": "KI-Leistung kostet ein Hundertstel. Zusätzlich können Agenten längere und komplexere digitale Abläufe einschließlich Werkzeugnutzung und Prüfung zuverlässiger bewältigen. Fehlerfreiheit ist weiterhin nicht unterstellt.",
+      "question": "Welche bisher notwendigen menschlichen Arbeitsschritte werden unter dieser zusätzlichen Annahme ersetzbar?",
+      "assumptions": {
+        "costFactor": 100,
+        "intelligence": "higher",
+        "robots": "none"
+      }
+    },
+    {
+      "id": "s4",
+      "title": "Roboter übernehmen Routine",
+      "short": "Routine-Robotik",
+      "story": "Die Agentenfähigkeiten bleiben gleich, die KI-Leistung kostet ein Hundertstel. Zusätzlich stehen wirtschaftlich einsetzbare Roboter für abgegrenzte, wiederkehrende körperliche Aufgaben in vorbereiteten Umgebungen bereit.",
+      "question": "Was ändert sich, wenn digitale Fähigkeiten auch klar begrenzte körperliche Abläufe ausführen können?",
+      "assumptions": {
+        "costFactor": 100,
+        "intelligence": "same",
+        "robots": "routine"
+      }
+    },
+    {
+      "id": "s5",
+      "title": "Stärkere Agenten steuern Roboter",
+      "short": "Agenten + Roboter",
+      "story": "KI-Leistung kostet ein Hundertstel. Agenten bearbeiten längere digitale Abläufe zuverlässiger und steuern wirtschaftlich einsetzbare Roboter in abgegrenzten, vorbereiteten Arbeitsumgebungen.",
+      "question": "Welche zusätzliche Wirkung haben leistungsfähigere Agenten bei derselben Routine-Robotik wie in Szenario 4?",
+      "assumptions": {
+        "costFactor": 100,
+        "intelligence": "higher",
+        "robots": "routine"
+      }
+    },
+    {
+      "id": "s6",
+      "title": "Flexible physische Automatisierung",
+      "short": "Flexible Robotik",
+      "story": "KI-Leistung kostet ein Hundertstel und Agenten bearbeiten komplexere Abläufe zuverlässiger. Zusätzlich werden flexible Roboter für wesentlich mehr körperliche Aufgaben wirtschaftlich einsetzbar. Verfügbarkeit und Wirtschaftlichkeit dieser Robotik sind eigene Szenarioannahmen.",
+      "question": "Welche bisher schützenden Grenzen körperlicher Ausführung fallen unter diesen Annahmen weg?",
+      "assumptions": {
+        "costFactor": 100,
+        "intelligence": "higher",
+        "robots": "flexible"
+      }
+    }
+  ],
+  "questions": [
+    {
+      "id": "value",
+      "title": "Bezahlter Nutzen",
+      "text": "Wie viel Ihres bezahlten Nutzens könnte durch Alternativen ersetzt werden?",
+      "low": "Bezahlter Nutzen bleibt eigenständig",
+      "high": "Nahezu vollständig ersetzbar",
+      "action": "Prüfen Sie an einer konkreten Kundenaufgabe, welcher zusätzliche Nutzen auch unter diesen Annahmen bezahlt würde."
+    },
+    {
+      "id": "price",
+      "title": "Preis und Marge",
+      "text": "Wie stark könnte der Druck auf Ihren Preis oder Ihre Marge steigen?",
+      "low": "Kaum zusätzlicher Druck",
+      "high": "Wirtschaftlichkeit stark bedroht",
+      "action": "Vergleichen Sie vollständige Kosten je brauchbarem Ergebnis und tatsächliche Zahlungsbereitschaft – einschließlich Prüfung und Umstellung."
+    },
+    {
+      "id": "access",
+      "title": "Kundenzugang",
+      "text": "Wie groß ist das Risiko, den Zugang zur Kaufentscheidung zu verlieren?",
+      "low": "Kundenzugang bleibt belastbar",
+      "high": "Auswahl liegt bei anderen Anbietern",
+      "action": "Testen Sie, wie Kunden oder Einkaufsagenten Ihr Angebot finden und auswählen und welche Zugänge oder Auswahlkriterien entscheidend sind."
+    },
+    {
+      "id": "adapt",
+      "title": "Anpassung",
+      "text": "Wie groß ist das Risiko, Ihr Angebot nicht rechtzeitig anzupassen?",
+      "low": "Umsetzung im Zeitfenster realistisch",
+      "high": "Keine realistische Anpassung",
+      "action": "Erproben Sie die wichtigste Anpassung mit klarer Zuständigkeit, Kapazität und überprüfbarem Ergebnis innerhalb des gewählten Zeitfensters."
+    },
+    {
+      "id": "opportunity",
+      "title": "Eigene Chance",
+      "text": "Wie gut könnten Sie diese Entwicklung selbst in zusätzlichen Kundennutzen und Erträge übersetzen?",
+      "low": "Kaum erkennbarer Ansatz",
+      "high": "Konkreter tragfähiger Ansatz",
+      "action": "Grenzen Sie einen kleinen Pilot ab, der den zusätzlichen Kundennutzen und Ihre Möglichkeit prüft, einen Teil davon als Ertrag zu behalten."
+    }
+  ]
+}

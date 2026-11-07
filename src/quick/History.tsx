@@ -46,6 +46,9 @@ export function History({
                   <span className="history-row-title">
                     <strong>{checkTitle(c)}</strong>
                     <small>
+                      {c.methodologyVersion === "quick-check-1.0"
+                        ? "Frühere Methode · "
+                        : "Expertenteam · "}
                       {c.view === "scenarios"
                         ? `${c.scenarios?.runs.length ?? 0} Szenariostände · Zukunftssimulation`
                         : `${r.answered} von 12 beantwortet · ${c.view === "results" ? "Ergebnis" : "Entwurf"}`}
@@ -98,6 +101,10 @@ export function History({
       <p className="storage-hint">
         In diesem Browser gespeichert. Mit JSON nehmen Sie Ihre Checks in einen
         anderen Browser mit.
+      </p>
+      <p className="storage-hint">
+        Frühere Methoden behalten ihre ursprünglichen Fragen. Scores aus
+        unterschiedlichen Methoden sind nicht unmittelbar vergleichbar.
       </p>
     </main>
   );

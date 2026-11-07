@@ -1,7 +1,9 @@
 import { z } from "zod";
+import oldQuestions from "./methods/quick-check-1.0.json";
+import { EXPERT_QUESTIONS } from "./expert-questions";
 import { scenarioWorkspaceSchema } from "./scenario-model";
 import type { ScenarioWorkspace } from "./scenario-model";
-export const QUICK_METHOD = "quick-check-1.0";
+export const QUICK_METHOD = "quick-check-2.0";
 export const QUICK_SCHEMA = "1.1";
 export type GroupId = "value" | "competition" | "advantage" | "control";
 export type QuickAnswer = number | "unknown" | null;
@@ -12,6 +14,7 @@ export interface QuickQuestion {
   low: string;
   high: string;
   help: string;
+  example?: string;
   action: string;
   actionDetail: string;
 }
@@ -21,140 +24,11 @@ export const QUICK_GROUPS: { id: GroupId; title: string; short: string }[] = [
   { id: "advantage", title: "Differenzierung", short: "Vorteile" },
   { id: "control", title: "Handlungsfähigkeit", short: "Handlung" },
 ];
-export const QUICK_QUESTIONS: QuickQuestion[] = [
-  {
-    id: "Q1",
-    group: "value",
-    text: "Wie unsicher ist der Bedarf für Ihr Angebot?",
-    low: "Wiederkehrender Bedarf belegt",
-    high: "Bedarf bisher nur vermutet",
-    help: "Denken Sie an ein konkretes Angebot für eine bestimmte Kundengruppe. Wählen Sie für jeden weiteren Check ein eigenes Angebot.",
-    action: "Den Kundenbedarf absichern",
-    actionDetail:
-      "Sprechen Sie mit konkreten Käufern über die Aufgabe, ihre heutige Alternative und die Folgen eines ungelösten Problems.",
-  },
-  {
-    id: "Q2",
-    group: "value",
-    text: "Wie stark ist die Zahlungsbereitschaft noch eine Annahme?",
-    low: "Bezahlte Aufträge oder Verlängerungen",
-    high: "Bisher kein Kaufnachweis",
-    help: "Interesse ist ein erster Hinweis. Ein bezahlter Pilot, Auftrag oder eine Verlängerung gibt eine belastbarere Grundlage.",
-    action: "Zahlungsbereitschaft überprüfen",
-    actionDetail:
-      "Testen Sie einen klar abgegrenzten bezahlten Pilot und dokumentieren Sie die tatsächliche Kaufentscheidung.",
-  },
-  {
-    id: "Q3",
-    group: "value",
-    text: "Wie groß ist das Risiko, dass sich Ihr Angebot nicht rechnet?",
-    low: "Kosten und Erlöse belastbar",
-    high: "Zentrale Annahmen offen",
-    help: "Berücksichtigen Sie neben KI-Kosten auch Vertrieb, Einführung, Betreuung, Prüfung und Nacharbeit.",
-    action: "Die Wirtschaftlichkeit konkret rechnen",
-    actionDetail:
-      "Stellen Sie realistische Erlöse den vollständigen Kosten einschließlich Vertrieb, Betreuung und Qualitätssicherung gegenüber.",
-  },
-  {
-    id: "Q4",
-    group: "competition",
-    text: "Wie leicht kann KI Ihre bezahlte Kernleistung ersetzen?",
-    low: "Überwiegend Randaufgaben",
-    high: "Weitgehend gleichwertige Kernleistung",
-    help: "Vergleichen Sie das vollständige bezahlte Ergebnis – einschließlich Fehlern, Prüfung, Ausführung und Nacharbeit.",
-    action: "Die Kernleistung gegen KI vergleichen",
-    actionDetail:
-      "Testen Sie verfügbare KI an repräsentativen Kundenaufgaben und vergleichen Sie das vollständige nutzbare Ergebnis.",
-  },
-  {
-    id: "Q5",
-    group: "competition",
-    text: "Wie leicht könnte eine Plattform Ihre Kernleistung mitliefern?",
-    low: "Kaum passende Bündelung erkennbar",
-    high: "Vergleichbare Funktion verfügbar",
-    help: "Denken Sie an die Plattformen, die Ihre Kunden bereits nutzen. Welche Leistung müssten sie dann noch separat kaufen?",
-    action: "Den bezahlten Nutzen schärfen",
-    actionDetail:
-      "Benennen und testen Sie, welchen zusätzlichen Nutzen Kunden auch bei einer gebündelten Standardfunktion weiterhin bezahlen würden.",
-  },
-  {
-    id: "Q6",
-    group: "competition",
-    text: "Wie leicht könnten Kunden wechseln oder es selbst erledigen?",
-    low: "Konkrete erhebliche Wechselhürden",
-    high: "Alternative unmittelbar einsetzbar",
-    help: "Betrachten Sie Migration, Qualität, Schulung und organisatorische Umstellung – nicht nur den Kündigungsklick.",
-    action: "Den tatsächlichen Wechselaufwand prüfen",
-    actionDetail:
-      "Prüfen Sie mit einem Kunden, wie gut die beste Alternative funktioniert und welcher reale Umstellungsaufwand entsteht.",
-  },
-  {
-    id: "Q7",
-    group: "advantage",
-    text: "Wie leicht lässt sich Ihr besonderer Kundennutzen nachbauen?",
-    low: "Schwer reproduzierbarer Vorsprung",
-    high: "Mit Standardmitteln reproduzierbar",
-    help: "Eigene Daten oder Fachwissen helfen nur, wenn sie einen relevanten Ergebnisvorteil erzeugen und schwer ersetzbar sind.",
-    action: "Den eigenen Vorsprung belegen",
-    actionDetail:
-      "Vergleichen Sie das Ergebnis mit und ohne Ihre besonderen Daten, Erfahrungen oder Zugänge und prüfen Sie Ersatzmöglichkeiten.",
-  },
-  {
-    id: "Q8",
-    group: "advantage",
-    text: "Wie ähnlich ist Ihr Ergebnis dem einer Standardlösung?",
-    low: "Relevanter Mehrwert gezeigt",
-    high: "Kein relevanter Unterschied",
-    help: "Maßstab ist die beste für den Kunden zugängliche Alternative. Dazu zählen auch Eigenleistung und nichts zu verändern.",
-    action: "Die Differenzierung sichtbar machen",
-    actionDetail:
-      "Messen Sie den zusätzlichen Nutzen gegenüber der besten zugänglichen Alternative bei Zeit, Qualität, Kosten oder Ergebnis.",
-  },
-  {
-    id: "Q9",
-    group: "advantage",
-    text: "Wie leicht erreicht ein neuer Wettbewerber Ihre Käufer?",
-    low: "Zugang schwer aufzubauen",
-    high: "Vergleichbarer Zugang verfügbar",
-    help: "Wiederkehrende Käufe und schwer reproduzierbare Beziehungen sind aussagekräftiger als eine bloße Kundenliste.",
-    action: "Den Kundenzugang stärken",
-    actionDetail:
-      "Untersuchen Sie, warum Käufer wiederkommen und welche Beziehungen oder Vertriebswege ein Wettbewerber tatsächlich nachbauen müsste.",
-  },
-  {
-    id: "Q10",
-    group: "control",
-    text: "Wie abhängig ist Ihre Kernleistung von einem KI-Anbieter?",
-    low: "Erprobte Ausweichmöglichkeit",
-    high: "Keine brauchbare Alternative",
-    help: "Eine zweite API genügt nicht. Prüfen Sie Qualität, Datenzugang, Kosten und gemeinsame technische Abhängigkeiten.",
-    action: "Einen Anbieterwechsel praktisch testen",
-    actionDetail:
-      "Erproben Sie eine Alternative an relevanten Aufgaben und dokumentieren Sie Qualität, Kosten, Umstellung und Mindestbetrieb.",
-  },
-  {
-    id: "Q11",
-    group: "control",
-    text: "Wie groß ist das Risiko unbemerkter Qualitätsfehler?",
-    low: "Relevante Aufgaben wiederholbar geprüft",
-    high: "Relevante Fehler kaum geprüft",
-    help: "Beurteilen Sie repräsentative Aufgaben, bekannte Fehlertypen und klare Akzeptanzgrenzen – statt einzelner überzeugender Beispiele.",
-    action: "Eine wiederholbare Qualitätsprüfung aufbauen",
-    actionDetail:
-      "Definieren Sie repräsentative Prüfaufgaben, Fehlerklassen und Akzeptanzgrenzen und testen Sie nach Modelländerungen erneut.",
-  },
-  {
-    id: "Q12",
-    group: "control",
-    text: "Wie schwer könnten Sie Ihr Angebot kurzfristig anpassen?",
-    low: "Ressourcen, Verantwortung und Plan klar",
-    high: "Keine realistische Umsetzung",
-    help: "Berücksichtigen Sie Entscheidungswege, verfügbare Kapazität, Budget und die Zeit bis zur notwendigen Veränderung.",
-    action: "Den Anpassungsplan konkret machen",
-    actionDetail:
-      "Legen Sie fest, wer welche Veränderung mit welchen Ressourcen umsetzt und bis wann ein überprüfbares Ergebnis vorliegen soll.",
-  },
-];
+export const QUICK_QUESTIONS = EXPERT_QUESTIONS;
+export const QUICK_METHODS: Record<string, QuickQuestion[]> = {
+  "quick-check-1.0": oldQuestions as QuickQuestion[],
+  [QUICK_METHOD]: QUICK_QUESTIONS,
+};
 export interface QuickCheck {
   id: string;
   schemaVersion: string;
@@ -165,7 +39,7 @@ export interface QuickCheck {
   type: "existing" | "idea";
   answers: Record<string, QuickAnswer>;
   step: number;
-  view: "questions" | "results" | "scenarios";
+  view: "intro" | "questions" | "results" | "scenarios";
   scenarios?: ScenarioWorkspace;
   isExample: boolean;
   originId: string | null;
@@ -182,14 +56,14 @@ export function createCheck(type: QuickCheck["type"]): QuickCheck {
     type,
     answers: Object.fromEntries(QUICK_QUESTIONS.map((q) => [q.id, null])),
     step: 0,
-    view: "questions",
+    view: "intro",
     isExample: false,
     originId: null,
   };
 }
 export function answerCheck(c: QuickCheck, id: string, value: QuickAnswer) {
   if (
-    !QUICK_QUESTIONS.some((q) => q.id === id) ||
+    !c.methodologySnapshot.some((q) => q.id === id) ||
     !(
       value === null ||
       value === "unknown" ||
@@ -217,7 +91,8 @@ export function riskLabel(score: number | null) {
           : "Hohes Risiko";
 }
 export function calculateRisk(c: QuickCheck) {
-  const rated = QUICK_QUESTIONS.flatMap((q) =>
+  const questions = c.methodologySnapshot;
+  const rated = questions.flatMap((q) =>
     typeof c.answers[q.id] === "number"
       ? [{ ...q, value: c.answers[q.id] as number }]
       : [],
@@ -237,11 +112,11 @@ export function calculateRisk(c: QuickCheck) {
   return {
     score: rated.length === 12 ? norm(rated.map((q) => q.value)) : null,
     answered: rated.length,
-    processed: QUICK_QUESTIONS.filter((q) => c.answers[q.id] !== null).length,
+    processed: questions.filter((q) => c.answers[q.id] !== null).length,
     groups,
     critical: ranked.filter((q) => q.value >= 9),
     priorities: ranked.filter((q) => q.value >= 4).slice(0, 3),
-    unknown: QUICK_QUESTIONS.filter((q) => typeof c.answers[q.id] !== "number"),
+    unknown: questions.filter((q) => typeof c.answers[q.id] !== "number"),
   };
 }
 const questionSchema = z
@@ -252,6 +127,7 @@ const questionSchema = z
     low: z.string(),
     high: z.string(),
     help: z.string(),
+    example: z.string().optional(),
     action: z.string(),
     actionDetail: z.string(),
   })
@@ -261,7 +137,7 @@ const checkSchema = z
   .object({
     id: z.string().min(1).max(200),
     schemaVersion: z.enum(["1.0", "1.1"]),
-    methodologyVersion: z.literal(QUICK_METHOD),
+    methodologyVersion: z.enum(["quick-check-1.0", QUICK_METHOD]),
     methodologySnapshot: z.array(questionSchema).length(12),
     createdAt: z.iso.datetime({ offset: true }),
     updatedAt: z.iso.datetime({ offset: true }),
@@ -275,7 +151,7 @@ const checkSchema = z
       ]),
     ),
     step: z.number().int().min(0).max(11),
-    view: z.enum(["questions", "results", "scenarios"]),
+    view: z.enum(["intro", "questions", "results", "scenarios"]),
     scenarios: scenarioWorkspaceSchema.optional(),
     isExample: z.boolean(),
     originId: z.string().nullable(),
@@ -301,7 +177,7 @@ export function serializeChecks(checks: QuickCheck[]) {
     {
       format: "e23-quick-check",
       schemaVersion: QUICK_SCHEMA,
-      appVersion: "0.3.0",
+      appVersion: "0.4.0",
       exportedAt: new Date().toISOString(),
       checks,
     },
@@ -332,7 +208,8 @@ export function parseChecks(
     if (ids.has(c.id)) throw Error("Doppelte Check-ID in der Datei.");
     ids.add(c.id);
     if (
-      JSON.stringify(c.methodologySnapshot) !== JSON.stringify(QUICK_QUESTIONS)
+      JSON.stringify(c.methodologySnapshot) !==
+      JSON.stringify(QUICK_METHODS[c.methodologyVersion])
     )
       throw Error(
         "Der Fragenkatalog passt nicht zur angegebenen Methodenversion.",

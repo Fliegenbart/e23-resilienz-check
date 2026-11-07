@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { QuickCheck, QuickAnswer } from "./model";
-import { QUICK_QUESTIONS, QUICK_GROUPS } from "./model";
+import { QUICK_GROUPS, QUICK_METHOD } from "./model";
+import { EXPERT_PREMISE, EXPERT_BOUNDARIES } from "./expert-team";
 import { Arrow } from "./ui";
 const CONFIRM_DELAY_MS = 450;
 export function Question({
@@ -14,7 +15,7 @@ export function Question({
   onAdvance: () => void;
   onStep: (step: number) => void;
 }) {
-  const q = QUICK_QUESTIONS[check.step],
+  const q = check.methodologySnapshot[check.step],
     value = check.answers[q.id],
     heading = useRef<HTMLHeadingElement>(null);
   const group = QUICK_GROUPS.find((g) => g.id === q.group)!;
@@ -62,7 +63,26 @@ export function Question({
         <h1 ref={heading} tabIndex={-1}>
           {q.text}
         </h1>
-        <p className="question-help">{q.help}</p>
+        {q.example ? (
+          <>
+            <div className="scenario-question-guide">
+              <div>
+                <h2>Was ist gemeint?</h2>
+                <p>{q.help}</p>
+              </div>
+              <div className="scenario-question-example">
+                <h2>Zum Beispiel</h2>
+                <p>{q.example}</p>
+              </div>
+            </div>
+            <p className="expert-scale-direction">
+              Je höher der Wert, desto größer die Lücke oder desto leichter der
+              Angriff auf Ihr Angebot.
+            </p>
+          </>
+        ) : (
+          <p className="question-help">{q.help}</p>
+        )}
         <fieldset
           className="scale"
           aria-labelledby="scale-label"
@@ -160,6 +180,15 @@ export function Question({
           </button>
         ))}
       </nav>
+      {check.methodologyVersion === QUICK_METHOD && (
+        <details className="expert-reminder">
+          <summary>
+            Das Expertenteam-Gedankenexperiment nochmals ansehen
+          </summary>
+          <p>{EXPERT_PREMISE}</p>
+          <p>{EXPERT_BOUNDARIES}</p>
+        </details>
+      )}
     </main>
   );
 }

@@ -5,9 +5,13 @@ import {
   riskLabel,
   checkTitle,
   QUICK_GROUPS,
-  QUICK_QUESTIONS,
   QUICK_METHOD,
 } from "./model";
+import {
+  EXPERT_PREMISE,
+  EXPERT_BOUNDARIES,
+  EXPERT_FRAMING,
+} from "./expert-team";
 export function QuickReport({ check }: { check: QuickCheck }) {
   const r = calculateRisk(check);
   if (r.processed === 0 && check.scenarios && check.scenarios.runs.length > 0) {
@@ -40,7 +44,19 @@ export function QuickReport({ check }: { check: QuickCheck }) {
         {checkTitle(check)}
         {check.isExample ? " · Fiktives Beispiel" : ""}
       </p>
-      <h1>Ihr KI-Risikoprofil</h1>
+      <h1>
+        {check.methodologyVersion === QUICK_METHOD
+          ? "Ihr Risikoprofil"
+          : "Ihr KI-Risikoprofil"}
+      </h1>
+      {check.methodologyVersion === QUICK_METHOD && (
+        <section className="print-block">
+          <h2>Das bewertete Gedankenexperiment</h2>
+          <p>{EXPERT_PREMISE}</p>
+          <p>{EXPERT_BOUNDARIES}</p>
+          <p>{EXPERT_FRAMING}</p>
+        </section>
+      )}
       <div className="print-score">
         <strong>{r.score ?? "Noch offen"}</strong>
         {r.score !== null && <span>/ 100</span>}
@@ -49,26 +65,28 @@ export function QuickReport({ check }: { check: QuickCheck }) {
         <strong>{riskLabel(r.score)}</strong> · {r.answered} von 12 beantwortet
       </p>
       <p>Einschätzung auf Basis Ihrer Antworten.</p>
-      <h2>Die vier Bereiche</h2>
-      <p>Je höher der Wert, desto größer das eingeschätzte Risiko.</p>
-      <table>
-        <thead>
-          <tr>
-            <th>Bereich</th>
-            <th>Risiko / 100</th>
-            <th>Beantwortet</th>
-          </tr>
-        </thead>
-        <tbody>
-          {r.groups.map((g) => (
-            <tr key={g.id}>
-              <td>{g.title}</td>
-              <td>{g.score ?? "Noch offen"}</td>
-              <td>{g.answered} / 3</td>
+      <section className="print-block">
+        <h2>Die vier Bereiche</h2>
+        <p>Je höher der Wert, desto größer das eingeschätzte Risiko.</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Bereich</th>
+              <th>Risiko / 100</th>
+              <th>Beantwortet</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {r.groups.map((g) => (
+              <tr key={g.id}>
+                <td>{g.title}</td>
+                <td>{g.score ?? "Noch offen"}</td>
+                <td>{g.answered} / 3</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
       {r.critical.length > 0 && (
         <>
           <h2>Kritische Einzelwerte</h2>
@@ -104,35 +122,37 @@ export function QuickReport({ check }: { check: QuickCheck }) {
       {QUICK_GROUPS.map((g) => (
         <section key={g.id}>
           <h3>{g.title}</h3>
-          {QUICK_QUESTIONS.filter((q) => q.group === g.id).map((q) => (
-            <section className="print-block print-answer" key={q.id}>
-              <h4>
-                {q.id} · {q.text}
-              </h4>
-              <p>
-                <strong>Antwort:</strong>{" "}
-                {typeof check.answers[q.id] === "number"
-                  ? `${check.answers[q.id]} von 10`
-                  : check.answers[q.id] === "unknown"
-                    ? "Bewusst unbekannt"
-                    : "Nicht beantwortet"}
-              </p>
-              <p>
-                <strong>1:</strong> {q.low}
-                <br />
-                <strong>10:</strong> {q.high}
-              </p>
-            </section>
-          ))}
+          {check.methodologySnapshot
+            .filter((q) => q.group === g.id)
+            .map((q) => (
+              <section className="print-block print-answer" key={q.id}>
+                <h4>
+                  {q.id} · {q.text}
+                </h4>
+                <p>
+                  <strong>Antwort:</strong>{" "}
+                  {typeof check.answers[q.id] === "number"
+                    ? `${check.answers[q.id]} von 10`
+                    : check.answers[q.id] === "unknown"
+                      ? "Bewusst unbekannt"
+                      : "Nicht beantwortet"}
+                </p>
+                <p>
+                  <strong>1:</strong> {q.low}
+                  <br />
+                  <strong>10:</strong> {q.high}
+                </p>
+              </section>
+            ))}
         </section>
       ))}
       <section className="print-block">
         <h2>Methode und Einordnung</h2>
         <p>
-          Version {QUICK_METHOD}. Alle zwölf Fragen sind gleich gewichtet.
-          Risikoscore = gerundeter Wert von 100 × Summe(Antwort − 1) / 108. Die
-          Teilbereiche verwenden jeweils drei Antworten. Niedrig: 0–24, mittel:
-          25–49, erhöht: 50–74, hoch: 75–100.
+          Version {check.methodologyVersion}. Alle zwölf Fragen sind gleich
+          gewichtet. Risikoscore = gerundeter Wert von 100 × Summe(Antwort − 1)
+          / 108. Die Teilbereiche verwenden jeweils drei Antworten. Niedrig:
+          0–24, mittel: 25–49, erhöht: 50–74, hoch: 75–100.
         </p>
         <p>
           Ein Gesamtscore setzt zwölf numerische Antworten voraus. Unbekannte

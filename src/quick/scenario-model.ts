@@ -1,5 +1,6 @@
 import { z } from "zod";
-export const SCENARIO_METHOD = "scenario-stress-1.0";
+import oldSnapshot from "./methods/scenario-stress-1.0.json";
+export const SCENARIO_METHOD = "scenario-stress-2.0";
 export type ScenarioAnswer = number | "unknown" | null;
 export type ScenarioQuestionId =
   "value" | "price" | "access" | "adapt" | "opportunity";
@@ -19,62 +20,62 @@ export interface ScenarioDefinition {
 export const SCENARIOS: ScenarioDefinition[] = [
   {
     id: "s1",
-    title: "Gleiche Intelligenz, günstiger",
+    title: "Dasselbe Expertenteam, günstiger",
     short: "Günstiger",
     story:
-      "Die heutigen Agentenfähigkeiten und Fehlerquoten bleiben gleich. Dieselbe KI-Leistung kostet nur noch ein Zehntel. Auch Wettbewerber und Kunden erhalten diesen Zugang.",
+      "Denken Sie an das Expertenteam Ihres Wettbewerbers: Es recherchiert, entwickelt und prüft auf Weltklasseniveau, rund um die Uhr. Seine Fähigkeiten und Fehlergrenzen bleiben gleich. Dieselbe digitale Facharbeit kostet ein Zehntel des angenommenen Ausgangspreises. Sie, Ihre Kunden und Wettbewerber können sie nutzen.",
     question:
-      "Welche heute schon möglichen Aufgaben werden dadurch wirtschaftlich interessant?",
+      "Welche Aufgaben würden Kunden oder Wettbewerber nun selbst erledigen lassen?",
     assumptions: { costFactor: 10, intelligence: "same", robots: "none" },
   },
   {
     id: "s2",
-    title: "Digitale Leistung wird Massenware",
-    short: "Massenware",
+    title: "Expertenteams für alle",
+    short: "Für alle",
     story:
-      "Die Agenten bleiben auf dem heutigen Leistungsniveau. Ihre Nutzung kostet nur noch ein Hundertstel. Bei gleichem KI-Budget werden hundertmal so viele gleichartige KI-Durchläufe finanzierbar.",
+      "Dasselbe Expertenteam mit unveränderten Fähigkeiten und Fehlergrenzen steht Ihnen, Ihren Kunden und Wettbewerbern zur Verfügung. Dieselbe digitale Facharbeit kostet nur noch ein Hundertstel des angenommenen Ausgangspreises. So wird wesentlich mehr gleichartige Arbeit finanzierbar, ohne dass das Team dadurch klüger wird.",
     question:
-      "Was verändert sich, wenn bisher teure digitale Arbeit in viel größerer Menge finanzierbar wird?",
+      "Was würden Kunden selbst erledigen lassen, wenn gute Facharbeit kaum noch etwas kostet?",
     assumptions: { costFactor: 100, intelligence: "same", robots: "none" },
   },
   {
     id: "s3",
-    title: "Agenten bewältigen mehr",
-    short: "Stärkere Agenten",
+    title: "Die klügsten Forscher im Team",
+    short: "Stärkeres Team",
     story:
-      "KI-Leistung kostet ein Hundertstel. Zusätzlich können Agenten längere und komplexere digitale Abläufe einschließlich Werkzeugnutzung und Prüfung zuverlässiger bewältigen. Fehlerfreiheit ist weiterhin nicht unterstellt.",
+      "Digitale Facharbeit kostet ein Hundertstel. Zusätzlich bekommt das Team die Fähigkeiten der klügsten Wissenschaftler und Entwickler Ihres Gebiets – im Gedankenexperiment bis auf Nobelpreisniveau, wo dieser Vergleich passt. Es löst schwierigere Probleme und bewältigt längere Entwicklungs- und Prüfabläufe zuverlässiger. Fehlerfreiheit und Zugang zu exklusiven Ressourcen sind nicht unterstellt.",
     question:
-      "Welche bisher notwendigen menschlichen Arbeitsschritte werden unter dieser zusätzlichen Annahme ersetzbar?",
+      "Welche fachliche Hürde bleibt, wenn das Team schwieriger forschen, entwickeln und prüfen kann?",
     assumptions: { costFactor: 100, intelligence: "higher", robots: "none" },
   },
   {
     id: "s4",
-    title: "Roboter übernehmen Routine",
-    short: "Routine-Robotik",
+    title: "Das Team bekommt Roboter",
+    short: "Team + Routine-Roboter",
     story:
-      "Die Agentenfähigkeiten bleiben gleich, die KI-Leistung kostet ein Hundertstel. Zusätzlich stehen wirtschaftlich einsetzbare Roboter für abgegrenzte, wiederkehrende körperliche Aufgaben in vorbereiteten Umgebungen bereit.",
+      "Die Fähigkeiten des Expertenteams bleiben gleich, digitale Facharbeit kostet ein Hundertstel. Zusätzlich bekommt es wirtschaftlich einsetzbare Roboter für abgegrenzte, wiederkehrende körperliche Arbeiten in vorbereiteten Umgebungen. Flexible Arbeiten in beliebigen Situationen sind damit nicht unterstellt.",
     question:
-      "Was ändert sich, wenn digitale Fähigkeiten auch klar begrenzte körperliche Abläufe ausführen können?",
+      "Welche körperliche Routine könnte das Team nun zusätzlich selbst ausführen?",
     assumptions: { costFactor: 100, intelligence: "same", robots: "routine" },
   },
   {
     id: "s5",
-    title: "Stärkere Agenten steuern Roboter",
-    short: "Agenten + Roboter",
+    title: "Forscherteam mit Robotern",
+    short: "Forscher + Routine-Roboter",
     story:
-      "KI-Leistung kostet ein Hundertstel. Agenten bearbeiten längere digitale Abläufe zuverlässiger und steuern wirtschaftlich einsetzbare Roboter in abgegrenzten, vorbereiteten Arbeitsumgebungen.",
+      "Digitale Facharbeit kostet ein Hundertstel. Das Team kann wie in Szenario 3 schwierigere Probleme erforschen und längere Abläufe zuverlässiger bewältigen. Dazu erhält es dieselben Routine-Roboter wie in Szenario 4. Diese arbeiten in abgegrenzten, vorbereiteten Umgebungen.",
     question:
-      "Welche zusätzliche Wirkung haben leistungsfähigere Agenten bei derselben Routine-Robotik wie in Szenario 4?",
+      "Was könnte das stärkere Team mit denselben Routine-Robotern zusätzlich leisten?",
     assumptions: { costFactor: 100, intelligence: "higher", robots: "routine" },
   },
   {
     id: "s6",
-    title: "Flexible physische Automatisierung",
-    short: "Flexible Robotik",
+    title: "Das Team kann auch körperlich handeln",
+    short: "Team + flexible Roboter",
     story:
-      "KI-Leistung kostet ein Hundertstel und Agenten bearbeiten komplexere Abläufe zuverlässiger. Zusätzlich werden flexible Roboter für wesentlich mehr körperliche Aufgaben wirtschaftlich einsetzbar. Verfügbarkeit und Wirtschaftlichkeit dieser Robotik sind eigene Szenarioannahmen.",
+      "Das stärkere Forscherteam aus Szenario 5 bekommt zusätzlich flexible Roboter für wesentlich mehr körperliche Aufgaben. Digitale Facharbeit kostet weiterhin ein Hundertstel. Dass diese Roboter zuverlässig verfügbar und wirtschaftlich einsetzbar sind, ist eine eigene Annahme dieses Szenarios.",
     question:
-      "Welche bisher schützenden Grenzen körperlicher Ausführung fallen unter diesen Annahmen weg?",
+      "Welche bisher schützende Grenze fällt weg, wenn das Team auch vielfältige körperliche Arbeiten ausführen kann?",
     assumptions: {
       costFactor: 100,
       intelligence: "higher",
@@ -92,53 +93,57 @@ export const SCENARIO_QUESTIONS: {
 }[] = [
   {
     id: "value",
-    title: "Bezahlter Nutzen",
-    text: "Wie viel Ihres bezahlten Nutzens könnte durch Alternativen ersetzt werden?",
-    low: "Bezahlter Nutzen bleibt eigenständig",
-    high: "Nahezu vollständig ersetzbar",
+    title: "Nachbau des Kundenergebnisses",
+    text: "Wie viel Ihres bezahlten Ergebnisses könnte dieses Team ohne Sie liefern?",
+    low: "Nur kleine Teile des Kundenergebnisses",
+    high: "Fast das gesamte Kundenergebnis",
     action:
-      "Prüfen Sie an einer konkreten Kundenaufgabe, welcher zusätzliche Nutzen auch unter diesen Annahmen bezahlt würde.",
+      "Prüfen Sie an einer konkreten Kundenaufgabe, welche Ergebnisse das Team mit zugänglichem Wissen und Werkzeugen liefern könnte und welche Hürden bestehen bleiben.",
   },
   {
     id: "price",
     title: "Preis und Marge",
-    text: "Wie stark könnte der Druck auf Ihren Preis oder Ihre Marge steigen?",
-    low: "Kaum zusätzlicher Druck",
-    high: "Wirtschaftlichkeit stark bedroht",
+    text: "Wie stark müssten Sie im Preis nachgeben, wenn das Team vergleichbar gut und viel günstiger anbietet?",
+    low: "Preis haltbar oder Kosten sinken ausreichend",
+    high: "Erzielbarer Preis deckt Kosten kaum noch",
     action:
-      "Vergleichen Sie vollständige Kosten je brauchbarem Ergebnis und tatsächliche Zahlungsbereitschaft – einschließlich Prüfung und Umstellung.",
+      "Spielen Sie ein vergleichbares günstigeres Angebot mit einem Kunden durch. Rechnen Sie nach, ob Ihr verbleibender Preis die vollständigen Kosten einschließlich Prüfung und Umstellung deckt.",
   },
   {
     id: "access",
-    title: "Kundenzugang",
-    text: "Wie groß ist das Risiko, den Zugang zur Kaufentscheidung zu verlieren?",
-    low: "Kundenzugang bleibt belastbar",
-    high: "Auswahl liegt bei anderen Anbietern",
+    title: "Auswahl beim Einkauf",
+    text: "Wie leicht könnte ein Einkaufsassistent Ihr Angebot bei der Vorauswahl übergehen?",
+    low: "Direkter Zugang oder klare Auswahlgründe",
+    high: "Kaum Gründe, Sie in die Auswahl aufzunehmen",
     action:
-      "Testen Sie, wie Kunden oder Einkaufsagenten Ihr Angebot finden und auswählen und welche Zugänge oder Auswahlkriterien entscheidend sind.",
+      "Spielen Sie die Anbietersuche aus Kundensicht durch. Prüfen Sie, über welche Zugänge und nachprüfbaren Kriterien Ihr Angebot auf die Auswahlliste gelangt.",
   },
   {
     id: "adapt",
-    title: "Anpassung",
-    text: "Wie groß ist das Risiko, Ihr Angebot nicht rechtzeitig anzupassen?",
-    low: "Umsetzung im Zeitfenster realistisch",
-    high: "Keine realistische Anpassung",
+    title: "Praktische Anpassung",
+    text: "Wie viel fehlt Ihnen, um Ihr Angebot im gewählten Zeitfenster zu verändern?",
+    low: "Ressourcen und nächste Schritte stehen bereit",
+    high: "Wesentliche Voraussetzungen fehlen",
     action:
-      "Erproben Sie die wichtigste Anpassung mit klarer Zuständigkeit, Kapazität und überprüfbarem Ergebnis innerhalb des gewählten Zeitfensters.",
+      "Erproben Sie eine konkrete Anpassung innerhalb des gewählten Zeitfensters mit klarer Zuständigkeit, Budget und überprüfbarem Ergebnis.",
   },
   {
     id: "opportunity",
-    title: "Eigene Chance",
-    text: "Wie gut könnten Sie diese Entwicklung selbst in zusätzlichen Kundennutzen und Erträge übersetzen?",
-    low: "Kaum erkennbarer Ansatz",
-    high: "Konkreter tragfähiger Ansatz",
+    title: "Das Team für Sie",
+    text: "Wie konkret könnten Sie dieses Team selbst für zusätzlichen Kundennutzen und Ertrag einsetzen?",
+    low: "Bisher kein konkreter bezahlbarer Einsatz",
+    high: "Konkreter Einsatz mit nachvollziehbarem Ertrag",
     action:
-      "Grenzen Sie einen kleinen Pilot ab, der den zusätzlichen Kundennutzen und Ihre Möglichkeit prüft, einen Teil davon als Ertrag zu behalten.",
+      "Erproben Sie einen konkreten Einsatz des Teams für Ihre Kunden. Prüfen Sie, welcher zusätzliche Nutzen bezahlt würde oder welche Einsparung im Unternehmen bliebe.",
   },
 ];
 export const SCENARIO_SNAPSHOT = {
   catalog: SCENARIOS,
   questions: SCENARIO_QUESTIONS,
+};
+export const SCENARIO_METHODS: Record<string, typeof SCENARIO_SNAPSHOT> = {
+  "scenario-stress-1.0": oldSnapshot as typeof SCENARIO_SNAPSHOT,
+  [SCENARIO_METHOD]: SCENARIO_SNAPSHOT,
 };
 export const PROFILE_LABELS = {
   digital: "Vorwiegend digital",
@@ -160,7 +165,7 @@ export interface ScenarioRun {
   completed: boolean;
 }
 export interface ScenarioWorkspace {
-  methodVersion: typeof SCENARIO_METHOD;
+  methodVersion: "scenario-stress-1.0" | typeof SCENARIO_METHOD;
   methodSnapshot: typeof SCENARIO_SNAPSHOT;
   referenceDate: string;
   draftContext: ScenarioContext;
@@ -225,12 +230,18 @@ export function answerScenario(
     throw Error("Bitte 1 bis 10 oder unbekannt wählen.");
   run.answers[id] = answer;
 }
-export function evaluateScenario(run: ScenarioRun) {
-  const risk = SCENARIO_QUESTIONS.slice(0, 4).flatMap((q) =>
-    typeof run.answers[q.id] === "number"
-      ? [{ ...q, value: run.answers[q.id] as number }]
-      : [],
-  );
+export function evaluateScenario(
+  run: ScenarioRun,
+  workspace?: ScenarioWorkspace,
+) {
+  const questions = workspace?.methodSnapshot.questions ?? SCENARIO_QUESTIONS;
+  const risk = questions
+    .slice(0, 4)
+    .flatMap((q) =>
+      typeof run.answers[q.id] === "number"
+        ? [{ ...q, value: run.answers[q.id] as number }]
+        : [],
+    );
   return {
     score:
       risk.length === 4
@@ -246,9 +257,7 @@ export function evaluateScenario(run: ScenarioRun) {
       typeof run.answers.opportunity === "number"
         ? run.answers.opportunity
         : null,
-    unknown: SCENARIO_QUESTIONS.filter(
-      (q) => typeof run.answers[q.id] !== "number",
-    ),
+    unknown: questions.filter((q) => typeof run.answers[q.id] !== "number"),
   };
 }
 export function costEffect(aiShare: number | null, factor: number) {
@@ -268,13 +277,20 @@ export const ROBOT_LABELS = {
   routine: "Routine-Robotik",
   flexible: "Flexible Robotik",
 };
-export function scenarioLabels(s: ScenarioDefinition) {
+export function scenarioLabels(
+  s: ScenarioDefinition,
+  version: string = SCENARIO_METHOD,
+) {
   return {
-    cost: `${s.assumptions.costFactor}× günstigere KI`,
+    cost: `${s.assumptions.costFactor}× günstigere ${version === "scenario-stress-1.0" ? "KI" : "digitale Facharbeit"}`,
     intelligence:
       s.assumptions.intelligence === "same"
-        ? "Agentenfähigkeiten gleich"
-        : "Agentenfähigkeiten höher",
+        ? version === "scenario-stress-1.0"
+          ? "Agentenfähigkeiten gleich"
+          : "Gleiche Teamfähigkeiten"
+        : version === "scenario-stress-1.0"
+          ? "Agentenfähigkeiten höher"
+          : "Höhere Teamfähigkeiten",
     robots: ROBOT_LABELS[s.assumptions.robots],
   };
 }
@@ -330,11 +346,14 @@ function canonical(value: unknown): unknown {
 }
 export const scenarioWorkspaceSchema = z
   .object({
-    methodVersion: z.literal(SCENARIO_METHOD),
+    methodVersion: z.enum(["scenario-stress-1.0", SCENARIO_METHOD]),
     methodSnapshot: z.custom<typeof SCENARIO_SNAPSHOT>(
       (v) =>
-        JSON.stringify(canonical(v)) ===
-        JSON.stringify(canonical(SCENARIO_SNAPSHOT)),
+        Object.values(SCENARIO_METHODS).some(
+          (snapshot) =>
+            JSON.stringify(canonical(v)) ===
+            JSON.stringify(canonical(snapshot)),
+        ),
       "Unbekannter Szenariokatalog oder Fragenstand.",
     ),
     referenceDate: z.iso.datetime({ offset: true }),
@@ -345,6 +364,14 @@ export const scenarioWorkspaceSchema = z
   })
   .strict()
   .superRefine((w, ctx) => {
+    if (
+      JSON.stringify(canonical(w.methodSnapshot)) !==
+      JSON.stringify(canonical(SCENARIO_METHODS[w.methodVersion]))
+    )
+      ctx.addIssue({
+        code: "custom",
+        message: "Fragenstand und Szenariomethode passen nicht zusammen.",
+      });
     const ids = new Set(w.runs.map((r) => r.id));
     if (ids.size !== w.runs.length)
       ctx.addIssue({

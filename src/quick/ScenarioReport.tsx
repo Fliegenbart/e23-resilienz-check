@@ -7,6 +7,11 @@ import {
   formatPercent,
   scenarioLabels,
 } from "./scenario-model";
+import {
+  SCENARIO_EXPERT_PREMISE,
+  EXPERT_BOUNDARIES,
+  EXPERT_FRAMING,
+} from "./expert-team";
 import { riskLabel } from "./model";
 const answer = (v: number | "unknown" | null) =>
   typeof v === "number"
@@ -32,6 +37,14 @@ export function ScenarioReport({
         und Zeitfenster sind Annahmen; es werden keine
         Eintrittswahrscheinlichkeiten oder Technologieprognosen berechnet.
       </p>
+      {workspace.methodVersion === SCENARIO_METHOD && (
+        <section className="print-block">
+          <h3>Das Expertenteam als Gedankenexperiment</h3>
+          <p>{SCENARIO_EXPERT_PREMISE}</p>
+          <p>{EXPERT_BOUNDARIES}</p>
+          <p>{EXPERT_FRAMING}</p>
+        </section>
+      )}
       <table>
         <thead>
           <tr>
@@ -46,7 +59,7 @@ export function ScenarioReport({
             const s = workspace.methodSnapshot.catalog.find(
                 (s) => s.id === r.presetId,
               )!,
-              e = evaluateScenario(r);
+              e = evaluateScenario(r, workspace);
             return (
               <tr key={r.id}>
                 <td>
@@ -64,13 +77,13 @@ export function ScenarioReport({
       </table>
       <p>
         Vergleichbar sind Szenariowerte aus diesem Vier-Fragen-Modell. Der
-        heutige Zwölf-Fragen-Check verwendet eine andere Methode. Zwischen
-        diesen beiden Scores wird keine rechnerische Veränderung ausgewiesen.
+        Zwölf-Fragen-Check verwendet eine andere Methode. Zwischen diesen beiden
+        Scores wird keine rechnerische Veränderung ausgewiesen.
       </p>
       <section className="print-block">
         <h3>Berechnung und Grenzen</h3>
         <p>
-          Methodenversion {SCENARIO_METHOD}. Risiko = gerundet 100 ×
+          Methodenversion {workspace.methodVersion}. Risiko = gerundet 100 ×
           Summe(Antwort − 1) / 36. Vier gleich gewichtete numerische
           Risikoantworten sind erforderlich; unbekannte Werte gelten nicht als
           niedrige Risiken. Einzelwerte 9/10 bleiben kritisch. Chancen werden
@@ -80,8 +93,11 @@ export function ScenarioReport({
           Kostenersparnis = heutiger KI-Kostenanteil × (1 − 1 /
           Vergünstigungsfaktor). Die übrigen Kosten bleiben gleich. Keine
           automatische Umrechnung in Umsatz, Marge, Personaleinsparungen oder
-          Robotikkosten. Ausgangspunkt sind angenommene heutige Fähigkeiten,
-          keine Live-Messung. Referenzdatum:{" "}
+          Robotikkosten.{" "}
+          {workspace.methodVersion === SCENARIO_METHOD
+            ? "Die Teamfähigkeiten sind Szenarioannahmen, keine Messung heute verfügbarer Systeme."
+            : "Ausgangspunkt sind angenommene heutige Fähigkeiten, keine Live-Messung."}{" "}
+          Referenzdatum:{" "}
           {new Intl.DateTimeFormat("de-DE").format(
             new Date(workspace.referenceDate),
           )}
@@ -92,8 +108,8 @@ export function ScenarioReport({
         const s = workspace.methodSnapshot.catalog.find(
             (s) => s.id === r.presetId,
           )!,
-          labels = scenarioLabels(s),
-          e = evaluateScenario(r),
+          labels = scenarioLabels(s, workspace.methodVersion),
+          e = evaluateScenario(r, workspace),
           cost = costEffect(r.context.aiShare, s.assumptions.costFactor);
         return (
           <section className="scenario-print-run" key={r.id}>

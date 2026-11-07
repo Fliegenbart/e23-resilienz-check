@@ -18,15 +18,22 @@ import {
 import { ScenarioInterview } from "./ScenarioInterview";
 import type { ScenarioUpdate } from "./ScenarioInterview";
 import { Arrow } from "./ui";
+import {
+  SCENARIO_EXPERT_PREMISE,
+  EXPERT_BOUNDARIES,
+  EXPERT_FRAMING,
+} from "./expert-team";
 import { riskLabel } from "./model";
 function Assumptions({
   preset,
   run,
+  version,
 }: {
   preset: ScenarioDefinition;
   run: ScenarioRun;
+  version: string;
 }) {
-  const l = scenarioLabels(preset),
+  const l = scenarioLabels(preset, version),
     effect = costEffect(run.context.aiShare, preset.assumptions.costFactor);
   return (
     <>
@@ -45,12 +52,16 @@ function Assumptions({
       <div className="scenario-budget">
         <div>
           <b>1</b>
-          <span>KI-Durchlauf heute</span>
+          <span>
+            {version === "scenario-stress-1.0"
+              ? "KI-Durchlauf heute"
+              : "vergleichbarer Arbeitsdurchlauf"}
+          </span>
         </div>
         <Arrow />
         <div>
           <b>{preset.assumptions.costFactor}</b>
-          <span>finanzierbare Durchläufe im Szenario</span>
+          <span>finanzierbare Arbeitsdurchläufe im Szenario</span>
         </div>
         <p>
           Gleiches KI-Budget und vergleichbares Leistungsziel für die
@@ -87,7 +98,7 @@ function Assumptions({
           <p>
             Datenzugang, Nutzungsrechte, Kundenzugang, Vertrauen und praktische
             Umsetzung. Eigene Firma, Wettbewerber und Kunden erhalten im
-            Szenario Zugang zur gleichen KI.
+            Szenario Zugang zu denselben Fähigkeiten.
           </p>
           {run.context.profile === "digital" &&
             preset.assumptions.robots !== "none" && (
@@ -210,11 +221,25 @@ export default function ScenarioPage({
             <p className="section-index">Sechs Zukunftsbilder. Ihr Geschäft.</p>
             <h1>Was wäre, wenn?</h1>
             <p>
-              Intelligenz bleibt gleich oder steigt. Digitale Arbeit wird
-              günstiger. Roboter kommen hinzu. Prüfen Sie die Folgen für Ihr
-              Angebot.
+              Expertenteams werden günstiger oder leistungsfähiger. Roboter
+              kommen hinzu. Prüfen Sie die Folgen für Ihr Angebot.
             </p>
           </header>
+          {workspace.methodVersion === SCENARIO_METHOD && (
+            <div className="scenario-story expert-scenario-premise">
+              <p className="section-index">
+                Denken Sie an Menschen mit außergewöhnlichen Fähigkeiten
+              </p>
+              <p>{SCENARIO_EXPERT_PREMISE}</p>
+              <details>
+                <summary>
+                  Was das Team bekommt – und was es erst beschaffen muss
+                </summary>
+                <p>{EXPERT_BOUNDARIES}</p>
+                <p>{EXPERT_FRAMING}</p>
+              </details>
+            </div>
+          )}
           <div className="scenario-settings">
             <fieldset>
               <legend>Ihr Angebot</legend>
@@ -309,7 +334,7 @@ export default function ScenarioPage({
           </details>
           <div className="scenario-catalog">
             {workspace.methodSnapshot.catalog.map((s, i) => {
-              const l = scenarioLabels(s);
+              const l = scenarioLabels(s, workspace.methodVersion);
               return (
                 <button
                   className="scenario-card"
@@ -334,8 +359,8 @@ export default function ScenarioPage({
           <div className="scenario-catalog-note">
             <strong>Sie müssen nicht alle Szenarien bearbeiten.</strong>
             <p>
-              Vergleichen Sie etwa 2 und 3 für höhere Agentenfähigkeiten oder 2
-              und 4 für zusätzliche Robotik. Jede neue Bewertung bewahrt ihre
+              Vergleichen Sie etwa 2 und 3 für höhere Teamfähigkeiten oder 2 und
+              4 für zusätzliche Robotik. Jede neue Bewertung bewahrt ihre
               eigenen Annahmen. Bestehende Stände ändern sich nicht mit den
               Einstellungen oben.
             </p>
@@ -353,7 +378,11 @@ export default function ScenarioPage({
               Jeweils ein Klick auf der Skala.
             </p>
           </header>
-          <Assumptions preset={preset} run={run} />
+          <Assumptions
+            preset={preset}
+            run={run}
+            version={workspace.methodVersion}
+          />
           <div className="scenario-start">
             <button
               className="button primary"
@@ -372,7 +401,7 @@ export default function ScenarioPage({
         </>
       ) : run && preset ? (
         (() => {
-          const result = evaluateScenario(run);
+          const result = evaluateScenario(run, workspace);
           return (
             <>
               <header className="scenario-heading">
@@ -477,7 +506,11 @@ export default function ScenarioPage({
               </section>
               <details className="scenario-saved-assumptions">
                 <summary>Annahmen dieser Bewertung</summary>
-                <Assumptions preset={preset} run={run} />
+                <Assumptions
+                  preset={preset}
+                  run={run}
+                  version={workspace.methodVersion}
+                />
               </details>
               <section className="scenario-comparison">
                 <h2>Alle gespeicherten Szenariostände</h2>
@@ -500,7 +533,7 @@ export default function ScenarioPage({
                         const s = workspace.methodSnapshot.catalog.find(
                             (s) => s.id === r.presetId,
                           )!,
-                          e = evaluateScenario(r);
+                          e = evaluateScenario(r, workspace);
                         return (
                           <tr
                             key={r.id}
@@ -550,9 +583,9 @@ export default function ScenarioPage({
               </section>
               <p className="scenario-comparability">
                 Diese Risikowerte vergleichen Szenarien mit demselben
-                Vier-Fragen-Modell. Der heutige Zwölf-Fragen-Check verwendet
-                eine andere Methode; eine rechnerische Differenz zwischen diesen
-                Scores ist nicht aussagekräftig.
+                Vier-Fragen-Modell. Der Zwölf-Fragen-Check verwendet eine andere
+                Methode; eine rechnerische Differenz zwischen diesen Scores ist
+                nicht aussagekräftig.
               </p>
               <div className="scenario-footer">
                 <button className="button primary" onClick={catalog}>
@@ -577,8 +610,10 @@ export default function ScenarioPage({
         <summary>Methode und Grenzen der Szenariosimulation</summary>
         <p>
           Die sechs Zukunftsbilder sind Stresstests ohne
-          Eintrittswahrscheinlichkeiten. Ausgangspunkt sind angenommene heutige
-          Fähigkeiten, keine automatische Live-Messung aktueller Spitzenmodelle.
+          Eintrittswahrscheinlichkeiten.{" "}
+          {workspace.methodVersion === SCENARIO_METHOD
+            ? "Die Teamfähigkeiten sind ausdrücklich angenommene Bedingungen des Gedankenexperiments, keine Messung heute verfügbarer Systeme."
+            : "Ausgangspunkt sind angenommene heutige Fähigkeiten, keine automatische Live-Messung aktueller Spitzenmodelle."}
           Angelegter Referenzstand:{" "}
           {new Intl.DateTimeFormat("de-DE").format(
             new Date(workspace.referenceDate),
@@ -597,8 +632,8 @@ export default function ScenarioPage({
           Personalersparnis oder Robotikkosten.
         </p>
         <small>
-          Methodenversion {SCENARIO_METHOD} · Eigene Beratungsheuristik auf
-          Basis Ihrer Einschätzungen
+          Methodenversion {workspace.methodVersion} · Eigene Beratungsheuristik
+          auf Basis Ihrer Einschätzungen
         </small>
       </details>
     </main>

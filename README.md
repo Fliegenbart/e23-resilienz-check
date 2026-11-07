@@ -1,6 +1,6 @@
 # e23 KI-Resilienz-Check
 
-Ein einfacher Check für ein konkretes Angebot: zwölf Fragen per Klick auf einer Skala von 1 bis 10, danach ein Risikoprofil mit Gesamtscore, vier Teilbereichen und nächsten Schritten. Eigenständiges Projekt außerhalb von ViralFlux.
+Ein einfacher Check für ein konkretes Angebot: ein Gedankenexperiment mit zehn Weltklasseexperten und zwölf Fragen per Klick auf einer Skala von 1 bis 10, danach ein Risikoprofil mit Gesamtscore, vier Teilbereichen und nächsten Schritten. Eigenständiges Projekt außerhalb von ViralFlux.
 
 Anwendung: https://e23-resilienz-check.vercel.app
 
@@ -8,7 +8,7 @@ Repository: https://github.com/Fliegenbart/e23-resilienz-check
 
 ## Nutzung
 
-1. Bestehendes Angebot oder neue Idee auswählen und starten.
+1. Bestehendes Angebot oder neue Idee auswählen, das Expertenteam-Gedankenexperiment lesen und starten.
 2. Zwölf Einschätzungen anklicken. Die Auswahl wird kurz gelb bestätigt; nach etwa einer halben Sekunde folgt automatisch die nächste Frage, nach der letzten das Ergebnis. Das gilt auch für „Weiß ich noch nicht“. Höhere Werte bedeuten immer mehr Risiko. Konkrete Anker erklären die Enden jeder Skala.
 3. Das Ergebnis ansehen, einzelne Antworten bei Bedarf ändern und den Bericht über „Ergebnis als PDF“ drucken bzw. als PDF speichern.
 4. Über „Bisherige Checks“ fortsetzen, JSON sichern oder eine Sicherung importieren.
@@ -17,7 +17,7 @@ Es gibt keine erforderlichen Texteingaben und keine Anmeldung. „Weiß ich noch
 
 ## Zukunftsszenarien
 
-„Direkt Zukunftsszenarien testen“ auf der Startseite oder „Zukunftsszenarien testen“ unter dem Ergebnis öffnet die Simulation. Sechs feste Zukunftsbilder trennen günstigere KI, gleichbleibende oder höhere Agentenfähigkeiten sowie Routine- oder flexible Robotik. Profil und Anpassungsfenster (6, 18, 36 Monate) werden angeklickt. Die Szenarien enthalten keine Eintrittswahrscheinlichkeiten und ihre Zeitfenster sind keine Prognosen.
+„Direkt Zukunftsszenarien testen“ auf der Startseite oder „Zukunftsszenarien testen“ unter dem Ergebnis öffnet die Simulation. Sechs feste Zukunftsbilder beschreiben dasselbe Expertenteam günstiger, Expertenteams für alle, stärkere Forscherteams bis auf angenommenes Nobelpreisniveau sowie Routine- oder flexible Roboter. Diese Fähigkeiten sind ausdrücklich Bedingungen eines Stresstests und keine Behauptung über heutige Systeme. Profil und Anpassungsfenster (6, 18, 36 Monate) werden angeklickt. Die Szenarien enthalten keine Eintrittswahrscheinlichkeiten und ihre Zeitfenster sind keine Prognosen.
 
 Pro ausgewähltem Szenario folgen vier Risiko-Einschätzungen und eine separate Chancenfrage. Auswahl und automatische Weiterleitung funktionieren wie im ursprünglichen Check, einschließlich der kurzen gelben Bestätigung. Risiko = gerundet `100 × Summe(Antwort − 1) / 36`; nur vier numerische Risikoantworten erzeugen einen Gesamtwert. Eine hohe eigene Chance verringert diesen Wert nicht. Kritische Einzelwerte und unbekannte Antworten bleiben sichtbar. Wegen der unterschiedlichen Fragebögen werden keine Differenzen zum Zwölf-Fragen-Score berechnet.
 
@@ -25,13 +25,17 @@ Jede Szenariofrage erläutert sichtbar, was bewertet wird und über welchen Wirk
 
 Optional lässt sich der heutige KI-Anteil an den Kosten einer konkreten Leistung anklicken. Die bedingte Rechnung hält die übrigen Kosten gleich: `Ersparnis = KI-Kostenanteil × (1 − 1 / Vergünstigungsfaktor)`. Bei 25 % KI-Anteil und zehnfach günstigerer KI ergeben sich 22,5 % geringere Gesamtkosten. Unbekannte Anteile erzeugen keine Einsparungszahl. Neue Robotik, Einführung, Qualitätssicherung, zusätzliche Automatisierung und Erlösveränderungen werden nicht automatisch daraus abgeleitet.
 
-Jede neue Bewertung behält ihr eigenes Profil, Zeitfenster und ihre Kostenannahme. Die Vergleichsansicht zeigt sämtliche gespeicherten Stände. Antworten können bewusst bearbeitet werden; veränderte Einstellungen für einen neuen Durchlauf ändern frühere Stände nicht. Laufende Szenariofragen lassen sich nach einem Neustart fortsetzen. JSON und Druckbericht enthalten die Annahmen, fünf Antworten, offene Punkte und Methodenversion `scenario-stress-1.0`.
+Jede neue Bewertung behält ihr eigenes Profil, Zeitfenster und ihre Kostenannahme. Die Vergleichsansicht zeigt sämtliche gespeicherten Stände. Antworten können bewusst bearbeitet werden; veränderte Einstellungen für einen neuen Durchlauf ändern frühere Stände nicht. Laufende Szenariofragen lassen sich nach einem Neustart fortsetzen. JSON und Druckbericht enthalten die Annahmen, fünf Antworten, offene Punkte und die jeweils gespeicherte Methodenversion. Neue Simulationen verwenden `scenario-stress-2.0`; ältere behalten `scenario-stress-1.0`.
 
 JSON-Schema 1.1 liest weiterhin bisherige Dateien mit Schema 1.0. Alte Checks werden nicht neu bewertet. Erst beim bewussten Ergänzen von Szenarien wird der betreffende Check auf das erweiterte Schema umgestellt. Vor dem Einsatz einer älteren Anwendung sichern: alte Software kann Dateien des neuen Schemas ablehnen.
 
 ## Methode
 
-Version `quick-check-1.0`: Gesamtscore = gerundet `100 × Summe(Antwort − 1) / 108`. Alle zwölf Fragen haben das gleiche Gewicht; jeder Teilbereich enthält drei Fragen. Orientierung: 0–24 niedrig, 25–49 mittel, 50–74 erhöht, 75–100 hoch.
+Version `quick-check-2.0`: Gesamtscore = gerundet `100 × Summe(Antwort − 1) / 108`. Alle zwölf Fragen haben das gleiche Gewicht; jeder Teilbereich enthält drei Fragen. Orientierung: 0–24 niedrig, 25–49 mittel, 50–74 erhöht, 75–100 hoch.
+
+Neue Checks beginnen mit zehn Weltklasseexperten, die sechs Monate ununterbrochen praktisch kostenlos an einer Alternative arbeiten. Vertrauliche Daten, Nutzungsrechte, Kundenbeziehungen, Maschinen und Zulassungen erhalten sie nicht automatisch. Die Fragen prüfen konkrete Nachbau-, Zugangs-, Wechsel- und Umsetzungshürden; Nutzer müssen keine abstrakten KI-Fähigkeiten bewerten. Das Ergebnis bleibt ein Stresstest auf Basis eigener Einschätzungen.
+
+V1-Fragenkataloge sind in `src/quick/methods` eingefroren. Historische Checks verwenden beim Fortsetzen, Berechnen, Anzeigen, Exportieren und Drucken ihren eigenen Methodensnapshot. V1- und V2-Daten können gemeinsam gespeichert und importiert werden; eine unpassende Versionszuordnung wird abgewiesen. Scores unterschiedlicher Methoden sind nicht unmittelbar vergleichbar.
 
 Der Score ist eine eigene Beratungsheuristik auf Basis einer Selbsteinschätzung, kein empirisch kalibriertes Prognosemodell und keine Ausfallwahrscheinlichkeit. Berechnung und Grenzen sind in der Anwendung und im Bericht erklärt. Fragen, Antworten und Methodensnapshot werden gemeinsam exportiert. Andere Methodenversionen werden nicht stillschweigend neu bewertet.
 

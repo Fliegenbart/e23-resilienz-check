@@ -4,6 +4,8 @@ import { createCheck, answerCheck } from "../src/quick/model";
 import { loadChecks, saveChecks } from "../src/quick/storage";
 import { saveWorkspace, loadWorkspace } from "../src/storage/database";
 import { createAssessment } from "../src/domain/model";
+import oldQuestions from "../src/quick/methods/quick-check-1.0.json";
+import type { QuickQuestion } from "../src/quick/model";
 import {
   createScenarioWorkspace,
   startScenario,
@@ -26,6 +28,16 @@ it("speichert Antworten und aktuelle Position für die Wiederaufnahme", async ()
   c.step = 1;
   await saveChecks([c]);
   expect(await loadChecks()).toEqual([c]);
+});
+it("bewahrt alte und neue Fragenstände gemeinsam in derselben Datenbank", async () => {
+  const old = createCheck("existing");
+  old.methodologyVersion = "quick-check-1.0";
+  old.methodologySnapshot = structuredClone(oldQuestions) as QuickQuestion[];
+  old.view = "questions";
+  answerCheck(old, "Q4", 9);
+  const current = createCheck("idea");
+  await saveChecks([old, current]);
+  expect(await loadChecks()).toEqual([old, current]);
 });
 it("überschreibt die ursprüngliche Datenbank nicht", async () => {
   const legacy = createAssessment("Alt", "existing", "Bestehende Analyse");

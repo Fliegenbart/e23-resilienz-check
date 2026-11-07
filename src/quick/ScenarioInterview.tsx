@@ -19,11 +19,15 @@ export function ScenarioInterview({
 }) {
   const q = workspace.methodSnapshot.questions[run.step],
     value = run.answers[q.id],
-    guidance = scenarioGuidance(q.id, run.context.profile);
+    guidance = scenarioGuidance(
+      q.id,
+      run.context.profile,
+      workspace.methodVersion,
+    );
   const preset = workspace.methodSnapshot.catalog.find(
     (s) => s.id === run.presetId,
   )!;
-  const labels = scenarioLabels(preset),
+  const labels = scenarioLabels(preset, workspace.methodVersion),
     heading = useRef<HTMLHeadingElement>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [confirming, setConfirming] = useState(false);
@@ -90,7 +94,9 @@ export function ScenarioInterview({
       >
         <h1 ref={heading} tabIndex={-1}>
           {q.id === "adapt"
-            ? `Wie groß ist das Risiko, Ihr Angebot innerhalb von ${run.context.horizon} Monaten nicht anpassen zu können?`
+            ? workspace.methodVersion === "scenario-stress-2.0"
+              ? `Wie viel fehlt Ihnen, um Ihr Angebot innerhalb von ${run.context.horizon} Monaten zu verändern?`
+              : `Wie groß ist das Risiko, Ihr Angebot innerhalb von ${run.context.horizon} Monaten nicht anpassen zu können?`
             : q.text}
         </h1>
         <div className="scenario-question-guide" id="scenario-question-guide">

@@ -1,4 +1,5 @@
 import type { ScenarioContext, ScenarioQuestionId } from "./scenario-model";
+import { expertScenarioGuidance } from "./expert-scenario-guidance";
 
 // Erläuterungen für die Bedienung, getrennt von der gespeicherten Bewertungsmethode.
 // Die Beispiele sind mögliche Wirkungswege, keine Technologieprognosen.
@@ -93,6 +94,9 @@ const EXAMPLES: Record<
 export function scenarioGuidance(
   id: ScenarioQuestionId,
   profile: ScenarioContext["profile"],
+  version = "scenario-stress-2.0",
 ) {
+  if (version === "scenario-stress-2.0")
+    return expertScenarioGuidance(id, profile);
   return { ...GUIDANCE[id], example: EXAMPLES[profile][id] };
 }
