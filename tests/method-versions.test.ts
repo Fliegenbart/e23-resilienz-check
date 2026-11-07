@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import {
-  createCheck,
+  createCheck as createCurrentCheck,
   answerCheck,
   calculateRisk,
   parseChecks,
@@ -20,6 +20,15 @@ import { ScenarioReport } from "../src/quick/ScenarioReport";
 import oldQuestions from "../src/quick/methods/quick-check-1.0.json";
 import oldScenario from "../src/quick/methods/scenario-stress-1.0.json";
 import type { QuickQuestion } from "../src/quick/model";
+import { EXPERT_QUESTIONS } from "../src/quick/expert-questions";
+
+function createCheck(type: "existing" | "idea") {
+  const c = createCurrentCheck(type);
+  c.methodologyVersion = "quick-check-2.0";
+  c.methodologySnapshot = structuredClone(EXPERT_QUESTIONS);
+  c.view = "intro";
+  return c;
+}
 
 function oldCheck() {
   const c = createCheck("existing");
@@ -33,7 +42,7 @@ function oldCheck() {
 }
 
 describe("Versionstreues Expertenteam-Modell", () => {
-  it("beginnt neue Checks mit dem Gedankenexperiment und neuer Methodenversion", () => {
+  it("bewahrt V2-Checks mit ihrem Gedankenexperiment und Fragenstand", () => {
     const c = createCheck("idea");
     expect(c.methodologyVersion).toBe("quick-check-2.0");
     expect(c.view).toBe("intro");

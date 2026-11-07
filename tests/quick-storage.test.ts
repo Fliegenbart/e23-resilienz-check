@@ -5,14 +5,29 @@ import { loadChecks, saveChecks } from "../src/quick/storage";
 import { saveWorkspace, loadWorkspace } from "../src/storage/database";
 import { createAssessment } from "../src/domain/model";
 import oldQuestions from "../src/quick/methods/quick-check-1.0.json";
+import { EXPERT_QUESTIONS } from "../src/quick/expert-questions";
 import type { QuickQuestion } from "../src/quick/model";
 import {
   createScenarioWorkspace,
   startScenario,
   answerScenario,
 } from "../src/quick/scenario-model";
+it("speichert die unabhängigen Tempi im neuen Ergebnis", async () => {
+  const c = createCheck("existing");
+  c.view = "results";
+  c.providerScenario = {
+    version: "provider-scenario-1.0",
+    horizonYears: 2,
+    capabilityPace: "fast",
+    pricePace: "slow",
+  };
+  await saveChecks([c]);
+  expect(await loadChecks()).toEqual([c]);
+});
 it("speichert Szenarioannahmen, Auswahl und Position vollständig", async () => {
   const c = createCheck("existing");
+  c.methodologyVersion = "quick-check-2.0";
+  c.methodologySnapshot = structuredClone(EXPERT_QUESTIONS);
   c.scenarios = createScenarioWorkspace();
   c.view = "scenarios";
   const r = startScenario(c.scenarios, "s4");

@@ -1,9 +1,20 @@
 import { z } from "zod";
 import oldQuestions from "./methods/quick-check-1.0.json";
+import providerV3 from "./methods/quick-check-3.0.json";
 import { EXPERT_QUESTIONS } from "./expert-questions";
+import {
+  PROVIDER_METHOD,
+  PROVIDER_QUESTIONS,
+  PROVIDER_GROUPS,
+  isProviderMethod,
+} from "./provider-questions";
 import { scenarioWorkspaceSchema } from "./scenario-model";
 import type { ScenarioWorkspace } from "./scenario-model";
-export const QUICK_METHOD = "quick-check-2.0";
+import {
+  providerScenarioSchema,
+  type ProviderScenarioSettings,
+} from "./provider-scenario";
+export const QUICK_METHOD = PROVIDER_METHOD;
 export const QUICK_SCHEMA = "1.1";
 export type GroupId = "value" | "competition" | "advantage" | "control";
 export type QuickAnswer = number | "unknown" | null;
@@ -24,9 +35,11 @@ export const QUICK_GROUPS: { id: GroupId; title: string; short: string }[] = [
   { id: "advantage", title: "Differenzierung", short: "Vorteile" },
   { id: "control", title: "Handlungsfähigkeit", short: "Handlung" },
 ];
-export const QUICK_QUESTIONS = EXPERT_QUESTIONS;
+export const QUICK_QUESTIONS = PROVIDER_QUESTIONS;
 export const QUICK_METHODS: Record<string, QuickQuestion[]> = {
   "quick-check-1.0": oldQuestions as QuickQuestion[],
+  "quick-check-2.0": EXPERT_QUESTIONS,
+  "quick-check-3.0": providerV3 as QuickQuestion[],
   [QUICK_METHOD]: QUICK_QUESTIONS,
 };
 export interface QuickCheck {
@@ -41,6 +54,7 @@ export interface QuickCheck {
   step: number;
   view: "intro" | "questions" | "results" | "scenarios";
   scenarios?: ScenarioWorkspace;
+  providerScenario?: ProviderScenarioSettings;
   isExample: boolean;
   originId: string | null;
 }
@@ -56,7 +70,7 @@ export function createCheck(type: QuickCheck["type"]): QuickCheck {
     type,
     answers: Object.fromEntries(QUICK_QUESTIONS.map((q) => [q.id, null])),
     step: 0,
-    view: "intro",
+    view: "questions",
     isExample: false,
     originId: null,
   };
@@ -97,12 +111,13 @@ export function calculateRisk(c: QuickCheck) {
       ? [{ ...q, value: c.answers[q.id] as number }]
       : [],
   );
-  const groups = QUICK_GROUPS.map((g) => {
+  const provider = isProviderMethod(c.methodologyVersion);
+  const groups = groupsForCheck(c).map((g) => {
     const values = rated.filter((q) => q.group === g.id).map((q) => q.value);
     return {
       ...g,
       answered: values.length,
-      score: values.length === 3 ? norm(values) : null,
+      score: !provider && values.length === 3 ? norm(values) : null,
     };
   });
   const ranked = [...rated].sort(
@@ -110,14 +125,20 @@ export function calculateRisk(c: QuickCheck) {
       b.value - a.value || Number(a.id.slice(1)) - Number(b.id.slice(1)),
   );
   return {
-    score: rated.length === 12 ? norm(rated.map((q) => q.value)) : null,
+    score:
+      !provider && rated.length === 12 ? norm(rated.map((q) => q.value)) : null,
     answered: rated.length,
-    processed: questions.filter((q) => c.answers[q.id] !== null).length,
+    processed: questions.filter((q) => c.answers[q.id] != null).length,
     groups,
-    critical: ranked.filter((q) => q.value >= 9),
-    priorities: ranked.filter((q) => q.value >= 4).slice(0, 3),
+    critical: provider ? [] : ranked.filter((q) => q.value >= 9),
+    priorities: provider ? [] : ranked.filter((q) => q.value >= 4).slice(0, 3),
     unknown: questions.filter((q) => typeof c.answers[q.id] !== "number"),
   };
+}
+export function groupsForCheck(c: QuickCheck) {
+  return isProviderMethod(c.methodologyVersion)
+    ? PROVIDER_GROUPS
+    : QUICK_GROUPS;
 }
 const questionSchema = z
   .object({
@@ -137,7 +158,12 @@ const checkSchema = z
   .object({
     id: z.string().min(1).max(200),
     schemaVersion: z.enum(["1.0", "1.1"]),
-    methodologyVersion: z.enum(["quick-check-1.0", QUICK_METHOD]),
+    methodologyVersion: z.enum([
+      "quick-check-1.0",
+      "quick-check-2.0",
+      "quick-check-3.0",
+      QUICK_METHOD,
+    ]),
     methodologySnapshot: z.array(questionSchema).length(12),
     createdAt: z.iso.datetime({ offset: true }),
     updatedAt: z.iso.datetime({ offset: true }),
@@ -153,6 +179,7 @@ const checkSchema = z
     step: z.number().int().min(0).max(11),
     view: z.enum(["intro", "questions", "results", "scenarios"]),
     scenarios: scenarioWorkspaceSchema.optional(),
+    providerScenario: providerScenarioSchema.optional(),
     isExample: z.boolean(),
     originId: z.string().nullable(),
   })
@@ -162,6 +189,16 @@ const checkSchema = z
       (c.view !== "scenarios" || c.scenarios !== undefined) &&
       (c.schemaVersion !== "1.0" || c.scenarios === undefined),
     "Szenariodaten benötigen Schema 1.1.",
+  )
+  .refine(
+    (c) => !isProviderMethod(c.methodologyVersion) || c.scenarios === undefined,
+    "Frühere Zukunftsszenarien gehören nicht zum Plattform-Check.",
+  )
+  .refine(
+    (c) =>
+      c.providerScenario === undefined ||
+      (isProviderMethod(c.methodologyVersion) && c.schemaVersion === "1.1"),
+    "Zwei-Jahres-Szenarien gehören zum Plattform-Check mit Schema 1.1.",
   );
 const exchangeSchema = z
   .object({
@@ -177,7 +214,7 @@ export function serializeChecks(checks: QuickCheck[]) {
     {
       format: "e23-quick-check",
       schemaVersion: QUICK_SCHEMA,
-      appVersion: "0.4.0",
+      appVersion: "0.5.0",
       exportedAt: new Date().toISOString(),
       checks,
     },
@@ -236,11 +273,11 @@ export function mergeChecks(
   return result;
 }
 export function checkTitle(c: QuickCheck) {
-  return `${c.isExample ? "Beispiel" : c.type === "idea" ? "Neue Idee" : "Bestehendes Angebot"}${c.originId ? " (Kopie)" : ""} · ${new Intl.DateTimeFormat("de-DE", { dateStyle: "medium", timeStyle: "short", timeZone: "Europe/Berlin" }).format(new Date(c.createdAt))}`;
+  return `${c.isExample ? "Beispiel" : isProviderMethod(c.methodologyVersion) ? "Assessment" : c.type === "idea" ? "Neue Idee" : "Bestehendes Angebot"}${c.originId ? " (Kopie)" : ""} · ${new Intl.DateTimeFormat("de-DE", { dateStyle: "medium", timeStyle: "short", timeZone: "Europe/Berlin" }).format(new Date(c.createdAt))}`;
 }
 export function exampleCheck() {
   const c = createCheck("existing");
-  const values = [5, 5, 4, 10, 8, 7, 8, 7, 5, 10, 8, 8];
+  const values = [9, 9, 8, 10, 8, 9, 8, 1, 2, 6, 3, 4];
   QUICK_QUESTIONS.forEach((q, i) => answerCheck(c, q.id, values[i]));
   c.isExample = true;
   c.view = "results";

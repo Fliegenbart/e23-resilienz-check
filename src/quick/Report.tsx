@@ -1,18 +1,16 @@
 import type { QuickCheck } from "./model";
+import { ProviderReport } from "./ProviderReport";
+import { isProviderMethod } from "./provider-questions";
 import { ScenarioReport } from "./ScenarioReport";
-import {
-  calculateRisk,
-  riskLabel,
-  checkTitle,
-  QUICK_GROUPS,
-  QUICK_METHOD,
-} from "./model";
+import { calculateRisk, riskLabel, checkTitle, QUICK_GROUPS } from "./model";
 import {
   EXPERT_PREMISE,
   EXPERT_BOUNDARIES,
   EXPERT_FRAMING,
 } from "./expert-team";
 export function QuickReport({ check }: { check: QuickCheck }) {
+  if (isProviderMethod(check.methodologyVersion))
+    return <ProviderReport check={check} />;
   const r = calculateRisk(check);
   if (r.processed === 0 && check.scenarios && check.scenarios.runs.length > 0) {
     return (
@@ -45,11 +43,11 @@ export function QuickReport({ check }: { check: QuickCheck }) {
         {check.isExample ? " · Fiktives Beispiel" : ""}
       </p>
       <h1>
-        {check.methodologyVersion === QUICK_METHOD
+        {check.methodologyVersion === "quick-check-2.0"
           ? "Ihr Risikoprofil"
           : "Ihr KI-Risikoprofil"}
       </h1>
-      {check.methodologyVersion === QUICK_METHOD && (
+      {check.methodologyVersion === "quick-check-2.0" && (
         <section className="print-block">
           <h2>Das bewertete Gedankenexperiment</h2>
           <p>{EXPERT_PREMISE}</p>

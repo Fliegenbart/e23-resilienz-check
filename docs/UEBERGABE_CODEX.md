@@ -1,6 +1,45 @@
 # Übergabe an einen neuen Codex-Chat
 
-Stand: 7. November 2026 · Anwendungsversion 0.4.0
+## Aktueller Stand: Plattform-Check 0.5.0
+
+Stand: 7. November 2026. **Dieser Abschnitt ersetzt die unten dokumentierte frühere Produktrichtung.** Der neue Umbau ist umgesetzt; David hat die Veröffentlichung auf Vercel ausdrücklich beauftragt. Arbeitsbranch: `codex/quick-check`, Produktionsbranch: `flux`. Die öffentliche Adresse ist `https://e23-resilienz-check.vercel.app`. Deployment- und Remote-Stand bei einem späteren Auftrag erneut prüfen.
+
+David hat die Leitfrage bestätigt: **„Was bleibt von deinem Geschäft, wenn der KI-Anbieter deiner Kunden deine Leistung selbst übernimmt?“** Der konkrete Auftrag war, das Tool mit einfachen Fragen auf „Was können die KI-Anbieter übernehmen und was schützt mein Geschäft wirklich?“ umzubauen. Die Richtung und Umsetzung sind autorisiert; keine erneute Konzeptfreigabe nötig.
+
+### Neue Methode und Oberfläche
+
+Textkorrektur im selben Auftrag: David will deutlich mehr Minimalismus und direkte Sprache. Einstieg jetzt **„Wird ein KI-Gigant Ihr Business vernichten?“**, Nutzenzeile **„Was kann KI übernehmen? Was schützt Ihr Geschäft?“**, Button **„Assessment starten“**. Produktbezeichnung: **Resilience-Assessment**. Auswahl „Bestehendes Angebot / Neue Idee“, langer Einstieg und drei Erklärungskästen entfernt. Ein Klick startet die erste Frage; neue Einträge heißen neutral „Assessment“. Bestehende Datensätze und Fragen-Snapshots bleiben unverändert. Keine zusätzliche Auswahl oder Erklärungsschicht wieder einbauen.
+
+- `quick-check-3.1`: zwölf gekürzte Fragen mit kurzen Skalenankern. Auf Davids anschließenden ausdrücklichen Wunsch bestehen Fragenansichten nur aus Fortschritt, Frage, Skala und Navigation. Hilfen und Beispiele liegen unter „Details“, die Bereichsnavigation ist entfernt. Dies ersetzt die frühere Präferenz für ständig sichtbare Erklärungen. Direkter Einstieg, Skala 1–10, unbekannte Antwort, gelbe Bestätigung und automatische Weiterleitung bleiben erhalten.
+- Die früheren 3.0-Fragen sind in `src/quick/methods/quick-check-3.0.json` eingefroren. Vorhandene Entwürfe behalten ihre ursprünglichen Fragen und Antworten, erhalten aber die kompakte Darstellung. `isProviderMethod` routet 3.0 und 3.1 gemeinsam; Schwellen und Zuordnung sind unverändert. Keine stille Umrechnung, kein Gesamtscore für beide Methoden.
+- Annahme: nahezu unbegrenzt sehr leistungsfähige digitale Agenten mit freigegebenem Unternehmenskontext. Kein Eintrittsdatum, keine automatische Verfügung über exklusive Daten, besondere Rechte oder körperliche Ausführung.
+- Drei getrennte Übernahmen: digitale Arbeit (Q1/Q2/Q3), im vorhandenen Paket mitliefern (Q1/Q2/Q4), Oberfläche umgehen (Q4/Q5/Q6).
+- Vier mögliche Schutzfaktoren Q7–Q10 und zwei Belegfragen Q11/Q12. Keine Durchschnittsnote, kein Verrechnen von Vorteil und Risiko. Unbekannte Angaben ergeben keine Entwarnung. Eine Schutzbehauptung ist noch kein belegter Wettbewerbsvorteil.
+- Ergebnis: eine kurze Kernaussage, nebeneinander Übernahme und Schutz, darunter bis zu drei kurze Schritte. Befunde, Belege und Schritte sind aufklappbar; der Druckbericht öffnet dieselben Details vollständig. Fehlende Antworten und Belege bleiben im geschlossenen Ergebnis sichtbar. Antwortkorrektur führt unmittelbar zurück zum aktualisierten Ergebnis.
+- Auf ausdrücklichen Folgeauftrag: im Ergebnis „Nächste 2 Jahre“, zwei unabhängige Auswahlzeilen „KI wird besser“ / „KI wird günstiger“, jeweils langsam/mittel/schnell, Standard mittel/mittel. Je ein kurzer Hinweis reagiert auf das Tempo und den stärksten erkennbaren Übernahmeweg. Fähigkeiten betreffen Übernahme, Kosten Preis-/Bündelungsdruck. Keine neuen Fragen, Preisfaktoren oder Wahrscheinlichkeiten. Grundbefunde und Schutz bleiben getrennt und unverändert. Regeln in `provider-scenario.ts`, Auswertung in `provider-analysis.ts`, gemeinsame Bildschirm-/Druckansicht in `ProviderScenario.tsx`.
+- ARK Invest, *Big Ideas 2026*, S. 20/34 (Tokenkosten), 33 (Aufgabenhorizonte), 26–28 (Agenten als Zugangsschicht), 36 (Spezialisten). Nur als Hintergrund; keine Marktprognosen im Ergebnis. Ergänzende offizielle Quellen stehen in `ProviderMethod.tsx` und im Bericht.
+
+### Kompatibilität und Dateien
+
+V1 und V2 behalten ihre Fragen, Scores und Szenarien. Die ursprünglichen Methoden werden weiterhin angezeigt, berechnet, gespeichert, importiert und gedruckt. Neue V3-Checks enthalten keine alten Zukunftsszenarien; entsprechende Mischimporte werden abgelehnt. Datenbanken und JSON-Schemaversion 1.1 bleiben erhalten.
+
+Die neuen V3-Tempoannahmen stehen separat in `providerScenario` (`provider-scenario-1.0`, fester Horizont 2 Jahre), automatisch gespeichert und im JSON erhalten. Ohne das optionale Feld gilt mittel/mittel; alte Fragen und Antworten werden nicht verändert. Ungültige Tempi, andere Horizonte und Kombinationen mit historischen Score-Methoden werden abgewiesen. Der Zwei-Jahres-Blick ist ein qualitatives Szenario; heutige Leistung beim konkreten Auftrag wird nicht gemessen. Keine kalibrierte Vorhersage ergänzen oder aus ARK ableiten.
+
+Neue Dateien: `src/quick/provider-questions.ts`, `provider-analysis.ts`, `ProviderLanding.tsx`, `ProviderResults.tsx`, `ProviderReport.tsx`, `ProviderMethod.tsx`, `provider.css`. Gemeinsame Integration: `model.ts`, `QuickApp.tsx`, `Question.tsx`, `History.tsx`, `Report.tsx`, `Results.tsx`. Historische Kataloge unverändert.
+
+Plan und Validierung: `docs/superpowers/plans/2026-11-07-plattform-check.md`. Neue Regressionen: `tests/provider.test.ts`; frühere Score-/Szenariotests verwenden explizite historische Methoden. Der echte Browserablauf wurde auf einer getrennten lokalen Adresse `http://127.0.0.1:5183/` mit synthetischen Antworten geprüft. Erreichbarkeit eines weiterlaufenden Servers bei Wiederaufnahme prüfen.
+
+Letzte Erweiterung geprüft: 113 Tests in 11 Dateien, Build und Diff sauber. Szenario-Auswahl auf separater Test-Origin `http://localhost:5183/` mit unabhängigen Tempi, Tastatur, Neuladen und Wiederöffnen geprüft; Desktop 1280 sowie Mobil 390/320 px ohne Überlauf oder Konsolenfehler. Nutzerdaten unter `127.0.0.1` wurden dafür nicht bearbeitet. Die nativen PDF-Dialoggrenzen aus dem Plan gelten weiter; Berichtsinhalte sind automatisiert geprüft.
+
+**Veröffentlichung:** Der ausdrückliche Folgeauftrag umfasst den Push der Version 0.5.0 nach `flux` und die Prüfung der öffentlichen Vercel-Adresse. `flux` löst automatisch Vercel aus. Vor der Veröffentlichung wurden erneut 113 Tests, Build und Diff geprüft; der Remote-Branch stand unverändert auf `18d1430`. Nicht aus den nachfolgenden historischen Abschnitten auf den aktuellen Live-Stand schließen.
+
+---
+
+## Historischer Stand: Expertenteam 0.4.0
+
+Die folgenden Abschnitte dokumentieren den vorherigen, damals veröffentlichten Stand. Seine Funktionen bleiben für frühere Checks erhalten; sie sind nicht mehr der Einstieg für neue Checks.
+
+Stand damals: 7. November 2026 · Anwendungsversion 0.4.0
 
 ## 1. Projekt und verifizierter Stand
 

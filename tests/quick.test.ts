@@ -1,19 +1,26 @@
 import { describe, it, expect } from "vitest";
 import {
-  createCheck,
+  createCheck as createCurrentCheck,
   calculateRisk,
   answerCheck,
   serializeChecks,
   parseChecks,
   mergeChecks,
-  QUICK_QUESTIONS,
 } from "../src/quick/model";
+import { EXPERT_QUESTIONS as QUICK_QUESTIONS } from "../src/quick/expert-questions";
+function createCheck(type: "existing" | "idea") {
+  const c = createCurrentCheck(type);
+  c.methodologyVersion = "quick-check-2.0";
+  c.methodologySnapshot = structuredClone(QUICK_QUESTIONS);
+  c.view = "intro";
+  return c;
+}
 const complete = (value: number) => {
   const c = createCheck("existing");
   for (const q of QUICK_QUESTIONS) answerCheck(c, q.id, value);
   return c;
 };
-describe("Quick-Check Methodik 1.0", () => {
+describe("Historischer Quick-Check: ursprüngliche Score-Regeln", () => {
   it("enthält zwölf eigenständige Fragen in vier Bereichen", () => {
     expect(QUICK_QUESTIONS).toHaveLength(12);
     expect(new Set(QUICK_QUESTIONS.map((q) => q.group)).size).toBe(4);

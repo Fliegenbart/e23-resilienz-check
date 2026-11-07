@@ -7,7 +7,20 @@ import {
   evaluateScenario,
   costEffect,
 } from "../src/quick/scenario-model";
-import { createCheck, parseChecks, serializeChecks } from "../src/quick/model";
+import {
+  createCheck as createCurrentCheck,
+  parseChecks,
+  serializeChecks,
+} from "../src/quick/model";
+import { EXPERT_QUESTIONS } from "../src/quick/expert-questions";
+
+// Die früheren Zukunftsszenarien bleiben bei ihrem V2-Fragenstand.
+function createCheck(type: "existing" | "idea") {
+  const check = createCurrentCheck(type);
+  check.methodologyVersion = "quick-check-2.0";
+  check.methodologySnapshot = structuredClone(EXPERT_QUESTIONS);
+  return check;
+}
 
 describe("Szenario-Stresstest", () => {
   it("trennt Kosten, Agentenfähigkeiten und Robotik in kontrollierten Paaren", () => {

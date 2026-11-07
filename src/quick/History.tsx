@@ -1,6 +1,7 @@
 import type { QuickCheck } from "./model";
 import { calculateRisk, riskLabel, checkTitle } from "./model";
 import { Arrow } from "./ui";
+import { isProviderMethod } from "./provider-questions";
 export function History({
   checks,
   onOpen,
@@ -46,9 +47,11 @@ export function History({
                   <span className="history-row-title">
                     <strong>{checkTitle(c)}</strong>
                     <small>
-                      {c.methodologyVersion === "quick-check-1.0"
-                        ? "Frühere Methode · "
-                        : "Expertenteam · "}
+                      {isProviderMethod(c.methodologyVersion)
+                        ? "Resilience-Assessment · "
+                        : c.methodologyVersion === "quick-check-1.0"
+                          ? "Frühere Methode · "
+                          : "Expertenteam · "}
                       {c.view === "scenarios"
                         ? `${c.scenarios?.runs.length ?? 0} Szenariostände · Zukunftssimulation`
                         : `${r.answered} von 12 beantwortet · ${c.view === "results" ? "Ergebnis" : "Entwurf"}`}
@@ -58,15 +61,21 @@ export function History({
                     </small>
                   </span>
                   <span className="history-score">
-                    {c.view === "scenarios"
-                      ? (c.scenarios?.runs.length ?? 0)
-                      : r.score === null
-                        ? "—"
-                        : r.score}
+                    {isProviderMethod(c.methodologyVersion)
+                      ? c.view === "results"
+                        ? "Ergebnis"
+                        : `${r.processed}/12`
+                      : c.view === "scenarios"
+                        ? (c.scenarios?.runs.length ?? 0)
+                        : r.score === null
+                          ? "—"
+                          : r.score}
                     <small>
-                      {c.view === "scenarios"
-                        ? "Szenariostände"
-                        : riskLabel(r.score)}
+                      {isProviderMethod(c.methodologyVersion)
+                        ? "Übernahme & Schutz"
+                        : c.view === "scenarios"
+                          ? "Szenariostände"
+                          : riskLabel(r.score)}
                     </small>
                   </span>
                   <Arrow />
@@ -103,8 +112,8 @@ export function History({
         anderen Browser mit.
       </p>
       <p className="storage-hint">
-        Frühere Methoden behalten ihre ursprünglichen Fragen. Scores aus
-        unterschiedlichen Methoden sind nicht unmittelbar vergleichbar.
+        Frühere Checks behalten ihre ursprünglichen Fragen und Ergebnisse. Der
+        neue Assessment betrachtet Übernahme und Schutz getrennt.
       </p>
     </main>
   );

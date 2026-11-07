@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { QuickCheck } from "./model";
-import { calculateRisk, riskLabel, QUICK_METHOD } from "./model";
+import { calculateRisk, riskLabel } from "./model";
 import { Arrow, useReducedMotion } from "./ui";
 function Count({ value }: { value: number }) {
   const reduced = useReducedMotion();
@@ -65,7 +65,7 @@ export function Results({
         <div className="score-panel">
           <h1>Ihr Risikoprofil</h1>
           <p className="example-label">
-            {check.methodologyVersion === QUICK_METHOD
+            {check.methodologyVersion === "quick-check-2.0"
               ? "Expertenteam-Gedankenexperiment · 6 Monate"
               : "Frühere Methode · ursprünglicher Fragenstand"}
           </p>

@@ -1,0 +1,176 @@
+import type { GroupId, QuickQuestion } from "./model";
+
+export const PROVIDER_METHOD = "quick-check-3.1";
+export function isProviderMethod(version: string) {
+  return version === "quick-check-3.0" || version === PROVIDER_METHOD;
+}
+export const PROVIDER_PREMISE =
+  "Stellen Sie sich vor: Ihre Kunden haben nahezu unbegrenzt sehr leistungsfähige KI-Agenten. Diese können digitale Arbeit erledigen und die freigegebenen Daten und Programme der Firma nutzen. Wofür braucht der Kunde dann noch Ihr Angebot?";
+export const PROVIDER_BOUNDARIES =
+  "Wir prüfen diese Annahme ohne festen Zeitpunkt. Exklusive Daten, besondere Rechte und körperliche Ausführung stehen dem Anbieter dadurch nicht automatisch zur Verfügung.";
+export const PROVIDER_GROUPS: { id: GroupId; title: string; short: string }[] =
+  [
+    { id: "value", title: "Ihre Leistung", short: "Leistung" },
+    { id: "competition", title: "Der Zugang zum Kunden", short: "Plattform" },
+    { id: "advantage", title: "Was Sie besonders macht", short: "Vorteile" },
+    { id: "control", title: "Was davon trägt", short: "Belege" },
+  ];
+
+export const PROVIDER_QUESTIONS: QuickQuestion[] = [
+  {
+    id: "Q1",
+    group: "value",
+    text: "Wie viel Ihrer Leistung ist rein digital?",
+    low: "Fast nichts",
+    high: "Fast alles",
+    help: "Denken Sie an das fertige Ergebnis für den Kunden – von der Anfrage bis zur Lieferung.",
+    example:
+      "Eine Analyse entsteht digital. Eine Maschine zu reparieren braucht zusätzlich Arbeit vor Ort.",
+    action: "Den digitalen Teil einmal ohne Ihr Tool erledigen",
+    actionDetail:
+      "Wählen Sie einen echten Kundenauftrag. Lassen Sie dessen digitalen Teil mit einer verfügbaren KI-Lösung bearbeiten und vergleichen Sie Aufwand und Ergebnis.",
+  },
+  {
+    id: "Q2",
+    group: "value",
+    text: "Wie viele benötigte Daten liegen schon beim Kunden?",
+    low: "Kaum Daten",
+    high: "Fast alle Daten",
+    help: "Gemeint sind zum Beispiel E-Mails, Dateien, Kundendaten und Aufträge, die der Kunde einem Agenten freigeben kann.",
+    example:
+      "Ein Projektbericht nutzt vorhandene E-Mails und Tabellen. Eigene Messungen müssten dagegen erst beschafft werden.",
+    action: "Die wirklich fehlenden Informationen benennen",
+    actionDetail:
+      "Listen Sie die Daten für einen Auftrag auf. Markieren Sie, was der Kunde bereits besitzt und was ausschließlich Sie zusätzlich liefern.",
+  },
+  {
+    id: "Q3",
+    group: "value",
+    text: "Reichen die Programme Ihres Kunden für den Auftrag?",
+    low: "Kaum",
+    high: "Vollständig",
+    help: "Denken Sie an Lesen, Erstellen und Ändern – in Programmen, die der Kunde zur Nutzung freigeben kann.",
+    example:
+      "Daten aus dem CRM lesen, eine Auswertung erstellen und eine Aufgabe anlegen. Ein eigenes Labor wäre ein zusätzlicher Schritt außerhalb dieser Programme.",
+    action: "Einen Auftrag vom Anfang bis zum Ende durchspielen",
+    actionDetail:
+      "Prüfen Sie an einem Auftrag, welche Schritte mit freigegebenen Kundenprogrammen ausführbar sind und an welcher Stelle Ihr eigener Beitrag nötig bleibt.",
+  },
+  {
+    id: "Q4",
+    group: "competition",
+    text: "Wie oft nutzen Kunden Microsoft 365, Google Workspace oder KI-Tools?",
+    low: "Kaum oder nie",
+    high: "Täglich für fast alles",
+    help: "Es geht um den Ort, an dem Ihre Kunden ohnehin arbeiten – etwa in Copilot, Gemini, ChatGPT oder Claude.",
+    example:
+      "Wer den ganzen Tag in Teams, Outlook und Excel arbeitet, hat bereits einen direkten Zugang zum Plattformanbieter.",
+    action: "Die vorhandene Plattform Ihres Kunden ausprobieren",
+    actionDetail:
+      "Bearbeiten Sie mit einem Kunden dieselbe Aufgabe in seiner vorhandenen Plattform. Halten Sie fest, wofür er danach noch Ihre separate Lösung braucht.",
+  },
+  {
+    id: "Q5",
+    group: "competition",
+    text: "Wie viel ist Suchen, Zusammenfassen und Zusammenführen?",
+    low: "Fast nichts",
+    high: "Unsere Hauptleistung",
+    help: "Prüfen Sie, ob Ihr Angebot vor allem vorhandene Informationen leichter zugänglich macht oder selbst etwas Neues liefert.",
+    example:
+      "Ein Dashboard fasst Daten anderer Systeme zusammen. Ein exklusiver Messdienst erzeugt selbst neue Daten.",
+    action: "Den eigenen Beitrag hinter der Oberfläche zeigen",
+    actionDetail:
+      "Beschreiben Sie, welches Ergebnis nur durch Ihre Lösung entsteht, wenn ein Agent Suche, Zusammenfassung und Bedienung übernimmt.",
+  },
+  {
+    id: "Q6",
+    group: "competition",
+    text: "Wie leicht lassen sich Ihre Daten und Ergebnisse exportieren?",
+    low: "Nur mit viel Aufwand",
+    high: "Direkt per Export oder Schnittstelle",
+    help: "Eine Datei oder Schnittstelle kann einem Agenten erlauben, Ihre Lösung im Hintergrund zu nutzen.",
+    example:
+      "Ein Agent liest die Daten Ihres Dashboards per Schnittstelle. Der Kunde öffnet Ihre Oberfläche dann möglicherweise gar nicht mehr.",
+    action: "Die Rolle als Dienst im Hintergrund durchrechnen",
+    actionDetail:
+      "Prüfen Sie, welchen unverzichtbaren Beitrag Sie weiter liefern und wie Sie ihn verkaufen, wenn ein Agent die Bedienung und Auswahl übernimmt.",
+  },
+  {
+    id: "Q7",
+    group: "advantage",
+    text: "Wie wichtig sind Ihre exklusiven Daten?",
+    low: "Nicht nötig",
+    high: "Unverzichtbar",
+    help: "Gemeint sind schwer ersetzbare eigene Daten. Dateien, die der Kunde selbst besitzt und freigeben kann, zählen hier nicht.",
+    example:
+      "Eigene laufende Messungen können einen Vorteil schaffen. Eine Kopie der Kundendokumente bietet diesen Schutz nicht automatisch.",
+    action: "Den Wert der eigenen Daten im Vergleich zeigen",
+    actionDetail:
+      "Vergleichen Sie dieselbe Kundenaufgabe mit und ohne Ihre Daten. Zeigen Sie, welcher Unterschied entsteht und ob eine andere Quelle ihn ersetzen könnte.",
+  },
+  {
+    id: "Q8",
+    group: "advantage",
+    text: "Wie viel braucht Menschen, Geräte oder Arbeit vor Ort?",
+    low: "Fast nichts",
+    high: "Ohne sie geht es nicht",
+    help: "Zählen Sie die tatsächliche Ausführung: herstellen, messen, installieren, liefern oder reparieren.",
+    example:
+      "Ein Agent kann eine Wartung planen. Die Reparatur selbst braucht weiterhin jemanden oder eine Maschine vor Ort.",
+    action: "Digitale Vorbereitung und echte Ausführung trennen",
+    actionDetail:
+      "Benennen Sie den Teil, den Sie tatsächlich ausführen müssen. Prüfen Sie, ob der KI-Anbieter dafür leicht einen anderen Dienstleister beauftragen könnte.",
+  },
+  {
+    id: "Q9",
+    group: "advantage",
+    text: "Braucht Ihre Leistung besondere Rechte oder Zugänge?",
+    low: "Nein",
+    high: "Unverzichtbar",
+    help: "Gemeint sind notwendige Nutzungsrechte, Zulassungen, Infrastruktur oder Partnerzugänge. Übliche Kundenfreigaben reichen als Schutz nicht aus.",
+    example:
+      "Ein notwendiger Zugang zu einer speziellen Anlage kann eine Hürde sein. Eine Freigabe für die Kundenablage kann der Kunde auch einem anderen Anbieter geben.",
+    action: "Die konkrete Zugangshürde prüfen",
+    actionDetail:
+      "Halten Sie fest, welcher Zugang zwingend nötig ist, wer ihn vergibt und wie viel Aufwand ein anderer Anbieter tatsächlich hätte, ihn zu erhalten.",
+  },
+  {
+    id: "Q10",
+    group: "control",
+    text: "Wie abhängig ist der Kundenbetrieb von Ihrem System?",
+    low: "Kaum abhängig",
+    high: "Zentrale Abläufe hängen daran",
+    help: "Denken Sie an verbindliche Daten, Freigaben und laufende Vorgänge. Eine oft geöffnete Oberfläche allein reicht dafür nicht.",
+    example:
+      "Ein System steuert Aufträge und hält deren verbindlichen Stand. Ein Berichtswerkzeug liest diese Daten nur aus.",
+    action: "Die tatsächlichen Schritte eines Wechsels auflisten",
+    actionDetail:
+      "Spielen Sie mit einem Kunden einen Wechsel durch. Prüfen Sie, was umgebaut werden muss und was ein Agent über Exporte oder Schnittstellen weiter nutzen könnte.",
+  },
+  {
+    id: "Q11",
+    group: "control",
+    text: "Ist Ihr Vorteil gegenüber einer günstigeren Standardlösung getestet?",
+    low: "Ungeprüft",
+    high: "Mehrfach bestätigt",
+    help: "Vergleichen Sie dieselbe Aufgabe: Qualität, Zuverlässigkeit und den gesamten Aufwand bis zum brauchbaren Ergebnis.",
+    example:
+      "Ein schöneres Ergebnis reicht nicht immer. Entscheidend ist ein Unterschied, der für den Kunden bei seiner Aufgabe zählt.",
+    action: "Einen direkten Vergleich durchführen",
+    actionDetail:
+      "Bearbeiten Sie denselben echten Auftrag mit Ihrer Lösung und der besten verfügbaren Standardalternative. Lassen Sie den Kunden den entscheidenden Unterschied beurteilen.",
+  },
+  {
+    id: "Q12",
+    group: "control",
+    text: "Kaufen Kunden trotz günstigerer Alternative bei Ihnen?",
+    low: "Ungeprüft",
+    high: "Ja, ganz bewusst",
+    help: "Gemeint ist eine echte Kaufentscheidung, bei der der Kunde die günstigere Alternative kennt. Bei einer neuen Idee kann das noch offen sein.",
+    example:
+      "Ein Kunde kennt die mitgelieferte Standardfunktion und bezahlt trotzdem Ihre Lösung, weil ein bestimmter Vorteil für ihn zählt.",
+    action: "Den Grund für einen weiteren Kauf prüfen",
+    actionDetail:
+      "Zeigen Sie einem Kunden die günstigere Alternative. Prüfen Sie, für welchen verbleibenden Vorteil er Ihre Lösung weiter kaufen würde – möglichst mit einem bezahlten Auftrag.",
+  },
+];

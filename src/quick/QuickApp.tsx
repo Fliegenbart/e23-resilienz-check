@@ -16,6 +16,10 @@ import { loadChecks, saveChecks } from "./storage";
 import { ExpertIntro } from "./ExpertIntro";
 import { Question } from "./Question";
 import { Results } from "./Results";
+import { isProviderMethod } from "./provider-questions";
+import { ProviderLanding } from "./ProviderLanding";
+import { ProviderResults } from "./ProviderResults";
+import { ProviderMethodContent } from "./ProviderMethod";
 import { History } from "./History";
 import { QuickReport } from "./Report";
 import { Arrow, Close } from "./ui";
@@ -52,50 +56,57 @@ function Method({
       <button
         className="icon-button dialog-close"
         onClick={onClose}
-        aria-label="Berechnung schließen"
+        aria-label="Grundlagen schließen"
       >
         <Close />
       </button>
-      <p className="section-index">Transparente Berechnung</p>
-      <h2>
-        Eine klare Skala.
-        <br />
-        Ein nachvollziehbarer Score.
-      </h2>
-      <p>
-        Sie bewerten zwölf Fragen von 1 bis 10. In jeder Frage bedeutet ein
-        höherer Wert mehr Risiko. Die konkreten Anker stehen direkt an der
-        Skala.
-      </p>
-      <div className="formula">100 × Summe(Antwort − 1) / 108</div>
-      <p>
-        Das gerundete Ergebnis liegt zwischen 0 und 100. Alle Fragen sind gleich
-        gewichtet. Die vier Teilbereiche verwenden jeweils drei Antworten.
-      </p>
-      <div className="method-bands">
-        <span>
-          <b>0–24</b>Niedrig
-        </span>
-        <span>
-          <b>25–49</b>Mittel
-        </span>
-        <span>
-          <b>50–74</b>Erhöht
-        </span>
-        <span>
-          <b>75–100</b>Hoch
-        </span>
-      </div>
-      <p>
-        Ein Gesamtscore erscheint erst nach zwölf numerischen Antworten.
-        Unbekannte Antworten zählen nicht als niedrige Risiken. Einzelwerte von
-        9 oder 10 werden unabhängig vom Durchschnitt hervorgehoben.
-      </p>
-      <p className="method-note">
-        Eigene Beratungsheuristik auf Basis Ihrer Selbsteinschätzung. Die
-        Grenzen sind methodische Orientierungswerte, keine empirisch kalibrierte
-        Prognose oder Überlebenswahrscheinlichkeit.
-      </p>
+      {isProviderMethod(version) ? (
+        <ProviderMethodContent />
+      ) : (
+        <>
+          <p className="section-index">Transparente Berechnung</p>
+          <h2>
+            Eine klare Skala.
+            <br />
+            Ein nachvollziehbarer Score.
+          </h2>
+          <p>
+            Sie bewerten zwölf Fragen von 1 bis 10. In jeder Frage bedeutet ein
+            höherer Wert mehr Risiko. Die konkreten Anker stehen direkt an der
+            Skala.
+          </p>
+          <div className="formula">100 × Summe(Antwort − 1) / 108</div>
+          <p>
+            Das gerundete Ergebnis liegt zwischen 0 und 100. Alle Fragen sind
+            gleich gewichtet. Die vier Teilbereiche verwenden jeweils drei
+            Antworten.
+          </p>
+          <div className="method-bands">
+            <span>
+              <b>0–24</b>Niedrig
+            </span>
+            <span>
+              <b>25–49</b>Mittel
+            </span>
+            <span>
+              <b>50–74</b>Erhöht
+            </span>
+            <span>
+              <b>75–100</b>Hoch
+            </span>
+          </div>
+          <p>
+            Ein Gesamtscore erscheint erst nach zwölf numerischen Antworten.
+            Unbekannte Antworten zählen nicht als niedrige Risiken. Einzelwerte
+            von 9 oder 10 werden unabhängig vom Durchschnitt hervorgehoben.
+          </p>
+          <p className="method-note">
+            Eigene Beratungsheuristik auf Basis Ihrer Selbsteinschätzung. Die
+            Grenzen sind methodische Orientierungswerte, keine empirisch
+            kalibrierte Prognose oder Überlebenswahrscheinlichkeit.
+          </p>
+        </>
+      )}
       <small>Methodenversion {version}</small>
     </dialog>
   );
@@ -190,7 +201,6 @@ export default function QuickApp() {
     [writable, setWritable] = useState(true),
     [page, setPage] = useState<Page>("home"),
     [selected, setSelected] = useState<string | null>(null),
-    [type, setType] = useState<QuickCheck["type"]>("existing"),
     [status, setStatus] = useState("Laden …"),
     [error, setError] = useState(""),
     [method, setMethod] = useState(false),
@@ -207,6 +217,7 @@ export default function QuickApp() {
     .filter(
       (c) =>
         !c.isExample &&
+        isProviderMethod(c.methodologyVersion) &&
         (c.view === "intro" ||
           c.view === "questions" ||
           c.view === "scenarios"),
@@ -297,7 +308,7 @@ export default function QuickApp() {
     window.scrollTo(0, 0);
   };
   const start = () => {
-    const c = createCheck(type);
+    const c = createCheck("existing");
     setChecks((list) => [...list, c]);
     open(c.id);
   };
@@ -307,19 +318,17 @@ export default function QuickApp() {
     open(c.id);
   };
   const openScenarios = () => {
-    if (current && page === "check") {
+    if (
+      current &&
+      page === "check" &&
+      !isProviderMethod(current.methodologyVersion)
+    ) {
       update((c) => {
         c.schemaVersion = "1.1";
         c.scenarios ??= createScenarioWorkspace();
         c.view = "scenarios";
       });
       go("check");
-    } else {
-      const c = createCheck(type);
-      c.scenarios = createScenarioWorkspace();
-      c.view = "scenarios";
-      setChecks((list) => [...list, c]);
-      open(c.id);
     }
   };
   const exportAll = () => download("e23-Checks.json", serializeChecks(checks));
@@ -386,10 +395,10 @@ export default function QuickApp() {
         <button
           className="wordmark"
           onClick={() => go("home")}
-          aria-label="e23 KI-Resilienz-Check, Startseite"
+          aria-label="e23 Resilience-Assessment, Startseite"
         >
           <strong>e23</strong>
-          <span>KI-Resilienz-Check</span>
+          <span>Resilience-Assessment</span>
         </button>
         <nav className="header-actions" aria-label="Hauptnavigation">
           <span
@@ -423,9 +432,15 @@ export default function QuickApp() {
                   go("home");
                 }}
               >
-                Neuer Check
+                Neues Assessment
               </button>
-              <button onClick={openScenarios}>Zukunftsszenarien testen</button>
+              {page === "check" &&
+                current &&
+                !isProviderMethod(current.methodologyVersion) && (
+                  <button onClick={openScenarios}>
+                    Frühere Zukunftsszenarien
+                  </button>
+                )}
               <button
                 onClick={() => {
                   if (menu.current) menu.current.open = false;
@@ -449,7 +464,7 @@ export default function QuickApp() {
                   if (menu.current) menu.current.open = false;
                 }}
               >
-                So wird der Score berechnet
+                Annahmen und Quellen
               </button>
               <button onClick={() => go("archive")}>Frühere Analysen</button>
             </div>
@@ -458,12 +473,12 @@ export default function QuickApp() {
       </header>
       <div id="quick-content" className="quick-content">
         {page === "check" &&
-          current?.methodologyVersion === "quick-check-1.0" && (
+          current &&
+          !isProviderMethod(current.methodologyVersion) && (
             <div className="method-version-note no-print">
               <span>
                 Sie sehen einen früheren Check mit seinen ursprünglichen Fragen.
-                Das neue Expertenteam-Gedankenexperiment beginnt mit einer
-                eigenen Bewertung.
+                Das neue Assessment beginnt mit einer eigenen Bewertung.
               </span>
               <button
                 className="text-link"
@@ -473,7 +488,7 @@ export default function QuickApp() {
                   open(c.id);
                 }}
               >
-                Neuen Expertenteam-Check starten
+                Neues Assessment starten
                 <Arrow />
               </button>
             </div>
@@ -501,134 +516,13 @@ export default function QuickApp() {
             Ihre lokalen Checks werden geladen …
           </main>
         ) : page === "home" ? (
-          <main className="landing-page">
-            <section className="landing-hero">
-              <div className="landing-copy">
-                <p className="section-index">
-                  Eine neue Perspektive auf Ihr Geschäft
-                </p>
-                <h1>
-                  Wie stark
-                  <br />
-                  ist
-                  <br />
-                  <span className="highlight-word">Ihr Geschäft?</span>
-                </h1>
-                <p className="landing-description">
-                  Zehn Weltklasseexperten. Sechs Monate.
-                  <br />
-                  Was schützt Ihr Angebot?
-                </p>
-                <fieldset className="case-type">
-                  <legend>Was möchten Sie einschätzen?</legend>
-                  <label className={type === "existing" ? "active" : ""}>
-                    <input
-                      type="radio"
-                      name="caseType"
-                      checked={type === "existing"}
-                      onChange={() => setType("existing")}
-                    />
-                    Bestehendes Angebot
-                  </label>
-                  <label className={type === "idea" ? "active" : ""}>
-                    <input
-                      type="radio"
-                      name="caseType"
-                      checked={type === "idea"}
-                      onChange={() => setType("idea")}
-                    />
-                    Neue Idee
-                  </label>
-                </fieldset>
-                <div className="landing-cta">
-                  <button className="button dark" onClick={start}>
-                    Check starten
-                    <Arrow />
-                  </button>
-                  <button className="text-link" onClick={showExample}>
-                    Beispiel ansehen
-                    <Arrow />
-                  </button>
-                </div>
-                <button
-                  className="text-link scenario-direct-link"
-                  onClick={openScenarios}
-                >
-                  Direkt Zukunftsszenarien testen
-                  <Arrow />
-                </button>
-                {resume && (
-                  <button
-                    className="resume-link"
-                    onClick={() => open(resume.id)}
-                  >
-                    {resume.view === "scenarios"
-                      ? "Letzte Szenariosimulation fortsetzen"
-                      : `Letzten Check fortsetzen · ${calculateRisk(resume).answered}/12`}
-                    <Arrow />
-                  </button>
-                )}
-                <p className="landing-privacy">
-                  Keine Anmeldung. Ihre Antworten bleiben in diesem Browser.
-                </p>
-              </div>
-              <div className="landing-graphic" aria-hidden="true">
-                <div className="graphic-label">
-                  Strategie beginnt
-                  <br />
-                  mit den richtigen Fragen.
-                </div>
-                <span className="graphic-number">
-                  12<span>Fragen</span>
-                </span>
-                <div className="graphic-line" />
-                <div className="graphic-range">
-                  <span>
-                    1<span>wenig Risiko</span>
-                  </span>
-                  <i />
-                  <span>
-                    10<span>viel Risiko</span>
-                  </span>
-                </div>
-                <div className="graphic-caption">
-                  Kundenwert · Wettbewerb
-                  <br />
-                  Differenzierung · Handlungsfähigkeit
-                </div>
-              </div>
-            </section>
-            <section className="landing-steps">
-              <div>
-                <span>01</span>
-                <h2>Einschätzen</h2>
-                <p>
-                  Ein Expertenteam greift Ihr Angebot an. Zwölf konkrete Fragen.
-                </p>
-              </div>
-              <div>
-                <span>02</span>
-                <h2>Risiken erkennen</h2>
-                <p>Ihr Risikoprofil und die vier Bereiche, die es prägen.</p>
-              </div>
-              <div>
-                <span>03</span>
-                <h2>Nächste Schritte</h2>
-                <p>
-                  Mit konkreten Prioritäten an Ihrem Angebot weiterarbeiten.
-                </p>
-              </div>
-            </section>
-            <footer className="landing-footer">
-              <span>e23 · KI-Resilienz-Check</span>
-              <button className="text-link" onClick={() => setMethod(true)}>
-                Methode und Berechnung
-              </button>
-              <button className="text-link" onClick={() => go("history")}>
-                Gespeicherte Checks
-              </button>
-            </footer>
-          </main>
+          <ProviderLanding
+            onStart={start}
+            onExample={showExample}
+            resume={resume}
+            onResume={() => resume && open(resume.id)}
+            onMethod={() => setMethod(true)}
+          />
         ) : page === "history" ? (
           <History
             checks={checks}
@@ -674,7 +568,7 @@ export default function QuickApp() {
                         calculateRisk(c).processed === 12
                           ? "results"
                           : calculateRisk(c).processed === 0 &&
-                              c.methodologyVersion === QUICK_METHOD
+                              c.methodologyVersion === "quick-check-2.0"
                             ? "intro"
                             : "questions";
                     });
@@ -684,7 +578,8 @@ export default function QuickApp() {
                   onPrint={() => window.print()}
                 />
               </Suspense>
-            ) : current.view === "intro" ? (
+            ) : current.view === "intro" &&
+              !isProviderMethod(current.methodologyVersion) ? (
               <ExpertIntro
                 onStart={() => {
                   update((c) => {
@@ -693,7 +588,7 @@ export default function QuickApp() {
                   window.scrollTo(0, 0);
                 }}
               />
-            ) : current.view === "questions" ? (
+            ) : current.view === "questions" || current.view === "intro" ? (
               <Question
                 key={`${current.id}:${current.step}`}
                 check={current}
@@ -704,13 +599,31 @@ export default function QuickApp() {
                 }}
                 onAdvance={() => {
                   update((c) => {
-                    if (c.step === c.methodologySnapshot.length - 1)
+                    if (
+                      c.step === c.methodologySnapshot.length - 1 ||
+                      (isProviderMethod(c.methodologyVersion) &&
+                        calculateRisk(c).processed === 12)
+                    )
                       c.view = "results";
                     else c.step += 1;
                   });
                   window.scrollTo(0, 0);
                 }}
                 onStep={onStep}
+              />
+            ) : isProviderMethod(current.methodologyVersion) ? (
+              <ProviderResults
+                check={current}
+                onScenarioChange={(settings) =>
+                  update((c) => {
+                    c.schemaVersion = "1.1";
+                    c.providerScenario = settings;
+                  })
+                }
+                onEdit={onStep}
+                onMethod={() => setMethod(true)}
+                onPrint={() => window.print()}
+                onExport={exportCurrent}
               />
             ) : (
               <Results

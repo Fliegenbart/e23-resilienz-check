@@ -1,79 +1,71 @@
-# e23 KI-Resilienz-Check
+# e23 Resilience-Assessment
 
-Ein einfacher Check für ein konkretes Angebot: ein Gedankenexperiment mit zehn Weltklasseexperten und zwölf Fragen per Klick auf einer Skala von 1 bis 10, danach ein Risikoprofil mit Gesamtscore, vier Teilbereichen und nächsten Schritten. Eigenständiges Projekt außerhalb von ViralFlux.
+**Wird ein KI-Gigant Ihr Business vernichten?**
 
-Anwendung: https://e23-resilienz-check.vercel.app
+Das Resilience-Assessment beantwortet diese Frage mit zwölf konkreten Einschätzungen. Das Ergebnis zeigt, welche Teile eine KI-Plattform übernehmen könnte, welche eigenen Vorteile bleiben und was davon bereits durch Vergleiche oder Kaufentscheidungen gestützt ist. Eigenständiges Projekt außerhalb von ViralFlux.
 
 Repository: https://github.com/Fliegenbart/e23-resilienz-check
 
-Übergabe an einen neuen Codex-Chat: [docs/UEBERGABE_CODEX.md](docs/UEBERGABE_CODEX.md). Aktuelle Abnahmebilder und Demo-PDF: [docs/qa/expertenteam-v2](docs/qa/expertenteam-v2/README.md).
+Produktionsadresse: https://e23-resilienz-check.vercel.app. Anwendungsversion **0.5.0** enthält den vereinfachten Plattform-Check und die beiden Tempoeinstellungen für die nächsten zwei Jahre.
 
 ## Nutzung
 
-1. Bestehendes Angebot oder neue Idee auswählen, das Expertenteam-Gedankenexperiment lesen und starten.
-2. Zwölf Einschätzungen anklicken. Die Auswahl wird kurz gelb bestätigt; nach etwa einer halben Sekunde folgt automatisch die nächste Frage, nach der letzten das Ergebnis. Das gilt auch für „Weiß ich noch nicht“. Höhere Werte bedeuten immer mehr Risiko. Konkrete Anker erklären die Enden jeder Skala.
-3. Das Ergebnis ansehen, einzelne Antworten bei Bedarf ändern und den Bericht über „Ergebnis als PDF“ drucken bzw. als PDF speichern.
-4. Über „Bisherige Checks“ fortsetzen, JSON sichern oder eine Sicherung importieren.
+1. „Assessment starten“ anklicken. Die erste Frage erscheint direkt, ohne Auswahl zwischen bestehendem Angebot und neuer Idee.
+2. Zwölf kurze Fragen beantworten: eine Frage pro Ansicht, Werte von 1 bis 10 oder „Weiß ich nicht“. Nach kurzer gelber Bestätigung folgt automatisch die nächste Frage. Hilfen und Beispiele stehen unter „Details“.
+3. Das kompakte Ergebnis lesen: mögliche Übernahme, Schutz und nächste Schritte. Unter „Nächste 2 Jahre“ unabhängig einstellen, wie schnell KI besser und günstiger wird: langsam, mittel oder schnell. Voreinstellung: mittel/mittel. Zwei kurze Hinweise reagieren direkt. Begründungen und Belege sind aufklappbar; Antworten lassen sich korrigieren.
+4. Den Check über „Bisherige Checks“ wieder öffnen, als JSON sichern oder importieren. „Ergebnis als PDF“ öffnet die Druckfunktion des Browsers.
 
-Es gibt keine erforderlichen Texteingaben und keine Anmeldung. „Weiß ich noch nicht“ hält eine Frage offen. Ein Gesamtscore erscheint erst bei zwölf numerischen Antworten; offene Werte zählen niemals als niedriges Risiko. Einzelwerte von 9 oder 10 bleiben unabhängig vom Durchschnitt sichtbar.
+Keine Anmeldung und keine erforderlichen Texteingaben. Die Daten bleiben im jeweiligen Browser. Eine hohe Zahl ist nicht pauschal gut oder schlecht: Die ersten Fragen beschreiben den möglichen Zugriff der Plattform, die späteren eigene Vorteile und Belege.
 
-## Zukunftsszenarien
+## Annahme und Ergebnis
 
-„Direkt Zukunftsszenarien testen“ auf der Startseite oder „Zukunftsszenarien testen“ unter dem Ergebnis öffnet die Simulation. Sechs feste Zukunftsbilder beschreiben dasselbe Expertenteam günstiger, Expertenteams für alle, stärkere Forscherteams bis auf angenommenes Nobelpreisniveau sowie Routine- oder flexible Roboter. Diese Fähigkeiten sind ausdrücklich Bedingungen eines Stresstests und keine Behauptung über heutige Systeme. Profil und Anpassungsfenster (6, 18, 36 Monate) werden angeklickt. Die Szenarien enthalten keine Eintrittswahrscheinlichkeiten und ihre Zeitfenster sind keine Prognosen.
+Der grundlegende Stresstest nimmt an, dass Kunden nahezu unbegrenzt sehr leistungsfähige digitale Agenten nutzen können. Diese erhalten Zugang zu freigegebenen Unternehmensdaten und Programmen. Exklusive Daten, besondere Rechte und körperliche Ausführung stehen ihnen dadurch nicht automatisch zur Verfügung. Für diesen Extremfall wird kein Eintrittsdatum behauptet.
 
-Pro ausgewähltem Szenario folgen vier Risiko-Einschätzungen und eine separate Chancenfrage. Auswahl und automatische Weiterleitung funktionieren wie im ursprünglichen Check, einschließlich der kurzen gelben Bestätigung. Risiko = gerundet `100 × Summe(Antwort − 1) / 36`; nur vier numerische Risikoantworten erzeugen einen Gesamtwert. Eine hohe eigene Chance verringert diesen Wert nicht. Kritische Einzelwerte und unbekannte Antworten bleiben sichtbar. Wegen der unterschiedlichen Fragebögen werden keine Differenzen zum Zwölf-Fragen-Score berechnet.
+Zusätzlich betrachtet das einstellbare Szenario die nächsten zwei Jahre. Fähigkeiten verändern den angenommenen Übernahmedruck, Kosten den Preis- und Bündelungsdruck. Die Hinweise verwenden die erkennbaren Übernahmewege; offene Antworten bleiben offen, Hürden werden nicht durch das Tempo beseitigt. Es sind qualitative Annahmen ohne gemessene heutige Leistungsbasis, Preisfaktoren oder Wahrscheinlichkeiten. Grundbefunde und Schutzfaktoren werden nicht umgerechnet. Auswahl und Hinweise erscheinen auch im Druckbericht.
 
-Jede Szenariofrage erläutert sichtbar, was bewertet wird und über welchen Wirkungsweg KI das Geschäft verändern könnte. Die fiktiven Beispiele passen zum gewählten digitalen, gemischten oder physischen Angebot. Eine aufklappbare Skalenhilfe erklärt die Werte 1, 5 und 10. Diese Bedienhilfen liegen getrennt vom eingefrorenen Methoden-Snapshot; bestehende Bewertungen und JSON-Exporte bleiben unverändert lesbar.
+Die drei möglichen Übernahmen werden getrennt betrachtet:
 
-Optional lässt sich der heutige KI-Anteil an den Kosten einer konkreten Leistung anklicken. Die bedingte Rechnung hält die übrigen Kosten gleich: `Ersparnis = KI-Kostenanteil × (1 − 1 / Vergünstigungsfaktor)`. Bei 25 % KI-Anteil und zehnfach günstigerer KI ergeben sich 22,5 % geringere Gesamtkosten. Unbekannte Anteile erzeugen keine Einsparungszahl. Neue Robotik, Einführung, Qualitätssicherung, zusätzliche Automatisierung und Erlösveränderungen werden nicht automatisch daraus abgeleitet.
+- **Digitale Arbeit übernehmen:** Fragen 1, 2 und 3.
+- **Die Leistung im vorhandenen Paket mitliefern:** Fragen 1, 2 und 4.
+- **Die Oberfläche umgehen:** Fragen 4, 5 und 6.
 
-Jede neue Bewertung behält ihr eigenes Profil, Zeitfenster und ihre Kostenannahme. Die Vergleichsansicht zeigt sämtliche gespeicherten Stände. Antworten können bewusst bearbeitet werden; veränderte Einstellungen für einen neuen Durchlauf ändern frühere Stände nicht. Laufende Szenariofragen lassen sich nach einem Neustart fortsetzen. JSON und Druckbericht enthalten die Annahmen, fünf Antworten, offene Punkte und die jeweils gespeicherte Methodenversion. Neue Simulationen verwenden `scenario-stress-2.0`; ältere behalten `scenario-stress-1.0`.
+Alle drei Werte ab 7 ergeben „Naheliegend“. Alle ab 4, aber nicht alle ab 7, ergeben „Teilweise“. Ein Wert bis 3 ergibt „Mit Hürden“. Sobald eine erforderliche Antwort fehlt, bleibt der betreffende Weg „Offen“.
 
-JSON-Schema 1.1 liest weiterhin bisherige Dateien mit Schema 1.0. Alte Checks werden nicht neu bewertet. Erst beim bewussten Ergänzen von Szenarien wird der betreffende Check auf das erweiterte Schema umgestellt. Vor dem Einsatz einer älteren Anwendung sichern: alte Software kann Dateien des neuen Schemas ablehnen.
+Fragen 7–10 betrachten eigene Daten, tatsächliche Ausführung, besondere Zugänge und Verankerung im Betrieb. Fragen 11/12 prüfen Vergleich und bewussten Kauf zusätzlich. Ein angegebener Vorteil wird nicht automatisch zum belegten Schutz. Die Auswertung verrechnet Vorteile und Angreifbarkeit nicht zu einem Gesamtscore.
 
-## Methode
+Das sind qualitative Gesprächsregeln auf Basis eigener Angaben, keine empirisch kalibrierten Wahrscheinlichkeiten. ARK Invest, *Big Ideas 2026*, liefert Hintergrund zu Kosten, Aufgabenhorizonten und Agenten als Zugangsschicht. Seine Marktprognosen werden nicht auf einzelne Unternehmen übertragen. Quellen und Regeln sind in „Annahmen und Grundlagen“ und im Druckbericht dokumentiert.
 
-Version `quick-check-2.0`: Gesamtscore = gerundet `100 × Summe(Antwort − 1) / 108`. Alle zwölf Fragen haben das gleiche Gewicht; jeder Teilbereich enthält drei Fragen. Orientierung: 0–24 niedrig, 25–49 mittel, 50–74 erhöht, 75–100 hoch.
+## Historie und Speicherung
 
-Neue Checks beginnen mit zehn Weltklasseexperten, die sechs Monate ununterbrochen praktisch kostenlos an einer Alternative arbeiten. Vertrauliche Daten, Nutzungsrechte, Kundenbeziehungen, Maschinen und Zulassungen erhalten sie nicht automatisch. Die Fragen prüfen konkrete Nachbau-, Zugangs-, Wechsel- und Umsetzungshürden; Nutzer müssen keine abstrakten KI-Fähigkeiten bewerten. Das Ergebnis bleibt ein Stresstest auf Basis eigener Einschätzungen.
+Neue Checks verwenden den kürzeren Fragenstand `quick-check-3.1`. Bestehende 3.0-Checks behalten ihre Fragen und Antworten und nutzen die kompakte Darstellung. Beide erhalten das neue Zwei-Jahres-Szenario. Es wird separat als `providerScenario` mit Version `provider-scenario-1.0` gespeichert und exportiert. Fehlt es in älteren Dateien, gilt mittel/mittel, ohne die Datensätze umzuschreiben. V1/V2 behalten ihre Fragen, Scores, Berichte und damaligen sechs Zukunftsszenarien. Sie werden nicht umgerechnet. Das Archiv der ursprünglichen ausführlichen Analysen bleibt lesbar und exportierbar.
 
-V1-Fragenkataloge sind in `src/quick/methods` eingefroren. Historische Checks verwenden beim Fortsetzen, Berechnen, Anzeigen, Exportieren und Drucken ihren eigenen Methodensnapshot. V1- und V2-Daten können gemeinsam gespeichert und importiert werden; eine unpassende Versionszuordnung wird abgewiesen. Scores unterschiedlicher Methoden sind nicht unmittelbar vergleichbar.
+JSON-Schema 1.1 liest weiterhin Schema 1.0 und alle vier unterstützten Methoden. Fragen und Methodenversion werden gemeinsam validiert. Importgrenze: 5 MiB; vollständige Vorschau vor Übernahme, standardmäßig zusätzliche Kopien. Gleiche IDs werden nur auf ausdrückliche Auswahl ersetzt.
 
-Der Score ist eine eigene Beratungsheuristik auf Basis einer Selbsteinschätzung, kein empirisch kalibriertes Prognosemodell und keine Ausfallwahrscheinlichkeit. Berechnung und Grenzen sind in der Anwendung und im Bericht erklärt. Fragen, Antworten und Methodensnapshot werden gemeinsam exportiert. Andere Methodenversionen werden nicht stillschweigend neu bewertet.
+IndexedDB speichert automatisch unter der jeweiligen Browseradresse. Lokale und veröffentlichte Adressen haben getrennte Daten. Für einen Umzug JSON exportieren und am Ziel importieren. Bei Speicherfehlern bleiben Eingaben im geöffneten Fenster und können gesichert werden. Gleichzeitiges Bearbeiten in mehreren Fenstern wird nicht unterstützt.
 
-## Speicherung und Austausch
+## Lokal starten und prüfen
 
-Die Anwendung speichert automatisch in IndexedDB im jeweiligen Browserprofil und unter der jeweiligen Adresse. Der Speicherstatus bestätigt abgeschlossene Transaktionen. Bei Speicherfehlern bleiben Eingaben im offenen Fenster und können als JSON gesichert werden. JSON regelmäßig sichern; Browserdaten können gelöscht werden. Gleichzeitiges Bearbeiten in mehreren Fenstern wird nicht unterstützt.
-
-JSON-Importe bis 5 MiB werden vollständig geprüft und zunächst als Vorschau angezeigt. Standard ist eine zusätzliche Kopie; das Ersetzen gleicher IDs muss ausdrücklich gewählt werden. Fehlerhafte Dateien verändern vorhandene Checks nicht. Lokale und veröffentlichte Adressen haben getrennte Browserdaten. Zum Umzug JSON exportieren und am Ziel importieren.
-
-Die bisherigen ausführlichen Analysen bleiben unter „Frühere Analysen“ lesbar und als Original-JSON exportierbar. Ihre Methodenversionen und historischen Berichte bleiben erhalten. Die neue Datenbank `e23-quick-check` ist unabhängig von `ki-resilienz-check`. Alte JSON-Sicherungen werden ins Archiv importiert und nicht in neue Scores umgerechnet.
-
-## Lokal starten
-
-Node.js ab 22.12 und ein aktueller Browser mit IndexedDB werden benötigt. Auf diesem Mac lässt sich `Start.command` doppelt anklicken. Alternativ:
+Node.js ab 22.12.0. Auf diesem Mac kann `Start.command` gestartet werden. Alternativ:
 
 ```sh
 npm ci
 npm run dev
 ```
 
-Adresse: http://127.0.0.1:5179/
+Standardadresse: http://127.0.0.1:5179/
 
 ```sh
-npm test
+npm test -- --pool=threads
 npm run build
-npm run preview -- --port 5180
+git diff --check
 ```
 
-Nach dem Laden benötigt der Check keine externe KI oder API-Verbindung. Es gibt keine Telemetrie, Cloud-Falldatenbank oder externen Schriften. Zum erneuten Öffnen muss der lokale Server bzw. die veröffentlichte Seite erreichbar sein.
+React, TypeScript, Vite, Zod, Vitest und IndexedDB. Keine externe KI, API-Schlüssel, Anmeldung oder Telemetrie erforderlich. Die Website bzw. der lokale Server muss zum Öffnen erreichbar sein.
 
-## Projekt und Veröffentlichung
+## Weiterarbeiten
 
-`src/quick` enthält die neue Methode, Ansichten, Speicherung und Druckgestaltung. Die bisherigen Fachmodule und Beispieldateien bleiben für das Archiv erhalten. `tests/quick.test.ts` und `tests/quick-storage.test.ts` prüfen Score, unbekannte Werte, Methodenversionen, Import und Speicherung. Die ursprünglichen Fachtests laufen weiterhin mit.
+Einstieg: `src/main.tsx` → `src/quick/QuickApp.tsx`. Neue Fragen und Regeln liegen in `provider-questions.ts` und `provider-analysis.ts`; die neuen Ansichten in `Provider*.tsx`, die Gestaltung in `provider.css`. Frühere Kataloge und Berechnungen bleiben unverändert. Inhaltliche Folgeänderungen an der veröffentlichten Methode müssen erneut versioniert werden.
 
-Das Design folgt dem freigegebenen dritten Entwurf in `design/03-ergebnis.png`: Weiß, Graphit, gelbe Akzente, klare Typografie und responsive Ansichten. Animationen berücksichtigen die Systemeinstellung für reduzierte Bewegung. Der Druckbericht verwendet immer den endgültigen Score.
+Übergabe: [docs/UEBERGABE_CODEX.md](docs/UEBERGABE_CODEX.md). Umsetzungsplan: [Plattform-Check](docs/superpowers/plans/2026-11-07-plattform-check.md).
 
-Vercel: Vite, `npm ci --no-audit --no-fund`, `npm run build`, Ausgabe `dist`. Keine API-Schlüssel erforderlich. Der bestehende GitHub-Anschluss veröffentlicht Änderungen am Branch `flux` automatisch. Dokumentation, Beispieldateien und Designentwürfe werden nicht hochgeladen.
-
-`docs/Acceptance.md` und `tests/browser-check.mjs` dokumentieren die ursprüngliche ausführliche Version; der alte Browserablauf ist kein Test des neuen Quick-Checks. Die Abnahme des Quick-Checks steht in `docs/Quick-Check-Plan.md`; der Szenarioablauf und seine Abnahme in `docs/superpowers/plans/2026-11-07-szenarien.md`.
+Vercel baut mit `npm run build` nach `dist`. Der GitHub-Anschluss veröffentlicht den Branch `flux` automatisch; ein Push dorthin ist eine Veröffentlichung.

@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import type { QuickCheck, QuickAnswer } from "./model";
-import { QUICK_GROUPS, QUICK_METHOD } from "./model";
+import { groupsForCheck } from "./model";
+import {
+  isProviderMethod,
+  PROVIDER_PREMISE,
+  PROVIDER_BOUNDARIES,
+} from "./provider-questions";
 import { EXPERT_PREMISE, EXPERT_BOUNDARIES } from "./expert-team";
 import { Arrow } from "./ui";
 const CONFIRM_DELAY_MS = 450;
@@ -18,7 +23,9 @@ export function Question({
   const q = check.methodologySnapshot[check.step],
     value = check.answers[q.id],
     heading = useRef<HTMLHeadingElement>(null);
-  const group = QUICK_GROUPS.find((g) => g.id === q.group)!;
+  const groups = groupsForCheck(check);
+  const group = groups.find((g) => g.id === q.group)!;
+  const provider = isProviderMethod(check.methodologyVersion);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [confirming, setConfirming] = useState(false);
   useEffect(
@@ -37,7 +44,10 @@ export function Question({
     heading.current?.focus({ preventScroll: true });
   }, [q.id]);
   return (
-    <main className="question-page" aria-label="Check bearbeiten">
+    <main
+      className={`question-page${provider ? " provider-question" : ""}`}
+      aria-label="Check bearbeiten"
+    >
       <div
         className="progress-track"
         aria-label={`Frage ${check.step + 1} von 12`}
@@ -49,7 +59,7 @@ export function Question({
           {String(check.step + 1).padStart(2, "0")}{" "}
           <span className="muted">/ 12</span>
         </span>
-        <span>{group.title}</span>
+        {!provider && <span>{group.title}</span>}
       </div>
       <div
         className={`question-stage${confirming ? " is-confirming" : ""}`}
@@ -63,33 +73,36 @@ export function Question({
         <h1 ref={heading} tabIndex={-1}>
           {q.text}
         </h1>
-        {q.example ? (
-          <>
-            <div className="scenario-question-guide">
-              <div>
-                <h2>Was ist gemeint?</h2>
-                <p>{q.help}</p>
+        {!provider &&
+          (q.example ? (
+            <>
+              <div className="scenario-question-guide">
+                <div>
+                  <h2>Was ist gemeint?</h2>
+                  <p>{q.help}</p>
+                </div>
+                <div className="scenario-question-example">
+                  <h2>Zum Beispiel</h2>
+                  <p>{q.example}</p>
+                </div>
               </div>
-              <div className="scenario-question-example">
-                <h2>Zum Beispiel</h2>
-                <p>{q.example}</p>
-              </div>
-            </div>
-            <p className="expert-scale-direction">
-              Je höher der Wert, desto größer die Lücke oder desto leichter der
-              Angriff auf Ihr Angebot.
-            </p>
-          </>
-        ) : (
-          <p className="question-help">{q.help}</p>
-        )}
+              <p className="expert-scale-direction">
+                Je höher der Wert, desto größer die Lücke oder desto leichter
+                der Angriff auf Ihr Angebot.
+              </p>
+            </>
+          ) : (
+            <p className="question-help">{q.help}</p>
+          ))}
         <fieldset
           className="scale"
           aria-labelledby="scale-label"
           disabled={confirming}
         >
           <legend id="scale-label" className="sr-only">
-            Ihre Einschätzung: 1 bedeutet niedriges Risiko, 10 hohes Risiko
+            {provider
+              ? `Ihre Einschätzung: 1 – ${q.low}; 10 – ${q.high}`
+              : "Ihre Einschätzung: 1 bedeutet niedriges Risiko, 10 hohes Risiko"}
           </legend>
           <div className="scale-points">
             {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
@@ -127,19 +140,24 @@ export function Question({
             </span>
           </div>
         </fieldset>
-        <p className="selection-feedback" aria-live="polite">
+        <p
+          className={`selection-feedback${provider ? " sr-only" : ""}`}
+          aria-live="polite"
+        >
           {typeof value === "number" ? (
             <>
               <strong>{value} von 10</strong>
-              <span>
-                {" "}
-                ·{" "}
-                {value <= 3
-                  ? "Geringes Risikosignal"
-                  : value <= 6
-                    ? "Mittleres Risikosignal"
-                    : "Deutliches Risikosignal"}
-              </span>
+              {!provider && (
+                <span>
+                  {" "}
+                  ·{" "}
+                  {value <= 3
+                    ? "Geringes Risikosignal"
+                    : value <= 6
+                      ? "Mittleres Risikosignal"
+                      : "Deutliches Risikosignal"}
+                </span>
+              )}
             </>
           ) : value === "unknown" ? (
             "Als offene Einschätzung markiert."
@@ -164,23 +182,35 @@ export function Question({
             if (event.detail < 2) chooseAnswer("unknown");
           }}
         >
-          Weiß ich noch nicht
+          {provider ? "Weiß ich nicht" : "Weiß ich noch nicht"}
         </button>
       </div>
-      <nav className="section-nav" aria-label="Bereiche des Checks">
-        {QUICK_GROUPS.map((g, i) => (
-          <button
-            key={g.id}
-            disabled={confirming}
-            onClick={() => onStep(i * 3)}
-            aria-current={q.group === g.id ? "step" : undefined}
-          >
-            <span>{String(i + 1).padStart(2, "0")}</span>
-            {g.short}
-          </button>
-        ))}
-      </nav>
-      {check.methodologyVersion === QUICK_METHOD && (
+      {!provider && (
+        <nav className="section-nav" aria-label="Bereiche des Checks">
+          {groups.map((g, i) => (
+            <button
+              key={g.id}
+              disabled={confirming}
+              onClick={() => onStep(i * 3)}
+              aria-current={q.group === g.id ? "step" : undefined}
+            >
+              <span>{String(i + 1).padStart(2, "0")}</span>
+              {g.short}
+            </button>
+          ))}
+        </nav>
+      )}
+      {provider && (
+        <details className="provider-question-details">
+          <summary>Details</summary>
+          <p>{q.help}</p>
+          {q.example && <p>{q.example}</p>}
+          <p className="provider-question-assumption">
+            {PROVIDER_PREMISE} {PROVIDER_BOUNDARIES}
+          </p>
+        </details>
+      )}
+      {check.methodologyVersion === "quick-check-2.0" && (
         <details className="expert-reminder">
           <summary>
             Das Expertenteam-Gedankenexperiment nochmals ansehen
