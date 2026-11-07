@@ -201,6 +201,7 @@ export default function QuickApp() {
     [writable, setWritable] = useState(true),
     [page, setPage] = useState<Page>("home"),
     [selected, setSelected] = useState<string | null>(null),
+    [businessDraft, setBusinessDraft] = useState(""),
     [status, setStatus] = useState("Laden …"),
     [error, setError] = useState(""),
     [method, setMethod] = useState(false),
@@ -271,14 +272,14 @@ export default function QuickApp() {
   }, [checks, ready, writable]);
   useEffect(() => {
     const handler = (e: BeforeUnloadEvent) => {
-      if (ready && checks !== saved.current) {
+      if (ready && (checks !== saved.current || businessDraft.trim())) {
         e.preventDefault();
         e.returnValue = "";
       }
     };
     window.addEventListener("beforeunload", handler);
     return () => window.removeEventListener("beforeunload", handler);
-  }, [checks, ready]);
+  }, [checks, ready, businessDraft]);
   const go = (p: Page) => {
     setPage(p);
     if (menu.current) menu.current.open = false;
@@ -309,7 +310,9 @@ export default function QuickApp() {
   };
   const start = () => {
     const c = createCheck("existing");
+    if (businessDraft.trim()) c.businessDescription = businessDraft.trim();
     setChecks((list) => [...list, c]);
+    setBusinessDraft("");
     open(c.id);
   };
   const showExample = () => {
@@ -517,6 +520,8 @@ export default function QuickApp() {
           </main>
         ) : page === "home" ? (
           <ProviderLanding
+            description={businessDraft}
+            onDescriptionChange={setBusinessDraft}
             onStart={start}
             onExample={showExample}
             resume={resume}
@@ -613,7 +618,13 @@ export default function QuickApp() {
               />
             ) : isProviderMethod(current.methodologyVersion) ? (
               <ProviderResults
+                key={current.id}
                 check={current}
+                onDescriptionChange={(text) =>
+                  update((c) => {
+                    c.businessDescription = text;
+                  })
+                }
                 onScenarioChange={(settings) =>
                   update((c) => {
                     c.schemaVersion = "1.1";

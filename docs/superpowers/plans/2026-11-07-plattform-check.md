@@ -41,6 +41,12 @@ Die Annahme: sehr leistungsfähige, nahezu unbegrenzt verfügbare digitale Agent
 
 ## Forschungsgrundlage
 
+### Optionale Business-Beschreibung mit Diktat (0.5.1)
+
+Auf Folgeauftrag vor dem Start ein kurzes freiwilliges Textfeld mit Mikrofon ergänzen, im Ergebnis bearbeitbar halten, mit dem Check speichern sowie in JSON und Druck übernehmen. Kontexttext verändert keine Antworten oder Bewertung. Keine weitere Pflichtfrage. Browser-Spracherkennung statt eigener KI-API; externe Verarbeitung durch den Browser-Sprachdienst am Feld benennen. Maximal 5.000 Zeichen, vorheriger Text bleibt erhalten. Start nur auf Klick; Stopp nimmt letzte Ergebnisse mit, Unmount bricht ab. Fehler und fehlende Browser-Unterstützung lassen Tippen weiter zu.
+
+TDD: zuerst Speicherung, Feld, Druck und Diktat-Steuerung fehlgeschlagen; zusätzlich ein Fehler beim Erhalt vorhandener Absätze reproduziert und korrigiert. Danach **132 Tests in 13 Dateien bestanden**, TypeScript/Vite erfolgreich, Diff sauber. Gesamter Browserpfad mit synthetischer Business-Beschreibung durch zwölf Fragen bis zum Ergebnis, Textänderung und Wiederöffnung nach Reload geprüft. Browserdienst-Simulation prüft Sprachereignisse und Fehler; keine echte Mikrofonaufnahme auf dem Nutzergerät. Die bestehende Einschränkung der nativen PDF-Prüfung gilt weiterhin.
+
 ### Zwei-Jahres-Szenario im Ergebnis
 
 David hat die vorgeschlagenen zwei unabhängigen Tempoeinstellungen ausdrücklich zur Umsetzung freigegeben: „KI wird besser“ / „KI wird günstiger“, jeweils langsam/mittel/schnell, fester Zeitraum zwei Jahre. Kein weiterer Fragebogen, keine neue Einstiegsseite. Die kompakte Darstellung ergänzt zwei kurze, antwortabhängige Auswirkungen; Standard mittel/mittel. Fähigkeiten beeinflussen den Übernahmehinweis, Kosten den Preis-/Bündelungshinweis. Grundbefunde, Schutz und Belegstatus bleiben unabhängig davon bestehen.

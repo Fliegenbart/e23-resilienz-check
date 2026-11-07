@@ -1,6 +1,8 @@
 import type { QuickCheck } from "./model";
 import { calculateRisk } from "./model";
 import { Arrow } from "./ui";
+import { useState } from "react";
+import { BusinessDescription } from "./BusinessDescription";
 
 export function ProviderLanding({
   onStart,
@@ -8,13 +10,18 @@ export function ProviderLanding({
   resume,
   onResume,
   onMethod,
+  description,
+  onDescriptionChange,
 }: {
   onStart: () => void;
   onExample: () => void;
   resume?: QuickCheck;
   onResume: () => void;
   onMethod: () => void;
+  description: string;
+  onDescriptionChange: (text: string) => void;
 }) {
+  const [dictating, setDictating] = useState(false);
   return (
     <main className="landing-page provider-landing">
       <section className="provider-intro">
@@ -26,8 +33,17 @@ export function ProviderLanding({
           <p className="provider-lead">
             Was kann KI übernehmen? Was schützt Ihr Geschäft?
           </p>
+          <BusinessDescription
+            value={description}
+            onChange={onDescriptionChange}
+            onBusyChange={setDictating}
+          />
           <div className="landing-cta">
-            <button className="button primary" onClick={onStart}>
+            <button
+              className="button primary"
+              onClick={onStart}
+              disabled={dictating}
+            >
               Assessment starten <Arrow />
             </button>
             <span className="provider-time">12 Fragen</span>

@@ -26,6 +26,103 @@
   color: #55565c;
   font-size: 13px;
 }
+.business-description {
+  max-width: 720px;
+  margin: 0 0 26px;
+}
+.business-description > label {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: 650;
+}
+.business-description > label > span {
+  color: #65666c;
+  font-size: 12px;
+  font-weight: 400;
+}
+.business-input {
+  border: 1px solid var(--line);
+}
+.business-input:focus-within {
+  border-color: var(--ink);
+}
+.business-input textarea {
+  display: block;
+  width: 100%;
+  min-height: 84px;
+  padding: 14px 16px 8px;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.5;
+  resize: vertical;
+}
+.business-input textarea:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.business-input-tools {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  padding: 0 10px 6px;
+}
+.business-dictate {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 44px;
+  padding: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.business-dictate[aria-pressed="true"] {
+  background: var(--yellow);
+  padding-inline: 10px;
+}
+.business-dictate:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.business-input-tools > span {
+  font-size: 12px;
+  color: #55565c;
+}
+.business-count {
+  margin-left: auto;
+}
+.business-hint,
+.business-message {
+  font-size: 12px;
+  line-height: 1.4;
+  color: #55565c;
+  margin: 8px 0 0;
+}
+.business-message {
+  color: #873719;
+}
+.provider-business-context {
+  margin: -12px 0 24px;
+}
+.provider-business-context > button {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-height: 44px;
+  font-size: 14px;
+}
+.provider-business-context .business-description {
+  margin: 8px 0 28px;
+}
+.print-business-description p {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
 .provider-question {
   max-width: 1000px;
   padding: 32px 4vw 40px;

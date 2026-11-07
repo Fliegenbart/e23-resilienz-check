@@ -6,16 +6,20 @@ Das Resilience-Assessment beantwortet diese Frage mit zwölf konkreten Einschät
 
 Repository: https://github.com/Fliegenbart/e23-resilienz-check
 
-Produktionsadresse: https://e23-resilienz-check.vercel.app. Anwendungsversion **0.5.0** enthält den vereinfachten Plattform-Check und die beiden Tempoeinstellungen für die nächsten zwei Jahre.
+Produktionsadresse: https://e23-resilienz-check.vercel.app. Anwendungsversion **0.5.1** ergänzt eine freiwillige Business-Beschreibung mit Diktierfunktion zum vereinfachten Plattform-Check und den beiden Tempoeinstellungen für die nächsten zwei Jahre.
 
 ## Nutzung
 
-1. „Assessment starten“ anklicken. Die erste Frage erscheint direkt, ohne Auswahl zwischen bestehendem Angebot und neuer Idee.
+1. Optional das Business kurz beschreiben – tippen oder „Diktieren“ verwenden. Dann „Assessment starten“ anklicken. Die erste Frage erscheint direkt, ohne Auswahl zwischen bestehendem Angebot und neuer Idee.
 2. Zwölf kurze Fragen beantworten: eine Frage pro Ansicht, Werte von 1 bis 10 oder „Weiß ich nicht“. Nach kurzer gelber Bestätigung folgt automatisch die nächste Frage. Hilfen und Beispiele stehen unter „Details“.
 3. Das kompakte Ergebnis lesen: mögliche Übernahme, Schutz und nächste Schritte. Unter „Nächste 2 Jahre“ unabhängig einstellen, wie schnell KI besser und günstiger wird: langsam, mittel oder schnell. Voreinstellung: mittel/mittel. Zwei kurze Hinweise reagieren direkt. Begründungen und Belege sind aufklappbar; Antworten lassen sich korrigieren.
 4. Den Check über „Bisherige Checks“ wieder öffnen, als JSON sichern oder importieren. „Ergebnis als PDF“ öffnet die Druckfunktion des Browsers.
 
 Keine Anmeldung und keine erforderlichen Texteingaben. Die Daten bleiben im jeweiligen Browser. Eine hohe Zahl ist nicht pauschal gut oder schlecht: Die ersten Fragen beschreiben den möglichen Zugriff der Plattform, die späteren eigene Vorteile und Belege.
+
+Die Beschreibung wird beim Start mit dem Check gespeichert und ist im Ergebnis unter „Ihr Business“ bearbeitbar. Sie erscheint auch in JSON und Druckbericht. Sie hält den Kontext fest; die Bewertung basiert weiterhin auf den zwölf Antworten. Maximal 5.000 Zeichen. Das optionale Feld `businessDescription` verändert vorhandene Checks ohne Beschreibung nicht.
+
+Das Diktat nutzt die [Web Speech API des Browsers](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition), auf Deutsch und ausschließlich nach einem Klick auf „Diktieren“. Der Browser kann Audio zur Erkennung an seinen Sprachdienst senden; darauf weist das Feld hin. Die App speichert keine Audiodatei. Nicht unterstützte Browser bieten die normale Texteingabe mit Hinweis auf die Diktierfunktion des Geräts. Stoppen, Fehler oder Verlassen der Ansicht beenden die Sitzung; bereits erkannter Text bleibt editierbar.
 
 ## Annahme und Ergebnis
 
@@ -60,7 +64,7 @@ npm run build
 git diff --check
 ```
 
-React, TypeScript, Vite, Zod, Vitest und IndexedDB. Keine externe KI, API-Schlüssel, Anmeldung oder Telemetrie erforderlich. Die Website bzw. der lokale Server muss zum Öffnen erreichbar sein.
+React, TypeScript, Vite, Zod, Vitest und IndexedDB. Keine eigene KI-API, API-Schlüssel, Anmeldung oder Telemetrie erforderlich. Optionales Diktat verwendet den Sprachdienst des Browsers. Die Website bzw. der lokale Server muss zum Öffnen erreichbar sein.
 
 ## Weiterarbeiten
 

@@ -144,6 +144,7 @@ describe("Plattform-Check", () => {
         onPrint() {},
         onExport() {},
         onScenarioChange() {},
+        onDescriptionChange() {},
       }),
     );
     const report = renderToStaticMarkup(

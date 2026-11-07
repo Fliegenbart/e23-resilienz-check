@@ -8,6 +8,7 @@ import {
 import { Arrow } from "./ui";
 import { ProviderScenario } from "./ProviderScenario";
 import type { ProviderScenarioSettings } from "./provider-scenario";
+import { BusinessDescription } from "./BusinessDescription";
 
 function AnswerBasis({
   check,
@@ -199,6 +200,7 @@ export function ProviderResults({
   onPrint,
   onExport,
   onScenarioChange,
+  onDescriptionChange,
 }: {
   check: QuickCheck;
   onEdit: (step: number) => void;
@@ -206,9 +208,11 @@ export function ProviderResults({
   onPrint: () => void;
   onExport: () => void;
   onScenarioChange: (settings: ProviderScenarioSettings) => void;
+  onDescriptionChange: (text: string) => void;
 }) {
   const r = evaluateProvider(check);
   const [answersOpen, setAnswersOpen] = useState(false);
+  const [descriptionOpen, setDescriptionOpen] = useState(false);
   return (
     <main className="results-page provider-results">
       <header className="provider-result-intro">
@@ -218,7 +222,7 @@ export function ProviderResults({
         </p>
         <h1>{r.headline}</h1>
         <p className="provider-result-summary">{r.summary}</p>
-        <p className="provider-context">Stresstest auf Basis Ihrer Angaben.</p>
+        <p className="provider-context">Auswertung Ihrer zwölf Antworten.</p>
         {r.unknown.length > 0 && (
           <button
             className="button secondary"
@@ -232,6 +236,25 @@ export function ProviderResults({
           </button>
         )}
       </header>
+      <section className="provider-business-context">
+        <button
+          type="button"
+          aria-expanded={descriptionOpen}
+          aria-controls="provider-business-editor"
+          onClick={() => setDescriptionOpen((open) => !open)}
+        >
+          {check.businessDescription ? "Ihr Business" : "Business beschreiben"}
+          <span aria-hidden="true">{descriptionOpen ? "−" : "+"}</span>
+        </button>
+        {descriptionOpen && (
+          <div id="provider-business-editor">
+            <BusinessDescription
+              value={check.businessDescription ?? ""}
+              onChange={onDescriptionChange}
+            />
+          </div>
+        )}
+      </section>
       <ProviderScenario check={check} onChange={onScenarioChange} />
       <ProviderFindings check={check} />
       <footer className="provider-result-tools">

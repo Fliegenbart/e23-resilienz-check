@@ -14,6 +14,7 @@ import {
   providerScenarioSchema,
   type ProviderScenarioSettings,
 } from "./provider-scenario";
+import { BUSINESS_DESCRIPTION_MAX_LENGTH } from "./business-description";
 export const QUICK_METHOD = PROVIDER_METHOD;
 export const QUICK_SCHEMA = "1.1";
 export type GroupId = "value" | "competition" | "advantage" | "control";
@@ -55,6 +56,7 @@ export interface QuickCheck {
   view: "intro" | "questions" | "results" | "scenarios";
   scenarios?: ScenarioWorkspace;
   providerScenario?: ProviderScenarioSettings;
+  businessDescription?: string;
   isExample: boolean;
   originId: string | null;
 }
@@ -180,6 +182,10 @@ const checkSchema = z
     view: z.enum(["intro", "questions", "results", "scenarios"]),
     scenarios: scenarioWorkspaceSchema.optional(),
     providerScenario: providerScenarioSchema.optional(),
+    businessDescription: z
+      .string()
+      .max(BUSINESS_DESCRIPTION_MAX_LENGTH)
+      .optional(),
     isExample: z.boolean(),
     originId: z.string().nullable(),
   })
@@ -214,7 +220,7 @@ export function serializeChecks(checks: QuickCheck[]) {
     {
       format: "e23-quick-check",
       schemaVersion: QUICK_SCHEMA,
-      appVersion: "0.5.0",
+      appVersion: "0.5.1",
       exportedAt: new Date().toISOString(),
       checks,
     },

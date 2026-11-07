@@ -1,6 +1,6 @@
 # Übergabe an einen neuen Codex-Chat
 
-## Aktueller Stand: Plattform-Check 0.5.0
+## Aktueller Stand: Plattform-Check 0.5.1
 
 Stand: 7. November 2026. **Dieser Abschnitt ersetzt die unten dokumentierte frühere Produktrichtung.** Der neue Umbau ist umgesetzt; David hat die Veröffentlichung auf Vercel ausdrücklich beauftragt. Arbeitsbranch: `codex/quick-check`, Produktionsbranch: `flux`. Die öffentliche Adresse ist `https://e23-resilienz-check.vercel.app`. Deployment- und Remote-Stand bei einem späteren Auftrag erneut prüfen.
 
@@ -17,6 +17,7 @@ Textkorrektur im selben Auftrag: David will deutlich mehr Minimalismus und direk
 - Vier mögliche Schutzfaktoren Q7–Q10 und zwei Belegfragen Q11/Q12. Keine Durchschnittsnote, kein Verrechnen von Vorteil und Risiko. Unbekannte Angaben ergeben keine Entwarnung. Eine Schutzbehauptung ist noch kein belegter Wettbewerbsvorteil.
 - Ergebnis: eine kurze Kernaussage, nebeneinander Übernahme und Schutz, darunter bis zu drei kurze Schritte. Befunde, Belege und Schritte sind aufklappbar; der Druckbericht öffnet dieselben Details vollständig. Fehlende Antworten und Belege bleiben im geschlossenen Ergebnis sichtbar. Antwortkorrektur führt unmittelbar zurück zum aktualisierten Ergebnis.
 - Auf ausdrücklichen Folgeauftrag: im Ergebnis „Nächste 2 Jahre“, zwei unabhängige Auswahlzeilen „KI wird besser“ / „KI wird günstiger“, jeweils langsam/mittel/schnell, Standard mittel/mittel. Je ein kurzer Hinweis reagiert auf das Tempo und den stärksten erkennbaren Übernahmeweg. Fähigkeiten betreffen Übernahme, Kosten Preis-/Bündelungsdruck. Keine neuen Fragen, Preisfaktoren oder Wahrscheinlichkeiten. Grundbefunde und Schutz bleiben getrennt und unverändert. Regeln in `provider-scenario.ts`, Auswertung in `provider-analysis.ts`, gemeinsame Bildschirm-/Druckansicht in `ProviderScenario.tsx`.
+- Weiterer Folgeauftrag: optionales Feld „Was macht Ihr Business?“ direkt vor dem Start, mit „Diktieren“/„Stopp“. Bis 5.000 Zeichen; ab Start als `businessDescription` beim Check gespeichert, in JSON und Bericht enthalten, im Ergebnis unter „Ihr Business“ bearbeitbar. Beschreibung dient als Kontext und wird nicht durch KI ausgewertet; zwölf Antworten bleiben Bewertungsbasis. `BusinessDescription.tsx` + `dictation.ts`: Browser-Web-Speech-API einschließlich WebKit, de-DE, keine eigene API und keine Audiodatei. Audio kann zum Browser-Sprachdienst gehen; Hinweis direkt am Feld. Mikrofon erst auf Klick. Bei fehlender Unterstützung, verweigerter Berechtigung oder Dienstfehler bleibt Texteingabe möglich. Beim Stopp letzte Ergebnisse abwarten, beim Verlassen abbrechen, veraltete Events ignorieren.
 - ARK Invest, *Big Ideas 2026*, S. 20/34 (Tokenkosten), 33 (Aufgabenhorizonte), 26–28 (Agenten als Zugangsschicht), 36 (Spezialisten). Nur als Hintergrund; keine Marktprognosen im Ergebnis. Ergänzende offizielle Quellen stehen in `ProviderMethod.tsx` und im Bericht.
 
 ### Kompatibilität und Dateien
@@ -31,7 +32,9 @@ Plan und Validierung: `docs/superpowers/plans/2026-11-07-plattform-check.md`. Ne
 
 Letzte Erweiterung geprüft: 113 Tests in 11 Dateien, Build und Diff sauber. Szenario-Auswahl auf separater Test-Origin `http://localhost:5183/` mit unabhängigen Tempi, Tastatur, Neuladen und Wiederöffnen geprüft; Desktop 1280 sowie Mobil 390/320 px ohne Überlauf oder Konsolenfehler. Nutzerdaten unter `127.0.0.1` wurden dafür nicht bearbeitet. Die nativen PDF-Dialoggrenzen aus dem Plan gelten weiter; Berichtsinhalte sind automatisiert geprüft.
 
-**Veröffentlichung:** Der ausdrückliche Folgeauftrag umfasst den Push der Version 0.5.0 nach `flux` und die Prüfung der öffentlichen Vercel-Adresse. `flux` löst automatisch Vercel aus. Vor der Veröffentlichung wurden erneut 113 Tests, Build und Diff geprüft; der Remote-Branch stand unverändert auf `18d1430`. Nicht aus den nachfolgenden historischen Abschnitten auf den aktuellen Live-Stand schließen.
+Beschreibung/Diktat: **132 Tests in 13 Dateien** sowie Build erfolgreich. Text → kompletter Check → Ergebnis → Beschreibung ändern → Neuladen/Wiederöffnen im Browser geprüft. Diktat-Lebenszyklus mit simuliertem Browserdienst getestet (Zwischenergebnisse, Duplikate, Stopp, späte Events, Mikrofon-/Netzfehler und Längenlimit). Keine echte Mikrofonaufnahme auf Davids Gerät gestartet; diese Grenze bei Aussagen zur Sprachprüfung beachten. Native PDF-Ausgabe weiterhin nicht visuell abgenommen, Berichtstext automatisiert geprüft.
+
+**Veröffentlichung:** Version 0.5.0 wurde nach ausdrücklichem Auftrag als `de8461a` nach `flux` gepusht; Vercel meldete `READY`, Startseite und beide Tempoeinstellungen waren öffentlich geprüft. Die Folgeergänzung 0.5.1 verwendet denselben Veröffentlichungsweg. `flux` löst automatisch Vercel aus. Nicht aus den nachfolgenden historischen Abschnitten auf den aktuellen Live-Stand schließen.
 
 ---
 

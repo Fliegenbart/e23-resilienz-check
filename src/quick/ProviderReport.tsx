@@ -25,6 +25,12 @@ export function ProviderReport({ check }: { check: QuickCheck }) {
       <h1>{r.headline}</h1>
       <p>{r.summary}</p>
       <p>{r.answered} von 12 eingeschätzt. Ergebnis auf Basis Ihrer Angaben.</p>
+      {check.businessDescription?.trim() && (
+        <section className="print-business-description">
+          <h2>Ihr Business</h2>
+          <p>{check.businessDescription}</p>
+        </section>
+      )}
       <ProviderScenario check={check} print />
       <section className="print-block">
         <h2>Grundannahme des Stresstests</h2>
