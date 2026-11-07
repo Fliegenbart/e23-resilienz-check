@@ -15,6 +15,18 @@ Repository: https://github.com/Fliegenbart/e23-resilienz-check
 
 Es gibt keine erforderlichen Texteingaben und keine Anmeldung. „Weiß ich noch nicht“ hält eine Frage offen. Ein Gesamtscore erscheint erst bei zwölf numerischen Antworten; offene Werte zählen niemals als niedriges Risiko. Einzelwerte von 9 oder 10 bleiben unabhängig vom Durchschnitt sichtbar.
 
+## Zukunftsszenarien
+
+„Direkt Zukunftsszenarien testen“ auf der Startseite oder „Zukunftsszenarien testen“ unter dem Ergebnis öffnet die Simulation. Sechs feste Zukunftsbilder trennen günstigere KI, gleichbleibende oder höhere Agentenfähigkeiten sowie Routine- oder flexible Robotik. Profil und Anpassungsfenster (6, 18, 36 Monate) werden angeklickt. Die Szenarien enthalten keine Eintrittswahrscheinlichkeiten und ihre Zeitfenster sind keine Prognosen.
+
+Pro ausgewähltem Szenario folgen vier Risiko-Einschätzungen und eine separate Chancenfrage. Auswahl und automatische Weiterleitung funktionieren wie im ursprünglichen Check, einschließlich der kurzen gelben Bestätigung. Risiko = gerundet `100 × Summe(Antwort − 1) / 36`; nur vier numerische Risikoantworten erzeugen einen Gesamtwert. Eine hohe eigene Chance verringert diesen Wert nicht. Kritische Einzelwerte und unbekannte Antworten bleiben sichtbar. Wegen der unterschiedlichen Fragebögen werden keine Differenzen zum Zwölf-Fragen-Score berechnet.
+
+Optional lässt sich der heutige KI-Anteil an den Kosten einer konkreten Leistung anklicken. Die bedingte Rechnung hält die übrigen Kosten gleich: `Ersparnis = KI-Kostenanteil × (1 − 1 / Vergünstigungsfaktor)`. Bei 25 % KI-Anteil und zehnfach günstigerer KI ergeben sich 22,5 % geringere Gesamtkosten. Unbekannte Anteile erzeugen keine Einsparungszahl. Neue Robotik, Einführung, Qualitätssicherung, zusätzliche Automatisierung und Erlösveränderungen werden nicht automatisch daraus abgeleitet.
+
+Jede neue Bewertung behält ihr eigenes Profil, Zeitfenster und ihre Kostenannahme. Die Vergleichsansicht zeigt sämtliche gespeicherten Stände. Antworten können bewusst bearbeitet werden; veränderte Einstellungen für einen neuen Durchlauf ändern frühere Stände nicht. Laufende Szenariofragen lassen sich nach einem Neustart fortsetzen. JSON und Druckbericht enthalten die Annahmen, fünf Antworten, offene Punkte und Methodenversion `scenario-stress-1.0`.
+
+JSON-Schema 1.1 liest weiterhin bisherige Dateien mit Schema 1.0. Alte Checks werden nicht neu bewertet. Erst beim bewussten Ergänzen von Szenarien wird der betreffende Check auf das erweiterte Schema umgestellt. Vor dem Einsatz einer älteren Anwendung sichern: alte Software kann Dateien des neuen Schemas ablehnen.
+
 ## Methode
 
 Version `quick-check-1.0`: Gesamtscore = gerundet `100 × Summe(Antwort − 1) / 108`. Alle zwölf Fragen haben das gleiche Gewicht; jeder Teilbereich enthält drei Fragen. Orientierung: 0–24 niedrig, 25–49 mittel, 50–74 erhöht, 75–100 hoch.
@@ -56,4 +68,4 @@ Das Design folgt dem freigegebenen dritten Entwurf in `design/03-ergebnis.png`: 
 
 Vercel: Vite, `npm ci --no-audit --no-fund`, `npm run build`, Ausgabe `dist`. Keine API-Schlüssel erforderlich. Der bestehende GitHub-Anschluss veröffentlicht Änderungen am Branch `flux` automatisch. Dokumentation, Beispieldateien und Designentwürfe werden nicht hochgeladen.
 
-`docs/Acceptance.md` und `tests/browser-check.mjs` dokumentieren die ursprüngliche ausführliche Version; der alte Browserablauf ist kein Test des neuen Quick-Checks. Die aktuelle Abnahme steht in `docs/Quick-Check-Plan.md`.
+`docs/Acceptance.md` und `tests/browser-check.mjs` dokumentieren die ursprüngliche ausführliche Version; der alte Browserablauf ist kein Test des neuen Quick-Checks. Die Abnahme des Quick-Checks steht in `docs/Quick-Check-Plan.md`; der Szenarioablauf und seine Abnahme in `docs/superpowers/plans/2026-11-07-szenarien.md`.

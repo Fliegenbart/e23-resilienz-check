@@ -46,13 +46,25 @@ export function History({
                   <span className="history-row-title">
                     <strong>{checkTitle(c)}</strong>
                     <small>
-                      {r.answered} von 12 beantwortet ·{" "}
-                      {c.view === "results" ? "Ergebnis" : "Entwurf"}
+                      {c.view === "scenarios"
+                        ? `${c.scenarios?.runs.length ?? 0} Szenariostände · Zukunftssimulation`
+                        : `${r.answered} von 12 beantwortet · ${c.view === "results" ? "Ergebnis" : "Entwurf"}`}
+                      {c.scenarios && c.view !== "scenarios"
+                        ? ` · ${c.scenarios.runs.length} Szenariostände`
+                        : ""}
                     </small>
                   </span>
                   <span className="history-score">
-                    {r.score === null ? "—" : r.score}
-                    <small>{riskLabel(r.score)}</small>
+                    {c.view === "scenarios"
+                      ? (c.scenarios?.runs.length ?? 0)
+                      : r.score === null
+                        ? "—"
+                        : r.score}
+                    <small>
+                      {c.view === "scenarios"
+                        ? "Szenariostände"
+                        : riskLabel(r.score)}
+                    </small>
                   </span>
                   <Arrow />
                 </button>

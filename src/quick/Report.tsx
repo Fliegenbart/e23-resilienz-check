@@ -1,4 +1,5 @@
 import type { QuickCheck } from "./model";
+import { ScenarioReport } from "./ScenarioReport";
 import {
   calculateRisk,
   riskLabel,
@@ -9,6 +10,26 @@ import {
 } from "./model";
 export function QuickReport({ check }: { check: QuickCheck }) {
   const r = calculateRisk(check);
+  if (r.processed === 0 && check.scenarios && check.scenarios.runs.length > 0) {
+    return (
+      <article className="quick-print-report">
+        <header className="print-brand">
+          <strong>e23</strong>
+          <span>KI-Resilienz-Check</span>
+        </header>
+        <p className="print-context">{checkTitle(check)} · Zukunftsszenarien</p>
+        <ScenarioReport workspace={check.scenarios} standalone />
+        <p>
+          Check-ID: {check.id} · Stand:{" "}
+          {new Intl.DateTimeFormat("de-DE", {
+            dateStyle: "medium",
+            timeStyle: "short",
+            timeZone: "Europe/Berlin",
+          }).format(new Date(check.updatedAt))}
+        </p>
+      </article>
+    );
+  }
   return (
     <article className="quick-print-report">
       <header className="print-brand">
@@ -134,6 +155,7 @@ export function QuickReport({ check }: { check: QuickCheck }) {
           }).format(new Date(check.updatedAt))}
         </p>
       </section>
+      {check.scenarios && <ScenarioReport workspace={check.scenarios} />}
     </article>
   );
 }

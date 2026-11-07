@@ -1,6 +1,8 @@
 import { z } from "zod";
+import { scenarioWorkspaceSchema } from "./scenario-model";
+import type { ScenarioWorkspace } from "./scenario-model";
 export const QUICK_METHOD = "quick-check-1.0";
-export const QUICK_SCHEMA = "1.0";
+export const QUICK_SCHEMA = "1.1";
 export type GroupId = "value" | "competition" | "advantage" | "control";
 export type QuickAnswer = number | "unknown" | null;
 export interface QuickQuestion {
@@ -163,7 +165,8 @@ export interface QuickCheck {
   type: "existing" | "idea";
   answers: Record<string, QuickAnswer>;
   step: number;
-  view: "questions" | "results";
+  view: "questions" | "results" | "scenarios";
+  scenarios?: ScenarioWorkspace;
   isExample: boolean;
   originId: string | null;
 }
@@ -257,7 +260,7 @@ const questionIds = QUICK_QUESTIONS.map((q) => q.id) as [string, ...string[]];
 const checkSchema = z
   .object({
     id: z.string().min(1).max(200),
-    schemaVersion: z.literal(QUICK_SCHEMA),
+    schemaVersion: z.enum(["1.0", "1.1"]),
     methodologyVersion: z.literal(QUICK_METHOD),
     methodologySnapshot: z.array(questionSchema).length(12),
     createdAt: z.iso.datetime({ offset: true }),
@@ -272,15 +275,22 @@ const checkSchema = z
       ]),
     ),
     step: z.number().int().min(0).max(11),
-    view: z.enum(["questions", "results"]),
+    view: z.enum(["questions", "results", "scenarios"]),
+    scenarios: scenarioWorkspaceSchema.optional(),
     isExample: z.boolean(),
     originId: z.string().nullable(),
   })
-  .strict();
+  .strict()
+  .refine(
+    (c) =>
+      (c.view !== "scenarios" || c.scenarios !== undefined) &&
+      (c.schemaVersion !== "1.0" || c.scenarios === undefined),
+    "Szenariodaten benötigen Schema 1.1.",
+  );
 const exchangeSchema = z
   .object({
     format: z.literal("e23-quick-check"),
-    schemaVersion: z.literal(QUICK_SCHEMA),
+    schemaVersion: z.enum(["1.0", "1.1"]),
     appVersion: z.string(),
     exportedAt: z.iso.datetime({ offset: true }),
     checks: z.array(checkSchema).max(2000),
@@ -291,7 +301,7 @@ export function serializeChecks(checks: QuickCheck[]) {
     {
       format: "e23-quick-check",
       schemaVersion: QUICK_SCHEMA,
-      appVersion: "0.2.0",
+      appVersion: "0.3.0",
       exportedAt: new Date().toISOString(),
       checks,
     },

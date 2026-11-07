@@ -18,7 +18,9 @@ import { Results } from "./Results";
 import { History } from "./History";
 import { QuickReport } from "./Report";
 import { Arrow, Close } from "./ui";
+import { createScenarioWorkspace } from "./scenario-model";
 const Legacy = lazy(() => import("./Legacy"));
+const ScenarioPage = lazy(() => import("./ScenarioPage"));
 type Page = "home" | "check" | "history" | "archive";
 type Preview =
   | { kind: "quick"; checks: QuickCheck[] }
@@ -195,7 +197,9 @@ export default function QuickApp() {
     generation = useRef(0);
   const current = checks.find((c) => c.id === selected);
   const resume = [...checks]
-    .filter((c) => !c.isExample && c.view === "questions")
+    .filter(
+      (c) => !c.isExample && (c.view === "questions" || c.view === "scenarios"),
+    )
     .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))[0];
   useEffect(() => {
     let active = true;
@@ -290,6 +294,22 @@ export default function QuickApp() {
     const c = exampleCheck();
     setChecks((list) => [...list, c]);
     open(c.id);
+  };
+  const openScenarios = () => {
+    if (current && page === "check") {
+      update((c) => {
+        c.schemaVersion = "1.1";
+        c.scenarios ??= createScenarioWorkspace();
+        c.view = "scenarios";
+      });
+      go("check");
+    } else {
+      const c = createCheck(type);
+      c.scenarios = createScenarioWorkspace();
+      c.view = "scenarios";
+      setChecks((list) => [...list, c]);
+      open(c.id);
+    }
   };
   const exportAll = () => download("e23-Checks.json", serializeChecks(checks));
   const exportCurrent = () => {
@@ -394,6 +414,7 @@ export default function QuickApp() {
               >
                 Neuer Check
               </button>
+              <button onClick={openScenarios}>Zukunftsszenarien testen</button>
               <button
                 onClick={() => {
                   if (menu.current) menu.current.open = false;
@@ -497,13 +518,21 @@ export default function QuickApp() {
                     <Arrow />
                   </button>
                 </div>
+                <button
+                  className="text-link scenario-direct-link"
+                  onClick={openScenarios}
+                >
+                  Direkt Zukunftsszenarien testen
+                  <Arrow />
+                </button>
                 {resume && (
                   <button
                     className="resume-link"
                     onClick={() => open(resume.id)}
                   >
-                    Letzten Check fortsetzen · {calculateRisk(resume).answered}
-                    /12
+                    {resume.view === "scenarios"
+                      ? "Letzte Szenariosimulation fortsetzen"
+                      : `Letzten Check fortsetzen · ${calculateRisk(resume).answered}/12`}
                     <Arrow />
                   </button>
                 )}
@@ -592,7 +621,35 @@ export default function QuickApp() {
                 Fiktives Beispiel · Sie bearbeiten synthetische Beispielangaben.
               </div>
             )}
-            {current.view === "questions" ? (
+            {current.view === "scenarios" && current.scenarios ? (
+              <Suspense
+                fallback={
+                  <main className="loading-state">
+                    Szenarien werden geöffnet …
+                  </main>
+                }
+              >
+                <ScenarioPage
+                  workspace={current.scenarios}
+                  onChange={(fn) =>
+                    update((c) => {
+                      if (c.scenarios) fn(c.scenarios);
+                    })
+                  }
+                  onBack={() => {
+                    update((c) => {
+                      c.view =
+                        calculateRisk(c).processed === 12
+                          ? "results"
+                          : "questions";
+                    });
+                    window.scrollTo(0, 0);
+                  }}
+                  onExport={exportCurrent}
+                  onPrint={() => window.print()}
+                />
+              </Suspense>
+            ) : current.view === "questions" ? (
               <Question
                 key={`${current.id}:${current.step}`}
                 check={current}
@@ -619,6 +676,7 @@ export default function QuickApp() {
                 onMethod={() => setMethod(true)}
                 onPrint={() => window.print()}
                 onExport={exportCurrent}
+                onScenarios={openScenarios}
               />
             )}
             <QuickReport check={current} />

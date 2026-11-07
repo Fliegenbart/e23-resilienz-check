@@ -19,6 +19,7 @@
   .history-page,
   .question-page,
   .results-page,
+  .scenario-page,
   .question-example,
   .error-banner,
   .method-dialog,
@@ -114,6 +115,24 @@
   }
   .print-block {
     break-inside: avoid;
+  }
+  .scenario-print-section table {
+    font-size: 8.5pt;
+  }
+  .scenario-print-section td,
+  .scenario-print-section th {
+    padding: 7pt 5pt;
+  }
+  .scenario-print-run > p {
+    font-size: 9pt;
+    line-height: 1.45;
+  }
+  .scenario-print-section .print-answer {
+    padding: 6pt 0 2pt;
+  }
+  .scenario-print-section .print-answer p {
+    font-size: 9pt;
+    line-height: 1.45;
   }
   .print-answer {
     padding: 10pt 0 5pt;

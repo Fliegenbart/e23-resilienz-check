@@ -4,6 +4,22 @@ import { createCheck, answerCheck } from "../src/quick/model";
 import { loadChecks, saveChecks } from "../src/quick/storage";
 import { saveWorkspace, loadWorkspace } from "../src/storage/database";
 import { createAssessment } from "../src/domain/model";
+import {
+  createScenarioWorkspace,
+  startScenario,
+  answerScenario,
+} from "../src/quick/scenario-model";
+it("speichert Szenarioannahmen, Auswahl und Position vollständig", async () => {
+  const c = createCheck("existing");
+  c.scenarios = createScenarioWorkspace();
+  c.view = "scenarios";
+  const r = startScenario(c.scenarios, "s4");
+  answerScenario(r, "value", 8);
+  r.step = 1;
+  c.scenarios.view = "questions";
+  await saveChecks([c]);
+  expect(await loadChecks()).toEqual([c]);
+});
 it("speichert Antworten und aktuelle Position für die Wiederaufnahme", async () => {
   const c = createCheck("idea");
   answerCheck(c, "Q1", 7);

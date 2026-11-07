@@ -43,12 +43,14 @@ export function Results({
   onMethod,
   onPrint,
   onExport,
+  onScenarios,
 }: {
   check: QuickCheck;
   onEdit: (step: number) => void;
   onMethod: () => void;
   onPrint: () => void;
   onExport: () => void;
+  onScenarios: () => void;
 }) {
   const r = calculateRisk(check);
   const [answersOpen, setAnswersOpen] = useState(false);
@@ -278,6 +280,20 @@ export function Results({
             </button>
           </div>
         </div>
+      </section>
+      <section className="scenario-entry">
+        <div>
+          <p className="section-index">Den nächsten Schritt vorausdenken</p>
+          <h2>Wie verändert sich Ihr Geschäft, wenn …?</h2>
+          <p>
+            Sechs Szenarien zu günstigeren oder stärkeren Agenten und
+            zusätzlicher Robotik.
+          </p>
+        </div>
+        <button className="button primary" onClick={onScenarios}>
+          Zukunftsszenarien testen
+          <Arrow />
+        </button>
       </section>
       {answersOpen && (
         <section className="answer-summary">
