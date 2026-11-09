@@ -21,7 +21,7 @@ import {
   buildAnalysisPrompt,
   createAnalysisHandler,
 } from "../server/business-analysis";
-import { ProviderLanding } from "../src/quick/ProviderLanding";
+import { BusinessMoat } from "../src/quick/BusinessMoat";
 import { QuickReport } from "../src/quick/Report";
 import { History } from "../src/quick/History";
 import { analysisResult } from "./fixtures/business-analysis";
@@ -165,21 +165,15 @@ describe("KI-Prüfung des behaupteten Vorteils", () => {
     );
     expect(history).toContain("KI-Risiko · KI widerspricht");
   });
-  it("bietet das Zusatzfeld direkt auf der Startseite an", () => {
+  it("fragt den selbst vermuteten Burggraben konkret ab", () => {
     const html = renderToStaticMarkup(
-      createElement(ProviderLanding, {
-        description: "",
-        moat: "Unser besonderer Vorteil",
-        onDescriptionChange() {},
-        onMoatChange() {},
-        onStart() {},
-        onExample() {},
-        onResume() {},
-        onMethod() {},
+      createElement(BusinessMoat, {
+        value: "Unser besonderer Vorteil",
+        onChange() {},
       }),
     );
-    expect(html).toContain("Was macht Ihr Angebot schwer ersetzbar?");
-    expect(html).toContain("USP oder Moat");
+    expect(html).toContain("Wo sehen Sie den Burggraben Ihres Unternehmens?");
+    expect(html).toContain("Was schützt Ihr Geschäft vor Nachahmern?");
     expect(html).toContain("Unser besonderer Vorteil");
   });
   it("übergibt die Behauptung als Daten und verlangt eine kritische Prüfung ohne erfundene Termine", () => {

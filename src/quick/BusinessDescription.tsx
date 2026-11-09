@@ -49,7 +49,8 @@ export function BusinessDescription({
   return (
     <div className="business-description">
       <label htmlFor={id}>
-        Was macht Ihr Business? <span>Optional</span>
+        Was macht Ihr Unternehmen – und was sollten wir noch wissen?{" "}
+        <span>Optional</span>
       </label>
       <div className="business-input">
         <textarea

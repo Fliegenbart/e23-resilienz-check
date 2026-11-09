@@ -19,6 +19,7 @@ import { Results } from "./Results";
 import { isProviderMethod, isExpertMethod } from "./provider-questions";
 import { ExpertScenarioIntro } from "./ExpertScenarioIntro";
 import { ProviderLanding } from "./ProviderLanding";
+import { BusinessContext } from "./BusinessContext";
 import { ProviderResults } from "./ProviderResults";
 import { ProviderMethodContent } from "./ProviderMethod";
 import { analysisMatches } from "./business-analysis";
@@ -203,8 +204,6 @@ export default function QuickApp() {
     [writable, setWritable] = useState(true),
     [page, setPage] = useState<Page>("home"),
     [selected, setSelected] = useState<string | null>(null),
-    [businessDraft, setBusinessDraft] = useState(""),
-    [moatDraft, setMoatDraft] = useState(""),
     [status, setStatus] = useState("Laden …"),
     [error, setError] = useState(""),
     [method, setMethod] = useState(false),
@@ -224,6 +223,7 @@ export default function QuickApp() {
         isProviderMethod(c.methodologyVersion) &&
         (c.view === "intro" ||
           c.view === "questions" ||
+          c.view === "context" ||
           c.view === "scenarios"),
     )
     .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))[0];
@@ -275,17 +275,14 @@ export default function QuickApp() {
   }, [checks, ready, writable]);
   useEffect(() => {
     const handler = (e: BeforeUnloadEvent) => {
-      if (
-        ready &&
-        (checks !== saved.current || businessDraft.trim() || moatDraft.trim())
-      ) {
+      if (ready && checks !== saved.current) {
         e.preventDefault();
         e.returnValue = "";
       }
     };
     window.addEventListener("beforeunload", handler);
     return () => window.removeEventListener("beforeunload", handler);
-  }, [checks, ready, businessDraft, moatDraft]);
+  }, [checks, ready]);
   const go = (p: Page) => {
     setPage(p);
     if (menu.current) menu.current.open = false;
@@ -317,11 +314,7 @@ export default function QuickApp() {
   const start = () => {
     const c = createCheck("existing");
     c.view = "intro";
-    if (businessDraft.trim()) c.businessDescription = businessDraft.trim();
-    if (moatDraft.trim()) c.businessMoat = moatDraft.trim();
     setChecks((list) => [...list, c]);
-    setBusinessDraft("");
-    setMoatDraft("");
     open(c.id);
   };
   const showExample = () => {
@@ -533,10 +526,6 @@ export default function QuickApp() {
           </main>
         ) : page === "home" ? (
           <ProviderLanding
-            description={businessDraft}
-            onDescriptionChange={setBusinessDraft}
-            moat={moatDraft}
-            onMoatChange={setMoatDraft}
             onStart={start}
             onExample={showExample}
             resume={resume}
@@ -619,6 +608,37 @@ export default function QuickApp() {
                   window.scrollTo(0, 0);
                 }}
               />
+            ) : current.view === "context" ? (
+              <BusinessContext
+                key={current.id}
+                check={current}
+                onDescriptionChange={(text) =>
+                  update((c) => {
+                    c.businessDescription = text;
+                  })
+                }
+                onMoatChange={(text) =>
+                  update((c) => {
+                    c.businessMoat = text;
+                  })
+                }
+                onAnalysisComplete={(analysis) => {
+                  update((c) => {
+                    if (analysisMatches(c, analysis)) {
+                      c.businessAnalysis = analysis;
+                      c.view = "results";
+                    }
+                  });
+                  window.scrollTo(0, 0);
+                }}
+                onContinue={() => {
+                  update((c) => {
+                    c.view = "results";
+                  });
+                  window.scrollTo(0, 0);
+                }}
+                onBack={() => onStep(current.methodologySnapshot.length - 1)}
+              />
             ) : current.view === "questions" || current.view === "intro" ? (
               <Question
                 key={`${current.id}:${current.step}`}
@@ -635,7 +655,10 @@ export default function QuickApp() {
                       (isProviderMethod(c.methodologyVersion) &&
                         calculateRisk(c).processed === 12)
                     )
-                      c.view = "results";
+                      c.view =
+                        c.methodologyVersion === "quick-check-7.0"
+                          ? "context"
+                          : "results";
                     else c.step += 1;
                   });
                   window.scrollTo(0, 0);

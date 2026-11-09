@@ -1,6 +1,17 @@
 # Übergabe an einen neuen Codex-Chat
 
-## Aktueller Stand: Resilience-Assessment 0.11.0
+## Aktueller Stand: Resilience-Assessment 0.12.0
+
+Stand: 9. November 2026. Die Freitextfelder stehen nach den zwölf Fragen statt auf der Startseite. „Was macht Ihr Unternehmen – und was sollten wir noch wissen?“ und „Wo sehen Sie den Burggraben Ihres Unternehmens?“ bleiben optional. Diktat ist weiter vorhanden. Die bestehende KI kann direkt dort gestartet werden; die fertige Antwort öffnet das Ergebnis. Ohne KI ist der Abschluss ebenfalls möglich. Keine automatische Übertragung.
+
+- `BusinessContext.tsx` ist der letzte Schritt der Methode 7.0. `view=context` wird lokal und im JSON gespeichert und kann über Fortsetzen oder den Verlauf wieder geöffnet werden.
+- Derselbe `BusinessAnalysisControl` nutzt unverändert GPT-5.2 über Vercel. Texte, Antworten, Szenario und Quellenabgleich bleiben dieselbe Bewertungsgrundlage. Änderungen an Eingaben brechen eine laufende Auswertung ab; bei einem Fehler bleiben die Eingaben erhalten.
+- Fragekatalog, Auswertungsregeln und historische Methoden unverändert. Ergebnisfelder können weiterhin bearbeitet werden.
+- Prüfung: 233 Tests, Build; lokaler Browserdurchlauf von Start über alle zwölf Fragen zum Abschluss. Überspringen ohne KI, Speicherung/Wiederaufnahme, unveränderte Übermittlung beider Texte und aller Antworten sowie Ergebniswechsel geprüft. KI-Fehler und Erfolg lokal mit kontrollierten API-Antworten geprüft; Fehler behalten die Texte. Desktop 1440 px und Mobil 390 px ohne Überlauf. Die Modellbewertung selbst wurde in 0.11.0 live geprüft und bleibt unverändert.
+
+---
+
+## Historischer Stand: Resilience-Assessment 0.11.0
 
 Stand: 9. November 2026. Happy-Scribe-Probe zeigte: Der Check erkannte die Angriffe, ließ aber bei überoptimistischen Angaben einen Score von 10 stehen und prüfte keine aktuellen Anbieterfunktionen. David beauftragte den Quellenabgleich, eine Sicherung gegen solche Schutzbehauptungen und die neue Rolle als bezahlter Zulieferer hinter Agenten.
 

@@ -26,6 +26,23 @@
   color: #55565c;
   font-size: 13px;
 }
+.business-context-page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 48px 5vw 72px;
+}
+.business-context-page h1 {
+  margin: 0 0 32px;
+  font-size: clamp(32px, 4vw, 48px);
+}
+.business-context-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  max-width: 720px;
+}
 .business-description {
   max-width: 720px;
   margin: 0 0 26px;

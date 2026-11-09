@@ -13,9 +13,11 @@ import {
 export function BusinessAnalysisControl({
   check,
   onComplete,
+  disabled = false,
 }: {
   check: QuickCheck;
   onComplete: (analysis: BusinessAnalysis) => void;
+  disabled?: boolean;
 }) {
   const input = analysisInputFor(check);
   const key = input ? analysisInputKey(input) : "";
@@ -37,7 +39,7 @@ export function BusinessAnalysisControl({
   }, [key]);
 
   const run = async () => {
-    if (!input || active.current) return;
+    if (!input || active.current || disabled) return;
     const controller = new AbortController();
     active.current = controller;
     setMessage("");
@@ -97,7 +99,7 @@ export function BusinessAnalysisControl({
         <button
           className={fresh ? "text-link" : "button primary"}
           onClick={run}
-          disabled={busy}
+          disabled={busy || disabled}
         >
           {busy
             ? "Wird ausgewertet …"

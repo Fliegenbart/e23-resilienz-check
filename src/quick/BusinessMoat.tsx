@@ -12,7 +12,7 @@ export function BusinessMoat({
   return (
     <div className="business-description business-moat">
       <label htmlFor={id}>
-        Was macht Ihr Angebot schwer ersetzbar? <span>Optional</span>
+        Wo sehen Sie den Burggraben Ihres Unternehmens? <span>Optional</span>
       </label>
       <div className="business-input">
         <textarea
@@ -21,7 +21,7 @@ export function BusinessMoat({
           onChange={(event) => onChange(event.target.value)}
           maxLength={BUSINESS_MOAT_MAX_LENGTH}
           rows={3}
-          placeholder="Ihr USP oder Moat – aus Ihrer Sicht."
+          placeholder="Was schützt Ihr Geschäft vor Nachahmern?"
         />
       </div>
     </div>

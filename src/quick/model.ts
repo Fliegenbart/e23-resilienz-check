@@ -76,7 +76,7 @@ export interface QuickCheck {
   type: "existing" | "idea";
   answers: Record<string, QuickAnswer>;
   step: number;
-  view: "intro" | "questions" | "results" | "scenarios";
+  view: "intro" | "questions" | "context" | "results" | "scenarios";
   scenarios?: ScenarioWorkspace;
   providerScenario?: ProviderScenarioSettings;
   businessDescription?: string;
@@ -215,7 +215,7 @@ const checkSchema = z
       ]),
     ),
     step: z.number().int().min(0).max(11),
-    view: z.enum(["intro", "questions", "results", "scenarios"]),
+    view: z.enum(["intro", "questions", "context", "results", "scenarios"]),
     scenarios: scenarioWorkspaceSchema.optional(),
     providerScenario: providerScenarioSchema.optional(),
     businessDescription: z
@@ -228,6 +228,10 @@ const checkSchema = z
     originId: z.string().nullable(),
   })
   .strict()
+  .refine(
+    (c) => c.view !== "context" || isProviderV7(c.methodologyVersion),
+    "Die abschließenden Unternehmensangaben gehören zum Check ab 7.0.",
+  )
   .refine(
     (c) =>
       c.businessMoat === undefined ||
@@ -272,7 +276,7 @@ export function serializeChecks(checks: QuickCheck[]) {
     {
       format: "e23-quick-check",
       schemaVersion: QUICK_SCHEMA,
-      appVersion: "0.11.0",
+      appVersion: "0.12.0",
       exportedAt: new Date().toISOString(),
       checks,
     },

@@ -5,12 +5,14 @@ import { describe, expect, it } from "vitest";
 import { createCheck, parseChecks, serializeChecks } from "../src/quick/model";
 import { loadChecks, saveChecks } from "../src/quick/storage";
 import { ProviderLanding } from "../src/quick/ProviderLanding";
+import { BusinessContext } from "../src/quick/BusinessContext";
 import { QuickReport } from "../src/quick/Report";
 import { evaluateProvider } from "../src/quick/provider-analysis";
 
 describe("Business-Beschreibung", () => {
   it("speichert Freitext mit Zeilenumbrüchen und exportiert ihn unverändert", async () => {
     const check = createCheck("existing");
+    check.view = "context";
     check.businessDescription =
       "Wir planen Schichten für Pflegedienste.\nUnsere Kunden sind kleine Teams.";
     expect(parseChecks(serializeChecks([check]))[0]).toEqual(check);
@@ -36,23 +38,55 @@ describe("Business-Beschreibung", () => {
     }
   });
 
-  it("bietet die freiwillige Beschreibung direkt vor dem Start an", () => {
-    const screen = renderToStaticMarkup(
+  it("startet ohne Freitextfelder und bietet sie erst im Abschluss an", () => {
+    const landing = renderToStaticMarkup(
       createElement(ProviderLanding, {
-        description: "Wir planen Schichten.",
-        onDescriptionChange() {},
         onStart() {},
         onExample() {},
         onResume() {},
         onMethod() {},
       }),
     );
-    expect(screen).toContain("Was macht Ihr Business?");
+    expect(landing).not.toContain("<textarea");
+    expect(landing).toContain("Assessment starten");
+    const check = createCheck("existing");
+    check.view = "context";
+    check.businessDescription = "Wir planen Schichten.";
+    const screen = renderToStaticMarkup(
+      createElement(BusinessContext, {
+        check,
+        onDescriptionChange() {},
+        onMoatChange() {},
+        onAnalysisComplete() {},
+        onContinue() {},
+        onBack() {},
+      }),
+    );
+    expect(screen).toContain(
+      "Was macht Ihr Unternehmen – und was sollten wir noch wissen?",
+    );
     expect(screen).toContain("Optional");
     expect(screen).toContain("Wir planen Schichten.");
     expect(screen).toContain("<textarea");
     expect(screen).not.toMatch(/<textarea[^>]*required/);
     expect(screen).toContain("Diktieren");
+    expect(screen).toContain("Mein Business auswerten");
+    expect(screen).toContain("Ohne KI zum Ergebnis");
+  });
+
+  it("lässt den Abschluss ohne Freitext und ohne KI-Aufruf zu", () => {
+    const screen = renderToStaticMarkup(
+      createElement(BusinessContext, {
+        check: createCheck("existing"),
+        onDescriptionChange() {},
+        onMoatChange() {},
+        onAnalysisComplete() {},
+        onContinue() {},
+        onBack() {},
+      }),
+    );
+    expect(screen).toContain("Ergebnis ansehen");
+    expect(screen).not.toContain("Individuelle Auswertung");
   });
 
   it("übernimmt die Beschreibung sicher in den Bericht, ohne Antworten daraus zu erfinden", () => {

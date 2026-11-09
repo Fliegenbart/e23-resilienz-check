@@ -1,9 +1,6 @@
 import type { QuickCheck } from "./model";
 import { calculateRisk } from "./model";
 import { Arrow } from "./ui";
-import { useState } from "react";
-import { BusinessDescription } from "./BusinessDescription";
-import { BusinessMoat } from "./BusinessMoat";
 
 export function ProviderLanding({
   onStart,
@@ -11,22 +8,13 @@ export function ProviderLanding({
   resume,
   onResume,
   onMethod,
-  description,
-  onDescriptionChange,
-  moat = "",
-  onMoatChange,
 }: {
   onStart: () => void;
   onExample: () => void;
   resume?: QuickCheck;
   onResume: () => void;
   onMethod: () => void;
-  description: string;
-  onDescriptionChange: (text: string) => void;
-  moat?: string;
-  onMoatChange?: (text: string) => void;
 }) {
-  const [dictating, setDictating] = useState(false);
   return (
     <main className="landing-page provider-landing">
       <section className="provider-intro">
@@ -38,21 +26,8 @@ export function ProviderLanding({
           <p className="provider-lead">
             Was übernimmt KI? Wofür zahlen Kunden weiter?
           </p>
-          <BusinessDescription
-            value={description}
-            onChange={onDescriptionChange}
-            onBusyChange={setDictating}
-          />
-          <BusinessMoat
-            value={moat}
-            onChange={(text) => onMoatChange?.(text)}
-          />
           <div className="landing-cta">
-            <button
-              className="button primary"
-              onClick={onStart}
-              disabled={dictating}
-            >
+            <button className="button primary" onClick={onStart}>
               Assessment starten <Arrow />
             </button>
             <span className="provider-time">12 Fragen</span>
