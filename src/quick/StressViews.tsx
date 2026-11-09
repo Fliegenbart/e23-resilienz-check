@@ -126,10 +126,54 @@ export function StressCurve({
         </g>
       ))}
       {blank && (
-        <path
-          className="curve-line curve-ghost"
-          d={`M${X[0]},${Y.top} L${X[2]},${Y.top}`}
-        />
+        // Before the test: the three ways the curve can run.
+        <g className="curve-legend">
+          <path
+            className="curve-line legend-holds"
+            d={`M${X[0]},${Y.top} L${X[2]},${Y.top}`}
+          />
+          <path
+            className="curve-line legend-pressure"
+            d={`M${X[0]},${Y.top} L${X[1] + 60},${Y.top} C${X[1] + 200},${Y.top} ${X[1] + 220},${Y.mid} ${X[2]},${Y.mid}`}
+          />
+          <path
+            className="curve-line legend-breaks"
+            d={`M${X[0]},${Y.top} L${X[1] - 90},${Y.top} C${X[1] - 30},${Y.top} ${X[1] - 8},${Y.top + 40} ${X[1]},${Y.base}`}
+          />
+          <g className="curve-break legend-mark">
+            <line
+              x1={X[1] - 14}
+              x2={X[1] + 14}
+              y1={Y.base - 14}
+              y2={Y.base + 14}
+            />
+            <line
+              x1={X[1] - 14}
+              x2={X[1] + 14}
+              y1={Y.base + 14}
+              y2={Y.base - 14}
+            />
+          </g>
+          <text
+            className="legend-text"
+            x={X[2] - 8}
+            y={Y.top - 14}
+            textAnchor="end"
+          >
+            Trägt
+          </text>
+          <text
+            className="legend-text"
+            x={X[2] - 8}
+            y={Y.mid + 32}
+            textAnchor="end"
+          >
+            Unter Druck
+          </text>
+          <text className="legend-text" x={X[1] + 26} y={Y.base - 18}>
+            Kippt
+          </text>
+        </g>
       )}
       {points.map((point, i) => {
         const from = i ? points[i - 1] : origin;
@@ -226,12 +270,10 @@ export function StressIntro({ onStart }: { onStart: () => void }) {
     <main className="stress-page stress-intro">
       <div className="intro-text">
         <h1>Welches Szenario bringt Ihr Geschäft um?</h1>
-        <p className="lede">
-          Wir fragen nicht, wie wahrscheinlich es ist. Wir fragen, was dann von
-          Ihrem Geschäft bleibt.
-        </p>
         <p className="principle">
           Was aus Intelligenz besteht, wird billig: Wissen, Software, Bedienung.
+        </p>
+        <p className="principle principle-stays">
           Daten, Rechte, Anlagen und Kundenzugang werden es nicht automatisch.
         </p>
         <button className="go" onClick={onStart}>
