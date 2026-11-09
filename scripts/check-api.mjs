@@ -20,7 +20,10 @@ try {
     root,
   );
   const program = ts.createProgram(
-    [path.join(root, "api/business-analysis.ts")],
+    [
+      path.join(root, "api/business-analysis.ts"),
+      path.join(root, "api/stress-analysis.ts"),
+    ],
     {
       ...options,
       noEmit: false,
@@ -53,6 +56,17 @@ try {
   );
   assert.equal(response.status, 405);
   assert.equal(response.headers.get("Allow"), "POST");
+  const { default: stress } = await import(
+    pathToFileURL(path.join(output, "api/stress-analysis.js"))
+  );
+  assert.equal(
+    (
+      await stress.fetch(
+        new Request("https://example.test/api/stress-analysis"),
+      )
+    ).status,
+    405,
+  );
   console.log("Native Node API smoke check passed.");
 } finally {
   await rm(output, { recursive: true, force: true });

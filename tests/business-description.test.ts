@@ -48,7 +48,7 @@ describe("Business-Beschreibung", () => {
       }),
     );
     expect(landing).not.toContain("<textarea");
-    expect(landing).toContain("Assessment starten");
+    expect(landing).toContain("Stresstest starten");
     const check = createCheck("existing");
     check.view = "context";
     check.businessDescription = "Wir planen Schichten.";

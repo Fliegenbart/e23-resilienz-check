@@ -8,10 +8,18 @@ import {
   serializeChecks,
   parseChecks,
   mergeChecks,
-  exampleCheck,
-  QUICK_METHOD,
+  createStressCheck,
+  stressExampleCheck,
+  CURRENT_METHOD,
   checkTitle,
 } from "./model";
+import { isStressMethod, stressAnalysisMatches } from "./stress";
+import {
+  StressIntro,
+  StressContext,
+  StressResults,
+  StressMethodContent,
+} from "./StressViews";
 import { loadChecks, saveChecks } from "./storage";
 import { ExpertIntro } from "./ExpertIntro";
 import { Question } from "./Question";
@@ -63,7 +71,9 @@ function Method({
       >
         <Close />
       </button>
-      {isProviderMethod(version) ? (
+      {isStressMethod(version) ? (
+        <StressMethodContent />
+      ) : isProviderMethod(version) ? (
         <ProviderMethodContent version={version} />
       ) : (
         <>
@@ -220,7 +230,8 @@ export default function QuickApp() {
     .filter(
       (c) =>
         !c.isExample &&
-        isProviderMethod(c.methodologyVersion) &&
+        (isProviderMethod(c.methodologyVersion) ||
+          isStressMethod(c.methodologyVersion)) &&
         (c.view === "intro" ||
           c.view === "questions" ||
           c.view === "context" ||
@@ -312,13 +323,12 @@ export default function QuickApp() {
     window.scrollTo(0, 0);
   };
   const start = () => {
-    const c = createCheck("existing");
-    c.view = "intro";
+    const c = createStressCheck();
     setChecks((list) => [...list, c]);
     open(c.id);
   };
   const showExample = () => {
-    const c = exampleCheck();
+    const c = stressExampleCheck();
     setChecks((list) => [...list, c]);
     open(c.id);
   };
@@ -326,7 +336,8 @@ export default function QuickApp() {
     if (
       current &&
       page === "check" &&
-      !isProviderMethod(current.methodologyVersion)
+      !isProviderMethod(current.methodologyVersion) &&
+      !isStressMethod(current.methodologyVersion)
     ) {
       update((c) => {
         c.schemaVersion = "1.1";
@@ -441,7 +452,8 @@ export default function QuickApp() {
               </button>
               {page === "check" &&
                 current &&
-                !isProviderMethod(current.methodologyVersion) && (
+                !isProviderMethod(current.methodologyVersion) &&
+                !isStressMethod(current.methodologyVersion) && (
                   <button onClick={openScenarios}>
                     Frühere Zukunftsszenarien
                   </button>
@@ -479,7 +491,7 @@ export default function QuickApp() {
       <div id="quick-content" className="quick-content">
         {page === "check" &&
           current &&
-          current.methodologyVersion !== QUICK_METHOD && (
+          current.methodologyVersion !== CURRENT_METHOD && (
             <div className="method-version-note no-print">
               <span>
                 Früherer Check. Fragen und Auswertung bleiben unverändert.
@@ -487,8 +499,7 @@ export default function QuickApp() {
               <button
                 className="text-link"
                 onClick={() => {
-                  const c = createCheck(current.type);
-                  c.view = "intro";
+                  const c = createStressCheck();
                   if (current.businessDescription)
                     c.businessDescription = current.businessDescription;
                   if (current.businessMoat)
@@ -587,6 +598,64 @@ export default function QuickApp() {
                   onPrint={() => window.print()}
                 />
               </Suspense>
+            ) : isStressMethod(current.methodologyVersion) &&
+              current.view === "intro" ? (
+              <StressIntro
+                onStart={() => {
+                  update((c) => {
+                    c.view = "context";
+                  });
+                  window.scrollTo(0, 0);
+                }}
+              />
+            ) : isStressMethod(current.methodologyVersion) &&
+              current.view === "context" ? (
+              <StressContext
+                key={current.id}
+                check={current}
+                onDescriptionChange={(text) =>
+                  update((c) => {
+                    c.businessDescription = text;
+                  })
+                }
+                onMoatChange={(text) =>
+                  update((c) => {
+                    c.businessMoat = text;
+                  })
+                }
+                onContinue={() => {
+                  update((c) => {
+                    const open = c.methodologySnapshot.findIndex(
+                      (q) => c.answers[q.id] == null,
+                    );
+                    c.view = open < 0 ? "results" : "questions";
+                    if (open >= 0) c.step = open;
+                  });
+                  window.scrollTo(0, 0);
+                }}
+              />
+            ) : isStressMethod(current.methodologyVersion) &&
+              current.view === "results" ? (
+              <StressResults
+                key={current.id}
+                check={current}
+                onEditContext={() => {
+                  update((c) => {
+                    c.view = "context";
+                  });
+                  window.scrollTo(0, 0);
+                }}
+                onAnalysisChange={(analysis) =>
+                  update((c) => {
+                    if (stressAnalysisMatches(c, analysis))
+                      c.stressAnalysis = analysis;
+                  })
+                }
+                onEdit={onStep}
+                onMethod={() => setMethod(true)}
+                onPrint={() => window.print()}
+                onExport={exportCurrent}
+              />
             ) : current.view === "intro" &&
               isExpertMethod(current.methodologyVersion) ? (
               <ExpertScenarioIntro
@@ -652,8 +721,10 @@ export default function QuickApp() {
                   update((c) => {
                     if (
                       c.step === c.methodologySnapshot.length - 1 ||
-                      (isProviderMethod(c.methodologyVersion) &&
-                        calculateRisk(c).processed === 12)
+                      ((isProviderMethod(c.methodologyVersion) ||
+                        isStressMethod(c.methodologyVersion)) &&
+                        calculateRisk(c).processed ===
+                          c.methodologySnapshot.length)
                     )
                       c.view =
                         c.methodologyVersion === "quick-check-7.0"
@@ -728,7 +799,7 @@ export default function QuickApp() {
           version={
             page === "check" && current
               ? current.methodologyVersion
-              : QUICK_METHOD
+              : CURRENT_METHOD
           }
           onClose={() => setMethod(false)}
         />

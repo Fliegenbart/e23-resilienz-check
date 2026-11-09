@@ -8,6 +8,7 @@ import {
   PROVIDER_BOUNDARIES,
 } from "./provider-questions";
 import { EXPERT_PREMISE, EXPERT_BOUNDARIES } from "./expert-team";
+import { isStressMethod } from "./stress";
 import { Arrow } from "./ui";
 const CONFIRM_DELAY_MS = 450;
 export function Question({
@@ -26,7 +27,9 @@ export function Question({
     heading = useRef<HTMLHeadingElement>(null);
   const groups = groupsForCheck(check);
   const group = groups.find((g) => g.id === q.group)!;
-  const provider = isProviderMethod(check.methodologyVersion);
+  const stress = isStressMethod(check.methodologyVersion);
+  const provider = stress || isProviderMethod(check.methodologyVersion);
+  const total = check.methodologySnapshot.length;
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [confirming, setConfirming] = useState(false);
   useEffect(
@@ -51,14 +54,14 @@ export function Question({
     >
       <div
         className="progress-track"
-        aria-label={`Frage ${check.step + 1} von 12`}
+        aria-label={`Frage ${check.step + 1} von ${total}`}
       >
-        <span style={{ width: `${((check.step + 1) / 12) * 100}%` }} />
+        <span style={{ width: `${((check.step + 1) / total) * 100}%` }} />
       </div>
       <div className="question-meta">
         <span>
           {String(check.step + 1).padStart(2, "0")}{" "}
-          <span className="muted">/ 12</span>
+          <span className="muted">/ {total}</span>
         </span>
         {!provider && <span>{group.title}</span>}
       </div>
@@ -98,59 +101,84 @@ export function Question({
           ) : (
             <p className="question-help">{q.help}</p>
           ))}
-        <fieldset
-          className="scale"
-          aria-labelledby="scale-label"
-          disabled={confirming}
-        >
-          <legend id="scale-label" className="sr-only">
-            {provider
-              ? `Ihre Einschätzung: 1 – ${q.low}; 10 – ${q.high}`
-              : "Ihre Einschätzung: 1 bedeutet niedriges Risiko, 10 hohes Risiko"}
-          </legend>
-          <div className="scale-points">
-            {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
-              <label
-                className={`scale-point ${value === n ? "chosen" : ""}`}
-                key={n}
+        {stress && <p className="question-help">{q.help}</p>}
+        {q.options ? (
+          <fieldset
+            className="stress-options"
+            aria-label="Ihre Antwort"
+            disabled={confirming}
+          >
+            {q.options.map((option, i) => (
+              <button
+                key={option}
+                type="button"
+                className={`stress-option${value === i + 1 ? " chosen" : ""}`}
+                aria-pressed={value === i + 1}
+                onClick={(event) => {
+                  if (event.detail < 2) chooseAnswer(i + 1);
+                }}
               >
-                <input
-                  type="radio"
-                  name={q.id}
-                  value={n}
-                  checked={value === n}
-                  readOnly
-                  onClick={(event) => {
-                    if (event.detail < 2) chooseAnswer(n);
-                  }}
-                  onKeyDown={(event) => {
-                    if (event.key === " " || event.key === "Enter") {
-                      event.preventDefault();
-                      chooseAnswer(n);
-                    }
-                  }}
-                  aria-label={String(n)}
-                />
-                <span>{n}</span>
-              </label>
+                {option}
+              </button>
             ))}
-          </div>
-          <div className="scale-anchors">
-            <span>
-              <b>1</b> {q.low}
-            </span>
-            <span>
-              <b>10</b> {q.high}
-            </span>
-          </div>
-        </fieldset>
+          </fieldset>
+        ) : (
+          <fieldset
+            className="scale"
+            aria-labelledby="scale-label"
+            disabled={confirming}
+          >
+            <legend id="scale-label" className="sr-only">
+              {provider
+                ? `Ihre Einschätzung: 1 – ${q.low}; 10 – ${q.high}`
+                : "Ihre Einschätzung: 1 bedeutet niedriges Risiko, 10 hohes Risiko"}
+            </legend>
+            <div className="scale-points">
+              {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
+                <label
+                  className={`scale-point ${value === n ? "chosen" : ""}`}
+                  key={n}
+                >
+                  <input
+                    type="radio"
+                    name={q.id}
+                    value={n}
+                    checked={value === n}
+                    readOnly
+                    onClick={(event) => {
+                      if (event.detail < 2) chooseAnswer(n);
+                    }}
+                    onKeyDown={(event) => {
+                      if (event.key === " " || event.key === "Enter") {
+                        event.preventDefault();
+                        chooseAnswer(n);
+                      }
+                    }}
+                    aria-label={String(n)}
+                  />
+                  <span>{n}</span>
+                </label>
+              ))}
+            </div>
+            <div className="scale-anchors">
+              <span>
+                <b>1</b> {q.low}
+              </span>
+              <span>
+                <b>10</b> {q.high}
+              </span>
+            </div>
+          </fieldset>
+        )}
         <p
           className={`selection-feedback${provider ? " sr-only" : ""}`}
           aria-live="polite"
         >
           {typeof value === "number" ? (
             <>
-              <strong>{value} von 10</strong>
+              <strong>
+                {q.options ? q.options[value - 1] : `${value} von 10`}
+              </strong>
               {!provider && (
                 <span>
                   {" "}
@@ -204,7 +232,7 @@ export function Question({
           ))}
         </nav>
       )}
-      {provider && (
+      {provider && !stress && (
         <details className="provider-question-details">
           <summary>Details</summary>
           <p>{q.help}</p>

@@ -1,0 +1,427 @@
+/* Method 8.0: reverse stress test. Reuses the provider page tokens. */
+.stress-options {
+  display: grid;
+  gap: 14px;
+  max-width: 720px;
+  margin: 36px 0 0;
+  padding: 0;
+  border: 0;
+}
+.stress-option {
+  padding: 20px 22px;
+  border: 1.5px solid #999aa0;
+  background: #fff;
+  font-size: 20px;
+  font-weight: 650;
+  line-height: 1.35;
+  text-align: left;
+  transition:
+    background 0.18s,
+    border-color 0.18s;
+}
+.stress-option:hover {
+  background: #fffad0;
+}
+.stress-option.chosen {
+  background: var(--yellow);
+  border-color: var(--ink);
+}
+.stress-option:focus-visible {
+  outline: 3px solid #54546a;
+  outline-offset: 2px;
+}
+.stress-options:disabled .stress-option:not(.chosen) {
+  background: #fff;
+  cursor: default;
+}
+.stress-scenarios {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+  margin: 36px 0;
+}
+.stress-scenario {
+  border-top: 1px solid #d5d5da;
+  padding-top: 18px;
+}
+.stress-scenario.tone-breaks {
+  border-top: 4px solid var(--ink);
+  padding-top: 15px;
+}
+.stress-scenario-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+  color: #55565e;
+  font-size: 13px;
+}
+.stress-scenario h2,
+.stress-scenario h3 {
+  margin: 0 0 10px;
+  font-size: 19px;
+  line-height: 1.35;
+}
+.stress-scenario p {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.5;
+}
+.stress-scenario .stress-assumption {
+  margin-top: 10px;
+  color: #65666c;
+  font-size: 14px;
+}
+.stress-status {
+  display: inline-block;
+  margin-bottom: 12px;
+  padding: 5px 9px;
+  background: #ededf0;
+  font-size: 13px;
+  font-weight: 650;
+}
+.stress-status.status-breaks {
+  background: var(--ink);
+  color: #fff;
+}
+.stress-status.status-pressure {
+  background: var(--yellow);
+}
+.stress-status.status-holds {
+  background: #dce9e3;
+  color: #204b3c;
+}
+.stress-status.status-open {
+  border: 1px dashed #8b8b91;
+  background: transparent;
+}
+.stress-results h1 {
+  max-width: 900px;
+  margin: 18px 0;
+  font-size: clamp(30px, 4vw, 50px);
+  line-height: 1.12;
+}
+.stress-basis,
+.stress-note {
+  max-width: 720px;
+  color: #55565e;
+  font-size: 15px;
+}
+.stress-block {
+  max-width: 860px;
+  margin: 34px 0;
+}
+.stress-block h2 {
+  margin: 0 0 10px;
+  font-size: 19px;
+}
+.stress-block p {
+  margin: 0 0 10px;
+  font-size: 18px;
+  line-height: 1.5;
+}
+.stress-obituary {
+  padding: 22px 24px;
+  border-left: 4px solid var(--ink);
+  background: var(--soft);
+}
+.stress-obituary p {
+  font-size: 20px;
+}
+.stress-split {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+  max-width: 860px;
+  margin: 34px 0;
+}
+.stress-split section {
+  border-top: 1px solid #d5d5da;
+  padding-top: 16px;
+}
+.stress-split h2 {
+  margin: 0 0 10px;
+  font-size: 17px;
+}
+.stress-split ul {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 17px;
+  line-height: 1.5;
+}
+.stress-split .stress-empty {
+  color: #65666c;
+  font-size: 16px;
+}
+.stress-brief {
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  font-size: 17px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+.stress-doubt {
+  padding: 14px 18px;
+  border: 1px dashed #8b8b91;
+}
+.stress-cta {
+  max-width: 860px;
+  margin: 44px 0 20px;
+  padding: 24px;
+  background: var(--yellow);
+}
+.stress-cta h2 {
+  margin: 0 0 8px;
+  font-size: 22px;
+}
+.stress-cta p {
+  margin: 0;
+  font-size: 18px;
+}
+@media (max-width: 700px) {
+  .stress-scenarios,
+  .stress-split {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  .stress-option {
+    padding: 16px 18px;
+    font-size: 18px;
+  }
+}
+@media print {
+  .stress-scenarios {
+    display: block;
+  }
+  .stress-scenario {
+    margin-bottom: 14px;
+    break-inside: avoid;
+  }
+  .stress-cta {
+    background: none;
+    border: 1px solid #000;
+  }
+}
+/* Score, attack block, advice and closing overlay. */
+.stress-score {
+  max-width: 560px;
+  margin: 18px 0 6px;
+}
+.stress-score-label {
+  margin: 0;
+  color: #55565e;
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.stress-score-value {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 2px 0 10px;
+}
+.stress-score-value strong {
+  font-size: clamp(56px, 8vw, 84px);
+  line-height: 1;
+}
+.stress-score-value > span:not(.stress-score-band) {
+  color: #65666c;
+  font-size: 22px;
+}
+.stress-score-band {
+  margin-left: 12px;
+  padding: 6px 12px;
+  font-size: 15px;
+  font-weight: 650;
+}
+.band-low .stress-score-band {
+  background: #c8372d;
+  color: #fff;
+}
+.band-medium .stress-score-band {
+  background: var(--yellow);
+}
+.band-high .stress-score-band {
+  background: #2e7d5b;
+  color: #fff;
+}
+.band-open .stress-score-band {
+  border: 1px dashed #8b8b91;
+}
+.stress-score-track {
+  position: relative;
+  display: grid;
+  grid-template-columns: 35fr 30fr 35fr;
+  gap: 3px;
+  height: 12px;
+}
+.stress-score-track .segment-low {
+  background: #c8372d;
+}
+.stress-score-track .segment-medium {
+  background: var(--yellow);
+}
+.stress-score-track .segment-high {
+  background: #2e7d5b;
+}
+.stress-score-track i {
+  position: absolute;
+  top: -6px;
+  width: 4px;
+  height: 24px;
+  margin-left: -2px;
+  background: var(--ink);
+  box-shadow: 0 0 0 2px #fff;
+}
+.stress-score-caption {
+  margin: 10px 0 0;
+  color: #65666c;
+  font-size: 13px;
+}
+.stress-attack {
+  max-width: 860px;
+  margin: 30px 0 38px;
+  padding: 30px 32px;
+  background: var(--ink);
+  color: #fff;
+}
+.stress-attack-kicker {
+  margin: 0 0 8px;
+  color: var(--yellow);
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.stress-attack h2 {
+  margin: 0 0 12px;
+  font-size: clamp(24px, 3vw, 34px);
+  line-height: 1.15;
+}
+.stress-attack p {
+  max-width: 640px;
+  margin: 0 0 18px;
+  font-size: 18px;
+  line-height: 1.5;
+}
+.stress-attack-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 14px;
+}
+.stress-attack-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 30px;
+  background: var(--yellow);
+  color: var(--ink);
+  font-size: 21px;
+  font-weight: 700;
+}
+.stress-attack-button:hover:not(:disabled) {
+  background: #fff;
+}
+.stress-attack-button:disabled {
+  opacity: 0.75;
+  cursor: progress;
+}
+.stress-attack .text-link {
+  color: #fff;
+}
+.stress-attack p.stress-attack-small {
+  margin: 0;
+  color: #c9cad0;
+  font-size: 13px;
+}
+.stress-obituary {
+  max-width: 860px;
+  margin-top: 26px;
+  border-left-width: 6px;
+}
+.stress-obituary h2 {
+  font-size: 24px;
+}
+.stress-advice ol,
+.stress-advice ul {
+  margin: 0 0 12px;
+  padding-left: 22px;
+  font-size: 18px;
+  line-height: 1.5;
+}
+.stress-advice li {
+  margin-bottom: 10px;
+}
+.stress-cta-sentinel {
+  height: 1px;
+}
+.stress-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 22px;
+  background: rgba(23, 23, 25, 0.6);
+  animation: stress-fade 0.25s ease-out;
+}
+.stress-overlay-card {
+  max-width: 620px;
+  padding: 36px;
+  background: var(--yellow);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  animation: stress-pop 0.3s ease-out;
+}
+.stress-overlay-card h2 {
+  margin: 0 0 12px;
+  font-size: 30px;
+}
+.stress-overlay-card p {
+  margin: 0 0 24px;
+  font-size: 20px;
+  line-height: 1.45;
+}
+.stress-overlay-card .button.primary {
+  background: var(--ink);
+  color: #fff;
+}
+@keyframes stress-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes stress-pop {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.97);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stress-overlay,
+  .stress-overlay-card {
+    animation: none;
+  }
+}
+@media (max-width: 700px) {
+  .stress-attack {
+    padding: 24px 22px;
+  }
+  .stress-attack-button {
+    width: 100%;
+    justify-content: space-between;
+    font-size: 19px;
+  }
+}
+@media print {
+  .stress-score-track span,
+  .stress-score-band {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}

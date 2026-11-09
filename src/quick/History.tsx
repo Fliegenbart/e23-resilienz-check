@@ -3,6 +3,7 @@ import { calculateRisk, riskLabel, checkTitle } from "./model";
 import { Arrow } from "./ui";
 import { isProviderMethod, isProviderRiskMethod } from "./provider-questions";
 import { evaluateProvider } from "./provider-analysis";
+import { isStressMethod, evaluateStress } from "./stress";
 import {
   currentBusinessAnalysis,
   moatDisputesScore,
@@ -46,6 +47,9 @@ export function History({
               const risk = isProviderRiskMethod(c.methodologyVersion)
                 ? evaluateProvider(c).risk
                 : null;
+              const stress = isStressMethod(c.methodologyVersion)
+                ? evaluateStress(c)
+                : null;
               const disputed = moatDisputesScore(
                 currentBusinessAnalysis(c),
                 risk?.score ?? null,
@@ -59,39 +63,49 @@ export function History({
                   <span className="history-row-title">
                     <strong>{checkTitle(c)}</strong>
                     <small>
-                      {isProviderMethod(c.methodologyVersion)
-                        ? "Resilience-Assessment · "
-                        : c.methodologyVersion === "quick-check-1.0"
-                          ? "Frühere Methode · "
-                          : "Expertenteam · "}
+                      {stress
+                        ? "Stresstest · "
+                        : isProviderMethod(c.methodologyVersion)
+                          ? "Resilience-Assessment · "
+                          : c.methodologyVersion === "quick-check-1.0"
+                            ? "Frühere Methode · "
+                            : "Expertenteam · "}
                       {c.view === "scenarios"
                         ? `${c.scenarios?.runs.length ?? 0} Szenariostände · Zukunftssimulation`
-                        : `${r.answered} von 12 beantwortet · ${c.view === "results" ? "Ergebnis" : "Entwurf"}`}
+                        : `${r.answered} von ${c.methodologySnapshot.length} beantwortet · ${c.view === "results" ? "Ergebnis" : "Entwurf"}`}
                       {c.scenarios && c.view !== "scenarios"
                         ? ` · ${c.scenarios.runs.length} Szenariostände`
                         : ""}
                     </small>
                   </span>
                   <span className="history-score">
-                    {risk && c.view === "results"
-                      ? (risk.score ?? `${risk.min}–${risk.max}`)
-                      : isProviderMethod(c.methodologyVersion)
-                        ? c.view === "results"
-                          ? "Ergebnis"
-                          : `${r.processed}/12`
-                        : c.view === "scenarios"
-                          ? (c.scenarios?.runs.length ?? 0)
-                          : r.score === null
-                            ? "—"
-                            : r.score}
-                    <small>
-                      {risk && c.view === "results"
-                        ? `KI-Risiko · ${disputed ? "KI widerspricht" : risk.label}`
+                    {stress
+                      ? c.view === "results"
+                        ? (stress.score ?? "–")
+                        : `${r.processed}/${c.methodologySnapshot.length}`
+                      : risk && c.view === "results"
+                        ? (risk.score ?? `${risk.min}–${risk.max}`)
                         : isProviderMethod(c.methodologyVersion)
-                          ? "Übernahme & Schutz"
+                          ? c.view === "results"
+                            ? "Ergebnis"
+                            : `${r.processed}/12`
                           : c.view === "scenarios"
-                            ? "Szenariostände"
-                            : riskLabel(r.score)}
+                            ? (c.scenarios?.runs.length ?? 0)
+                            : r.score === null
+                              ? "—"
+                              : r.score}
+                    <small>
+                      {stress
+                        ? c.view === "results"
+                          ? `Resilienz · ${stress.short}`
+                          : "Stresstest"
+                        : risk && c.view === "results"
+                          ? `KI-Risiko · ${disputed ? "KI widerspricht" : risk.label}`
+                          : isProviderMethod(c.methodologyVersion)
+                            ? "Übernahme & Schutz"
+                            : c.view === "scenarios"
+                              ? "Szenariostände"
+                              : riskLabel(r.score)}
                     </small>
                   </span>
                   <Arrow />

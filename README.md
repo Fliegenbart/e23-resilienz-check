@@ -6,9 +6,37 @@ Das Resilience-Assessment beantwortet diese Frage mit zwölf konkreten Einschät
 
 Repository: https://github.com/Fliegenbart/e23-resilienz-check
 
-Produktionsadresse: https://e23-resilienz-check.vercel.app. Anwendungsversion **0.12.0** prüft den Burggraben gegen günstige Expertenteams für alle. Neue Methode: `quick-check-7.0`.
+Produktionsadresse: https://e23-resilienz-check.vercel.app. Anwendungsversion **0.13.0** (noch nicht veröffentlicht) führt den umgekehrten Stresstest ein. Neue Methode: `quick-check-8.0`. Veröffentlicht ist 0.12.0 mit `quick-check-7.0`.
 
-## Nutzung
+## Stresstest (Methode 8.0)
+
+Für Workshops und Kundengespräche. Gefragt wird nicht, wie wahrscheinlich ein Szenario ist, sondern welches das Geschäft umbringt und was bleibt.
+
+Ablauf: drei Szenarien ansehen, zwei Sätze zu Geschäft und Schutz, zehn Fragen mit je drei Antworten oder „Weiß ich nicht“, Ergebnis. Antwort 1 ist immer die verwundbarste.
+
+| Szenario                                       | Annahme                                                                                                      |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| A · Heutige KI für alle (6–12 Monate)          | Spitzenmodelle werden nicht klüger, offene Modelle ziehen gleich, beliebig viele Agenten auf heutigem Niveau |
+| B · Spitzenniveau in jedem Fach (12–18 Monate) | KI verbessert sich selbst und arbeitet überall auf Nobelpreis-Niveau, für alle und günstig                   |
+| C · Dasselbe in sechs Monaten                  | Fähigkeit wie B, nur weniger Zeit zum Umbauen; das Ergebnis entspricht deshalb immer B                       |
+
+Die zehn Fragen (`src/quick/stress.ts`): S1 Ergebnis digital oder vor Ort, S2 heutige KI, S3 Wert der Bedienung, S4 eigene laufende Daten, S5 Zulassung/Recht/Haftung, S6 persönliche Beziehung, S7 Netzwerk, S8 Kundenzugang, S9 Wechseltempo, S10 Kaufbeleg.
+
+**Szenario-Urteil** (kippt, unter Druck, trägt, offen): Ein rein digitales Ergebnis (S1) ohne Beitrag außerhalb der Intelligenz (höchster Wert aus S4–S7) kippt in B und C; schafft heutige KI den Auftrag schon (S2), kippt es bereits in A. Was nur das Unternehmen hat, trägt; ohne mehrfachen Kaufbeleg (S10) steht dabei „laut Ihren Angaben“. Mehr Fähigkeit fällt nie milder aus als weniger.
+
+**Resilienz-Score** (0 akut gefährdet, 100 robust; unter 35 rot, bis 64 gelb, ab 65 grün): Jede Antwort zählt 0, halb oder voll mit ihrem Gewicht (S1 und S4 je 15, S2, S3, S5–S8 je 10, S9 und S10 je 5). Die Summe wird in den Bereich gelegt, der zum Szenario-Urteil passt: kippt in A 0–20, kippt in B 15–35, Druck in A 25–55, Druck in B 40–65, trägt laut Angaben 60–80, trägt 65–100; gerundet auf Fünferschritte. Das Urteil führt, die Zahl macht es greifbar. Offengelegte Einschätzung, keine Wahrscheinlichkeit.
+
+**Empfehlungen:** Ohne KI die vier allgemeinen Ratschläge zu den schwächsten Antworten (schwerstes Gewicht zuerst). Mit KI zusätzlich drei konkrete Empfehlungen für das beschriebene Geschäft.
+
+**Nachruf:** Der dunkle Block „Nachruf schreiben lassen“ sendet Beschreibung, Schutz und die zehn Antworten an OpenAI über Vercel (`api/stress-analysis.ts`, `server/stress-analysis.ts`, Ausgabe `stress-analysis-1.0`). Die KI liefert je Szenario ein eigenes Urteil, einen Nachruf in fünf bis sieben Sätzen, die Trennung „aus Intelligenz gebaut / nicht aus Intelligenz gebaut“, die Prüfung des genannten Schutzes, den möglichen bezahlten Rest, Empfehlungen und einen fertigen Auftrag an einen KI-Agenten als Test. Es gilt immer das strengere Urteil aus Regeln und KI, auch für den Score. Unverständliche Beschreibungen machen Ergebnis und Score offen. Keine Webrecherche: Die Szenarien sind gesetzte Annahmen.
+
+Am Ende der Ergebnisseite erscheint einmal das Overlay „Und jetzt?“. Die Beschreibung lässt sich über „Beschreibung ändern“ anpassen.
+
+Für Workshops wiederholt der Browser überlastete Anfragen (429/502/503) dreimal mit wachsender Pause; der Server bricht nach 45 Sekunden ab und lässt zwei Wiederholungen beim Modell zu. Die Ratenbegrenzung von fünf Anfragen pro Minute und IP gilt weiter und trifft einen Raum mit gemeinsamem WLAN; vor einem Workshop anheben.
+
+Neue Checks starten mit 8.0. Checks der Methoden 1.0–7.0 bleiben lesbar und unverändert; die folgenden Abschnitte beschreiben Methode 7.0.
+
+## Nutzung der Methode 7.0
 
 1. Direkt „Assessment starten“ anklicken. Drei Angriffe und eine mögliche Zuliefererrolle öffnen den Blick: Der Kunde macht es selbst, ein Wettbewerber legt zu, ein neuer Anbieter aus einer anderen Branche löst das Problem anders.
 2. Zwölf kurze Fragen beantworten: eine Frage pro Ansicht, Werte von 1 bis 10 oder „Weiß ich nicht“. Nach kurzer gelber Bestätigung folgt automatisch die nächste Frage. Hilfen und Beispiele stehen unter „Details“.

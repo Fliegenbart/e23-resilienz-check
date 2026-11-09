@@ -34,7 +34,18 @@ import {
   businessAnalysisSchema,
   type BusinessAnalysis,
 } from "./business-analysis.js";
+import {
+  STRESS_METHOD,
+  STRESS_QUESTIONS,
+  STRESS_IDS,
+  isStressMethod,
+  stressAnswersSchema,
+  stressAnalysisSchema,
+  type StressAnalysis,
+} from "./stress.js";
+// QUICK_METHOD stays the frozen 7.0 catalogue; new checks use CURRENT_METHOD.
 export const QUICK_METHOD = PROVIDER_METHOD;
+export const CURRENT_METHOD = STRESS_METHOD;
 export const QUICK_SCHEMA = "1.1";
 export type GroupId = "value" | "competition" | "advantage" | "control";
 export type QuickAnswer = number | "unknown" | null;
@@ -46,6 +57,8 @@ export interface QuickQuestion {
   high: string;
   help: string;
   example?: string;
+  // Three fixed answers instead of a 1–10 scale (method 8.0).
+  options?: string[];
   action: string;
   actionDetail: string;
 }
@@ -65,6 +78,7 @@ export const QUICK_METHODS: Record<string, QuickQuestion[]> = {
   "quick-check-5.0": providerV5 as QuickQuestion[],
   "quick-check-6.0": providerV6 as QuickQuestion[],
   [QUICK_METHOD]: QUICK_QUESTIONS,
+  [STRESS_METHOD]: STRESS_QUESTIONS,
 };
 export interface QuickCheck {
   id: string;
@@ -82,6 +96,7 @@ export interface QuickCheck {
   businessDescription?: string;
   businessMoat?: string;
   businessAnalysis?: BusinessAnalysis;
+  stressAnalysis?: StressAnalysis;
   isExample: boolean;
   originId: string | null;
 }
@@ -102,16 +117,31 @@ export function createCheck(type: QuickCheck["type"]): QuickCheck {
     originId: null,
   };
 }
+export function createStressCheck(): QuickCheck {
+  const c = createCheck("existing");
+  c.methodologyVersion = STRESS_METHOD;
+  c.methodologySnapshot = structuredClone(STRESS_QUESTIONS);
+  c.answers = Object.fromEntries(STRESS_IDS.map((id) => [id, null]));
+  c.view = "intro";
+  return c;
+}
 export function answerCheck(c: QuickCheck, id: string, value: QuickAnswer) {
+  const question = c.methodologySnapshot.find((q) => q.id === id);
   if (
-    !c.methodologySnapshot.some((q) => q.id === id) ||
+    !question ||
     !(
       value === null ||
       value === "unknown" ||
-      (Number.isInteger(value) && Number(value) >= 1 && Number(value) <= 10)
+      (Number.isInteger(value) &&
+        Number(value) >= 1 &&
+        Number(value) <= (question.options?.length ?? 10))
     )
   )
-    throw Error("Ungültige Antwort. Bitte einen Wert von 1 bis 10 wählen.");
+    throw Error(
+      question?.options
+        ? "Ungültige Antwort. Bitte eine der Antworten wählen."
+        : "Ungültige Antwort. Bitte einen Wert von 1 bis 10 wählen.",
+    );
   c.answers[id] = value;
   c.updatedAt = new Date().toISOString();
 }
@@ -183,6 +213,7 @@ const questionSchema = z
     high: z.string(),
     help: z.string(),
     example: z.string().optional(),
+    options: z.array(z.string()).length(3).optional(),
     action: z.string(),
     actionDetail: z.string(),
   })
@@ -201,19 +232,23 @@ const checkSchema = z
       "quick-check-5.0",
       "quick-check-6.0",
       QUICK_METHOD,
+      STRESS_METHOD,
     ]),
-    methodologySnapshot: z.array(questionSchema).length(12),
+    methodologySnapshot: z.array(questionSchema).min(1).max(12),
     createdAt: z.iso.datetime({ offset: true }),
     updatedAt: z.iso.datetime({ offset: true }),
     type: z.enum(["existing", "idea"]),
-    answers: z.record(
-      z.enum(questionIds),
-      z.union([
-        z.number().int().min(1).max(10),
-        z.literal("unknown"),
-        z.null(),
-      ]),
-    ),
+    answers: z.union([
+      z.record(
+        z.enum(questionIds),
+        z.union([
+          z.number().int().min(1).max(10),
+          z.literal("unknown"),
+          z.null(),
+        ]),
+      ),
+      stressAnswersSchema,
+    ]),
     step: z.number().int().min(0).max(11),
     view: z.enum(["intro", "questions", "context", "results", "scenarios"]),
     scenarios: scenarioWorkspaceSchema.optional(),
@@ -224,18 +259,42 @@ const checkSchema = z
       .optional(),
     businessMoat: z.string().max(BUSINESS_MOAT_MAX_LENGTH).optional(),
     businessAnalysis: businessAnalysisSchema.optional(),
+    stressAnalysis: stressAnalysisSchema.optional(),
     isExample: z.boolean(),
     originId: z.string().nullable(),
   })
   .strict()
   .refine(
-    (c) => c.view !== "context" || isProviderV7(c.methodologyVersion),
+    (c) =>
+      c.methodologySnapshot.length ===
+        QUICK_METHODS[c.methodologyVersion].length &&
+      c.step < c.methodologySnapshot.length &&
+      Object.keys(c.answers).length === c.methodologySnapshot.length &&
+      c.methodologySnapshot.every((q) => q.id in c.answers),
+    "Fragen, Antworten und Schritt müssen zur Methodenversion passen.",
+  )
+  .refine(
+    (c) =>
+      isStressMethod(c.methodologyVersion)
+        ? c.schemaVersion === "1.1" &&
+          c.scenarios === undefined &&
+          c.providerScenario === undefined &&
+          c.businessAnalysis === undefined
+        : c.stressAnalysis === undefined,
+    "Der Stresstest hat eine eigene Auswertung und keine früheren Szenarien.",
+  )
+  .refine(
+    (c) =>
+      c.view !== "context" ||
+      isProviderV7(c.methodologyVersion) ||
+      isStressMethod(c.methodologyVersion),
     "Die abschließenden Unternehmensangaben gehören zum Check ab 7.0.",
   )
   .refine(
     (c) =>
       c.businessMoat === undefined ||
-      isProviderRiskMethod(c.methodologyVersion),
+      isProviderRiskMethod(c.methodologyVersion) ||
+      isStressMethod(c.methodologyVersion),
     "Der zusätzliche Vorteil gehört zum KI-Risiko-Check ab 5.0.",
   )
   .refine(
@@ -276,7 +335,7 @@ export function serializeChecks(checks: QuickCheck[]) {
     {
       format: "e23-quick-check",
       schemaVersion: QUICK_SCHEMA,
-      appVersion: "0.12.0",
+      appVersion: "0.13.0",
       exportedAt: new Date().toISOString(),
       checks,
     },
@@ -335,7 +394,7 @@ export function mergeChecks(
   return result;
 }
 export function checkTitle(c: QuickCheck) {
-  return `${c.isExample ? "Beispiel" : isProviderMethod(c.methodologyVersion) ? "Assessment" : c.type === "idea" ? "Neue Idee" : "Bestehendes Angebot"}${c.originId ? " (Kopie)" : ""} · ${new Intl.DateTimeFormat("de-DE", { dateStyle: "medium", timeStyle: "short", timeZone: "Europe/Berlin" }).format(new Date(c.createdAt))}`;
+  return `${c.isExample ? "Beispiel" : isStressMethod(c.methodologyVersion) ? "Stresstest" : isProviderMethod(c.methodologyVersion) ? "Assessment" : c.type === "idea" ? "Neue Idee" : "Bestehendes Angebot"}${c.originId ? " (Kopie)" : ""} · ${new Intl.DateTimeFormat("de-DE", { dateStyle: "medium", timeStyle: "short", timeZone: "Europe/Berlin" }).format(new Date(c.createdAt))}`;
 }
 export function exampleCheck() {
   const c = createCheck("existing");
@@ -346,6 +405,19 @@ export function exampleCheck() {
   c.isExample = true;
   c.view = "results";
   c.step = 11;
+  return c;
+}
+export function stressExampleCheck() {
+  const c = createStressCheck();
+  c.businessDescription =
+    "Unsere App erstellt aus Audiodateien Transkripte und SRT-Untertitel für einzelne Content-Creator. Kunden zahlen für die automatische Umwandlung und den Download.";
+  c.businessMoat = "Einfache Bedienung und viele Exportformate.";
+  [1, 1, 2, 1, 1, 1, 1, 1, 1, 2].forEach((value, i) =>
+    answerCheck(c, STRESS_IDS[i], value),
+  );
+  c.isExample = true;
+  c.view = "results";
+  c.step = STRESS_IDS.length - 1;
   return c;
 }
 export function downloadText(

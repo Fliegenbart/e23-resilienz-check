@@ -24,17 +24,20 @@ export function ProviderLanding({
             <span className="highlight-word">disruptiert werden?</span>
           </h1>
           <p className="provider-lead">
-            Was übernimmt KI? Wofür zahlen Kunden weiter?
+            Drei Szenarien. Welches bringt Ihr Geschäft um, und was bleibt?
           </p>
           <div className="landing-cta">
             <button className="button primary" onClick={onStart}>
-              Assessment starten <Arrow />
+              Stresstest starten <Arrow />
             </button>
-            <span className="provider-time">12 Fragen</span>
+            <span className="provider-time">
+              2 Sätze · 10 Fragen · 4 Minuten
+            </span>
           </div>
           {resume && (
             <button className="resume-link" onClick={onResume}>
-              Fortsetzen · {calculateRisk(resume).processed}/12 <Arrow />
+              Fortsetzen · {calculateRisk(resume).processed}/
+              {resume.methodologySnapshot.length} <Arrow />
             </button>
           )}
         </div>
@@ -45,7 +48,7 @@ export function ProviderLanding({
           Beispiel ansehen
         </button>
         <button className="text-link" onClick={onMethod}>
-          Annahmen und Quellen
+          Annahmen und Regeln
         </button>
       </footer>
     </main>

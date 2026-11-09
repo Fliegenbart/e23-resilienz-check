@@ -2,6 +2,8 @@ import type { QuickCheck } from "./model";
 import { ProviderReport } from "./ProviderReport";
 import { isProviderMethod } from "./provider-questions";
 import { ScenarioReport } from "./ScenarioReport";
+import { isStressMethod } from "./stress";
+import { StressReport } from "./StressViews";
 import { calculateRisk, riskLabel, checkTitle, QUICK_GROUPS } from "./model";
 import {
   EXPERT_PREMISE,
@@ -9,6 +11,8 @@ import {
   EXPERT_FRAMING,
 } from "./expert-team";
 export function QuickReport({ check }: { check: QuickCheck }) {
+  if (isStressMethod(check.methodologyVersion))
+    return <StressReport check={check} />;
   if (isProviderMethod(check.methodologyVersion))
     return <ProviderReport check={check} />;
   const r = calculateRisk(check);
