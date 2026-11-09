@@ -1,6 +1,6 @@
 import type { GroupId, QuickQuestion } from "./model.js";
 
-export const PROVIDER_METHOD = "quick-check-6.0";
+export const PROVIDER_METHOD = "quick-check-7.0";
 export function isProviderMethod(version: string) {
   return [
     "quick-check-3.0",
@@ -8,6 +8,7 @@ export function isProviderMethod(version: string) {
     "quick-check-4.0",
     "quick-check-5.0",
     "quick-check-6.0",
+    "quick-check-7.0",
   ].includes(version);
 }
 export const PROVIDER_PREMISE =
@@ -31,8 +32,14 @@ export function isProviderV5(version: string) {
 export function isProviderV6(version: string) {
   return version === "quick-check-6.0";
 }
+export function isProviderV7(version: string) {
+  return version === "quick-check-7.0";
+}
+export function isExpertMethod(version: string) {
+  return isProviderV6(version) || isProviderV7(version);
+}
 export function isProviderRiskMethod(version: string) {
-  return isProviderV5(version) || isProviderV6(version);
+  return isProviderV5(version) || isExpertMethod(version);
 }
 export function supportsBusinessAnalysis(version: string) {
   return isProviderV4(version) || isProviderRiskMethod(version);
@@ -40,7 +47,7 @@ export function supportsBusinessAnalysis(version: string) {
 export const EXPERT_PREMISE =
   "Stellen Sie sich ein Team aus Spitzenexperten vor: rund um die Uhr, parallel und viel günstiger. Ihre Kunden, bekannte Wettbewerber und neue Anbieter aus anderen Branchen haben dasselbe Team wie Sie. Es darf das Kundenproblem ganz anders lösen. Welcher Burggraben bleibt?";
 export function providerPremise(version: string) {
-  if (isProviderV6(version)) return EXPERT_PREMISE;
+  if (isExpertMethod(version)) return EXPERT_PREMISE;
   if (isProviderV5(version))
     return "Sehr leistungsfähige KI kann Aufgaben erledigen, Programme bedienen und andere Anbieter beauftragen. Was braucht der Kunde dann noch von Ihnen – und wofür zahlt er extra?";
   return isProviderV4(version)
@@ -78,23 +85,23 @@ export const PROVIDER_QUESTIONS: QuickQuestion[] = [
   {
     id: "Q3",
     group: "value",
-    text: "Nutzen Ihre Zielkunden bereits KI-Assistenten?",
-    low: "Kaum",
-    high: "Fast alle",
-    help: "Denken Sie an ChatGPT, Claude, Gemini oder Assistenten in der Unternehmenssoftware.",
+    text: "Kann ein Agent Ihren Dienst direkt nutzen und bezahlen?",
+    low: "Noch nicht",
+    high: "Bereits im Einsatz",
+    help: "Von der Freigabe bis zum Ergebnis und zur Abrechnung. Eine Schnittstelle allein genügt nicht.",
     example:
-      "Der Assistent ist bereits dort verfügbar, wo der Kundenauftrag entsteht.",
-    action: "Den direkten Auftrag testen",
+      "Ein Kundenagent bestellt eine Prüfung; Ihr Dienst liefert das Ergebnis und wird dafür bezahlt.",
+    action: "Einen bezahlten Agentenauftrag testen",
     actionDetail:
-      "Formulieren Sie den Kundenauftrag in einem Satz. Was fehlt bis zum fertigen Ergebnis?",
+      "Kann ein Kundenagent Ihren Dienst finden, autorisieren, nutzen und bezahlen? Testen Sie einen vollständigen Auftrag.",
   },
   {
     id: "Q4",
     group: "competition",
-    text: "Wie viel Ihrer Leistung besteht aus Software-Bedienung?",
+    text: "Wie viel Ihres Werts steckt allein in der Bedienung?",
     low: "Kaum etwas",
     high: "Fast alles",
-    help: "Zählen Sie Klicks, Einstellungen und das Übertragen von Daten zwischen Programmen.",
+    help: "Zählen Sie Klicks und Einstellungen. Bezahlte Daten, Berechnung oder Ausführung können dahinter bleiben.",
     example:
       "Ein Agent bedient das Schnittprogramm. Dessen Verarbeitung kann trotzdem nötig bleiben.",
     action: "Bedienung und Technik trennen",
@@ -104,7 +111,7 @@ export const PROVIDER_QUESTIONS: QuickQuestion[] = [
   {
     id: "Q5",
     group: "competition",
-    text: "Wie leicht können Kunden auf andere Lösungen ausweichen?",
+    text: "Wie leicht kann ein Agent einen anderen Anbieter wählen?",
     low: "Kaum möglich",
     high: "Leicht austauschbar",
     help: "Zählen Sie andere Anbieter, Selbstmachen und Lösungen aus anderen Branchen.",
@@ -182,20 +189,20 @@ export const PROVIDER_QUESTIONS: QuickQuestion[] = [
   {
     id: "Q11",
     group: "control",
-    text: "Wie häufig brauchen Ihre Zielkunden diese Lösung?",
-    low: "Selten",
-    high: "Laufend",
-    help: "Wiederkehrender Bedarf kann eine skalierbare Lösung attraktiv machen. Marktgröße und Kosten bleiben separat zu prüfen.",
+    text: "Wer kontrolliert den Zugang zu Ihren Kunden?",
+    low: "Wir selbst",
+    high: "Eine Plattform",
+    help: "Wer kann Sie aus der Auswahl nehmen, Preise diktieren oder den Kundenkontakt übernehmen?",
     example:
-      "Täglich viele Dokumente prüfen oder eine seltene Sonderaufgabe erledigen.",
-    action: "Den wirtschaftlichen Anreiz prüfen",
+      "Eigene Kundenverträge oder mehrere Absatzwege geben mehr Spielraum als ein einziger Vermittler.",
+    action: "Abhängigkeit vom Vermittler prüfen",
     actionDetail:
-      "Wer spart Zeit oder Geld? Wie viele Kunden sind erreichbar, und was kosten Datenzugang, Betrieb und verlässliche Lieferung?",
+      "Wer bestimmt Auswahl, Preis und Kundendaten? Prüfen Sie einen zweiten Absatzweg und Ihre Marge nach Vermittlungskosten.",
   },
   {
     id: "Q12",
     group: "control",
-    text: "Zahlen Kunden trotz guter Alternativen für Ihren Vorteil?",
+    text: "Zahlen Kunden oder Partner trotz Alternativen für Ihren Vorteil?",
     low: "Noch nicht getestet",
     high: "Mehrfach bestätigt",
     help: "Gemeint sind echte Käufe nach einem Vergleich. Eine neue Idee ohne Belege bleibt eine Annahme.",

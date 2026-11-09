@@ -1,6 +1,8 @@
 import type { QuickCheck } from "./model";
 import { evaluateProvider } from "./provider-analysis";
-import { isProviderV6 } from "./provider-questions";
+import { isExpertMethod, isProviderV7 } from "./provider-questions";
+import { providerRiskV7 } from "./provider-analysis-7";
+import { CurrentCapabilities, AgentRoleFinding } from "./AgentFindings";
 import {
   currentBusinessAnalysis,
   expertReviewFor,
@@ -15,6 +17,9 @@ import { EXPERT_ATTACKS } from "./ExpertScenarioIntro";
 
 export function ProviderRiskScore({ check }: { check: QuickCheck }) {
   const risk = evaluateProvider(check).risk!;
+  const review = isProviderV7(check.methodologyVersion)
+    ? providerRiskV7(check).review
+    : [];
   const disputed = moatDisputesScore(
     currentBusinessAnalysis(check),
     risk.score,
@@ -26,7 +31,11 @@ export function ProviderRiskScore({ check }: { check: QuickCheck }) {
         <strong>{risk.score ?? `${risk.min}–${risk.max}`}</strong>
         {risk.score !== null && <span>/100</span>}
         <span className="provider-risk-band">
-          {disputed ? "KI widerspricht" : risk.label}
+          {review.length
+            ? "Angaben prüfen"
+            : disputed
+              ? "KI widerspricht"
+              : risk.label}
         </span>
       </div>
       {risk.score !== null && (
@@ -35,11 +44,18 @@ export function ProviderRiskScore({ check }: { check: QuickCheck }) {
         </div>
       )}
       <p className="provider-risk-caption">
-        {isProviderV6(check.methodologyVersion)
+        {isProviderV7(check.methodologyVersion) &&
+          "Ersetzbarkeit Ihrer Leistung · "}
+        {isExpertMethod(check.methodologyVersion)
           ? "KI auf Expertenniveau"
           : "Sehr leistungsfähige KI"}{" "}
         · 0 niedrig, 100 hoch · keine Wahrscheinlichkeit
       </p>
+      {review.length > 0 && (
+        <p className="provider-risk-review" role="status">
+          {review[0].reason} Die Spanne bleibt bis zur Klärung offen.
+        </p>
+      )}
       <p className="provider-risk-basis">
         Basis: {risk.basis}
         {risk.missing.length
@@ -61,7 +77,7 @@ export function ProviderRiskScore({ check }: { check: QuickCheck }) {
 function MoatReviewPanel({ analysis }: { analysis: BusinessAnalysis | null }) {
   const review = moatReviewFor(analysis);
   if (!review) return null;
-  const expert = isProviderV6(analysis!.input.methodologyVersion);
+  const expert = isExpertMethod(analysis!.input.methodologyVersion);
   const title = expert ? "Ihr Burggraben" : "KI-Prüfung Ihres Vorteils";
   return (
     <section
@@ -90,7 +106,9 @@ export function ProviderPurchaseFindings({
   const r = evaluateProvider(check);
   const personal = currentBusinessAnalysis(check);
   const moatReview = moatReviewFor(personal);
-  const expert = isProviderV6(check.methodologyVersion);
+  const expert = isExpertMethod(check.methodologyVersion);
+  const agent = isProviderV7(check.methodologyVersion);
+  const AttackContainer = agent ? "details" : "section";
   const expertReview = expertReviewFor(personal);
   const findings = personal
     ? [
@@ -106,6 +124,7 @@ export function ProviderPurchaseFindings({
       aria-label="Ihr verbleibender Kaufgrund"
     >
       <MoatReviewPanel analysis={personal} />
+      <CurrentCapabilities check={check} print={print} />
       <div className="provider-purchase-grid">
         <section className="print-block">
           <h2>Was KI übernimmt</h2>
@@ -117,11 +136,16 @@ export function ProviderPurchaseFindings({
         </section>
       </div>
       {expertReview && (
-        <section
+        <AttackContainer
           aria-label="Drei mögliche Angreifer"
           className="expert-attacks print-block"
+          open={(agent && print) || undefined}
         >
-          <h2>Drei mögliche Angreifer</h2>
+          {agent ? (
+            <summary>Drei mögliche Angreifer</summary>
+          ) : (
+            <h2>Drei mögliche Angreifer</h2>
+          )}
           <div className="expert-attack-grid">
             {EXPERT_ATTACKS.map(({ id, title }) => (
               <section key={id}>
@@ -130,8 +154,9 @@ export function ProviderPurchaseFindings({
               </section>
             ))}
           </div>
-        </section>
+        </AttackContainer>
       )}
+      <AgentRoleFinding check={check} print={print} />
       {expert && (
         <details
           className="expert-conditions print-block"
@@ -175,7 +200,11 @@ export function ProviderPurchaseFindings({
           {moatReview && (
             <p>
               <strong>Ihr genannter Vorteil</strong>
-              <span>Ihr Vorteil: „{moatReview.basisQuote}“</span>
+              <span>
+                {moatReview.basisQuote
+                  ? `Ihr Vorteil: „${moatReview.basisQuote}“`
+                  : "Grundlage: Ihre Beschreibung des Vorteils."}
+              </span>
             </p>
           )}
           <p>Eigener KI-Nutzen: {personal.result.opportunity.detail}</p>
@@ -183,8 +212,9 @@ export function ProviderPurchaseFindings({
             <p key={i}>Offen: {question}</p>
           ))}
           <p>
-            KI-Einschätzung aus Ihren Angaben. Keine externe Prüfung. Der Score
-            wird aus den Antworten berechnet.
+            {agent
+              ? "KI-Einschätzung aus Ihren Angaben und den verlinkten Anbieterquellen. Geschäftliche Schutzbehauptungen sind nicht unabhängig bestätigt. Beanstandete Antworten öffnen die Score-Spanne."
+              : "KI-Einschätzung aus Ihren Angaben. Keine externe Prüfung. Der Score wird aus den Antworten berechnet."}
           </p>
         </details>
       )}

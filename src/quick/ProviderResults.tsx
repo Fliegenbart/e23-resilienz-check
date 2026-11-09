@@ -8,7 +8,7 @@ import {
 } from "./provider-analysis";
 import {
   isProviderRiskMethod,
-  isProviderV6,
+  isExpertMethod,
   supportsBusinessAnalysis,
 } from "./provider-questions";
 import {
@@ -207,7 +207,7 @@ export function ProviderFindings({
               )}
               <span>
                 {supportsBusinessAnalysis(check.methodologyVersion)
-                  ? isProviderV6(check.methodologyVersion)
+                  ? isExpertMethod(check.methodologyVersion)
                     ? "Kauf nach Vergleich"
                     : "Kauf nach KI-Vergleich"
                   : "Kaufentscheidung"}{" "}
@@ -312,10 +312,16 @@ export function ProviderResults({
               )
             }
           >
-            {current ? r.risk!.missing.length : r.unknown.length} offene{" "}
-            {(current ? r.risk!.missing.length : r.unknown.length) === 1
-              ? "Frage klären"
-              : "Fragen klären"}
+            {check.methodologyVersion === "quick-check-7.0" ? (
+              `${r.risk!.missing.length} Angaben prüfen`
+            ) : (
+              <>
+                {current ? r.risk!.missing.length : r.unknown.length} offene{" "}
+                {(current ? r.risk!.missing.length : r.unknown.length) === 1
+                  ? "Frage klären"
+                  : "Fragen klären"}
+              </>
+            )}
             <Arrow />
           </button>
         )}

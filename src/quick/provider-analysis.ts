@@ -3,7 +3,12 @@ import {
   isProviderV4,
   isProviderV5,
   isProviderV6,
+  isProviderV7,
 } from "./provider-questions.js";
+import {
+  evaluateProviderV7,
+  evaluateProviderScenarioV7,
+} from "./provider-analysis-7.js";
 import {
   evaluateProviderV6,
   evaluateProviderScenarioV6,
@@ -51,24 +56,28 @@ export function evaluateProvider(check: QuickCheck): Omit<
   access?: string;
   incentive?: string;
 } {
-  return isProviderV6(check.methodologyVersion)
-    ? evaluateProviderV6(check)
-    : isProviderV5(check.methodologyVersion)
-      ? evaluateProviderV5(check)
-      : isProviderV4(check.methodologyVersion)
-        ? evaluateProviderV4(check)
-        : evaluateV3(check);
+  return isProviderV7(check.methodologyVersion)
+    ? evaluateProviderV7(check)
+    : isProviderV6(check.methodologyVersion)
+      ? evaluateProviderV6(check)
+      : isProviderV5(check.methodologyVersion)
+        ? evaluateProviderV5(check)
+        : isProviderV4(check.methodologyVersion)
+          ? evaluateProviderV4(check)
+          : evaluateV3(check);
 }
 export function evaluateProviderScenario(check: QuickCheck): ReturnType<
   typeof scenarioV3
 > & {
   benefit?: { level: ProviderBenefit["level"]; text: string };
 } {
-  return isProviderV6(check.methodologyVersion)
-    ? evaluateProviderScenarioV6(check)
-    : isProviderV5(check.methodologyVersion)
-      ? evaluateProviderScenarioV5(check)
-      : isProviderV4(check.methodologyVersion)
-        ? evaluateProviderScenarioV4(check)
-        : scenarioV3(check);
+  return isProviderV7(check.methodologyVersion)
+    ? evaluateProviderScenarioV7(check)
+    : isProviderV6(check.methodologyVersion)
+      ? evaluateProviderScenarioV6(check)
+      : isProviderV5(check.methodologyVersion)
+        ? evaluateProviderScenarioV5(check)
+        : isProviderV4(check.methodologyVersion)
+          ? evaluateProviderScenarioV4(check)
+          : scenarioV3(check);
 }

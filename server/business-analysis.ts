@@ -5,11 +5,13 @@ import {
   analysisResultSchema,
   analysisWithMoatSchema,
   expertAnalysisResultSchema,
+  agentAnalysisResultSchema,
   businessAnalysisSchema,
   BUSINESS_ANALYSIS_MODEL,
   BUSINESS_ANALYSIS_VERSION,
   BUSINESS_MOAT_ANALYSIS_VERSION,
   BUSINESS_EXPERT_ANALYSIS_VERSION,
+  BUSINESS_AGENT_ANALYSIS_VERSION,
   type BusinessAnalysisInput,
 } from "../src/quick/business-analysis.js";
 import { createCheck, QUICK_METHODS } from "../src/quick/model.js";
@@ -21,7 +23,14 @@ import {
   providerPremise,
   isProviderV5,
   isProviderV6,
+  isProviderV7,
 } from "../src/quick/provider-questions.js";
+import { type ProviderResearch } from "../src/quick/provider-research.js";
+import { researchProviderCapabilities } from "./provider-research.js";
+import {
+  buildAgentAnalysisPrompt,
+  validateAgentOutput,
+} from "./agent-analysis.js";
 
 const MAX_REQUEST_BYTES = 32_768;
 // Fixed categories only. Never return provider messages or generated business text.
@@ -82,7 +91,20 @@ takeover benennt ausschließlich die durch KI übernehmbare Tätigkeit, auch in 
 Bei unbekanntem oder schwachem Q12 dürfen weder headline noch summary behaupten, dass Kunden für einen Vorteil weiterzahlen. Schreiben Sie dann könnten, falls oder ungeprüft. Haftung, Daten oder Vor-Ort-Arbeit schützen nur unter den genannten Bedingungen; nennen Sie die entscheidende Bedingung. Keine lange Aufzählung sämtlicher niedriger Schutzwerte.
 Jeder Befund enthält eine kurze Überschrift (höchstens sechs Wörter) und genau einen kurzen Satz (höchstens 25 Wörter). Beispiel für den Ton: KI könnte Prüfzeugnisse auslesen. Ihre Haftungszusage kann wertvoll bleiben, wenn Kunden dafür weiterzahlen. basisQuote ist ein exakter, zusammenhängender Ausschnitt (höchstens 240 Zeichen) aus der Beschreibung, sonst null. questions enthält die tatsächlich verwendeten Frage-IDs. Jeder Befund benötigt mindestens ein echtes Zitat oder eine Frage-ID. Herkunftsbezüge sind keine unabhängigen Belege. Kein Markdown und keine HTML-Tags.`;
 
-export function buildAnalysisPrompt(input: BusinessAnalysisInput) {
+export function buildAnalysisPrompt(
+  input: BusinessAnalysisInput,
+  research?: ProviderResearch,
+) {
+  if (isProviderV7(input.methodologyVersion))
+    return buildAgentAnalysisPrompt(
+      input,
+      research ?? {
+        status: "unavailable",
+        retrievedAt: new Date().toISOString(),
+        topics: [],
+        sources: [],
+      },
+    );
   const check = createCheck("existing");
   check.methodologyVersion = input.methodologyVersion;
   check.methodologySnapshot = QUICK_METHODS[input.methodologyVersion];
@@ -173,18 +195,25 @@ Bei inhaltsleeren Angaben wie „wir machen diesdas ananas“ bleiben Leistung u
 async function generateAnalysis(
   input: BusinessAnalysisInput,
   signal: AbortSignal,
+  research?: ProviderResearch,
 ) {
   const { output } = await generateText({
     model: gateway(BUSINESS_ANALYSIS_MODEL),
-    ...buildAnalysisPrompt(input),
+    ...buildAnalysisPrompt(input, research),
     output: Output.object({
-      schema: isProviderV6(input.methodologyVersion)
-        ? expertAnalysisResultSchema
-        : input.businessMoat
-          ? analysisWithMoatSchema
-          : analysisResultSchema,
+      schema: isProviderV7(input.methodologyVersion)
+        ? agentAnalysisResultSchema
+        : isProviderV6(input.methodologyVersion)
+          ? expertAnalysisResultSchema
+          : input.businessMoat
+            ? analysisWithMoatSchema
+            : analysisResultSchema,
     }),
-    maxOutputTokens: isProviderV6(input.methodologyVersion) ? 5000 : 4000,
+    maxOutputTokens: isProviderV7(input.methodologyVersion)
+      ? 6500
+      : isProviderV6(input.methodologyVersion)
+        ? 5000
+        : 4000,
     reasoning: "low",
     maxRetries: 0,
     abortSignal: signal,
@@ -242,11 +271,17 @@ async function readInput(request: Request) {
 
 export function createAnalysisHandler({
   generate = generateAnalysis,
+  research = researchProviderCapabilities,
 }: {
   generate?: (
     input: BusinessAnalysisInput,
     signal: AbortSignal,
+    research?: ProviderResearch,
   ) => Promise<unknown>;
+  research?: (
+    input: BusinessAnalysisInput,
+    signal: AbortSignal,
+  ) => Promise<ProviderResearch>;
 } = {}) {
   return async (request: Request): Promise<Response> => {
     const headers = {
@@ -291,22 +326,33 @@ export function createAnalysisHandler({
     try {
       const signal = AbortSignal.any([
         request.signal,
-        AbortSignal.timeout(45_000),
+        AbortSignal.timeout(
+          isProviderV7(input.methodologyVersion) ? 95_000 : 45_000,
+        ),
       ]);
       signal.throwIfAborted();
-      const result = await generate(input, signal);
+      const sources = isProviderV7(input.methodologyVersion)
+        ? await research(input, signal)
+        : undefined;
+      const generated = await generate(input, signal, sources);
+      const result = sources
+        ? validateAgentOutput(generated, input, sources)
+        : generated;
       signal.throwIfAborted();
       const analysis = businessAnalysisSchema.parse({
-        version: isProviderV6(input.methodologyVersion)
-          ? BUSINESS_EXPERT_ANALYSIS_VERSION
-          : input.businessMoat
-            ? BUSINESS_MOAT_ANALYSIS_VERSION
-            : isProviderV5(input.methodologyVersion)
-              ? BUSINESS_ANALYSIS_VERSION
-              : "business-analysis-1.0",
+        version: isProviderV7(input.methodologyVersion)
+          ? BUSINESS_AGENT_ANALYSIS_VERSION
+          : isProviderV6(input.methodologyVersion)
+            ? BUSINESS_EXPERT_ANALYSIS_VERSION
+            : input.businessMoat
+              ? BUSINESS_MOAT_ANALYSIS_VERSION
+              : isProviderV5(input.methodologyVersion)
+                ? BUSINESS_ANALYSIS_VERSION
+                : "business-analysis-1.0",
         createdAt: new Date().toISOString(),
         model: BUSINESS_ANALYSIS_MODEL,
         input,
+        ...(sources ? { research: sources } : {}),
         result,
       });
       return Response.json(analysis, { status: 200, headers });

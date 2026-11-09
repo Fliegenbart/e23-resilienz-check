@@ -1,4 +1,9 @@
-import { isProviderV4, isProviderV5, isProviderV6 } from "./provider-questions";
+import {
+  isProviderV4,
+  isProviderV5,
+  isProviderV6,
+  isProviderV7,
+} from "./provider-questions";
 import {
   ROUTE_LABELS,
   PROTECTION_LABELS,
@@ -8,6 +13,64 @@ import { PROVIDER_SCENARIO_METHOD } from "./provider-scenario";
 
 // One explanation for screen and print, selected by the saved method.
 export function ProviderRules({ version }: { version: string }) {
+  if (isProviderV7(version))
+    return (
+      <>
+        <p>
+          Methode {version}. Der Score beschreibt die Ersetzbarkeit Ihrer
+          bezahlten Leistung bei günstigen Expertenteams für alle. Der Verlust
+          der Oberfläche, die Nutzbarkeit für Agenten und die Macht eines
+          Vermittlers sind getrennte Befunde. Keine Pleitewahrscheinlichkeit und
+          keine Zeitprognose.
+        </p>
+        <p>
+          Normierung: (Antwort − 1) / 9. Direkte Ersetzung = min(Q1, Q2, Q10);
+          andere Anbieter = min(Q2, Q5). Schutz = min(Q6, Q7, Q8). Score = 100 ×
+          max(direkte Ersetzung, andere Anbieter) × (1 − 0,75 × Schutz), auf
+          Fünferschritte gerundet. Bedienung = min(Q2, Q4) wird separat gezeigt
+          und erhöht den Score nicht allein.
+        </p>
+        <p>
+          Unbekannte Antworten werden mit beiden möglichen Extremen gerechnet.
+          Starke Schutzbehauptungen (Q6–Q8 ab 7) bleiben ohne mehrfach
+          bestätigten bezahlten Vergleich (Q12 ab 7) offen. Hohe Ersetzbarkeit
+          und schwere Beschaffbarkeit zugleich (Q5/Q7 ab 7) öffnen Q7. Konkrete
+          Beanstandungen der KI öffnen ebenfalls die betroffene Antwort. Ein
+          nicht tragfähiger oder nur bedingter KI-Burggrabenbefund hält hohe
+          Schutzwerte auch bei angegebenen Kaufbelegen offen. Daraus entsteht
+          eine Spanne, keine von der KI erfundene Zahl.
+        </p>
+        <p>
+          Beanstandete Schutzbehauptungen werden als „Angaben prüfen“ markiert.
+          Eine niedrige Untergrenze ist dann keine Entwarnung. Q12 bleibt eine
+          nicht unabhängig geprüfte Selbstauskunft. Fehlende Belege erhöhen die
+          Unsicherheit, nicht automatisch das Risiko.
+        </p>
+        <p>
+          Q3 erfasst direkte Nutzung und Bezahlung durch Agenten. Q11 erfasst
+          die Kontrolle über den Kundenzugang. Eine Schnittstelle garantiert
+          weder Auswahl noch Umsatz. Beide verändern den Ersetzbarkeits-Score
+          nicht. Die mögliche Zuliefererrolle braucht einen bezahlten Beitrag,
+          einen Auswahlgrund und eine tragfähige Marge trotz Vermittlung.
+        </p>
+        <p>
+          Der aktuelle Anbieterabgleich verwendet begrenzte öffentliche
+          Sachthemen, offizielle Anbieterquellen und deren tatsächliche
+          Textauszüge. Vollständige Geschäftsbeschreibungen gehen nicht an die
+          Suchmaschine. Quellenabruf und Anbieterangaben sind kein unabhängiger
+          Qualitätstest. Ohne passende Quellen bleibt die heutige Fähigkeit
+          ungeprüft; das Expertenszenario bleibt separat möglich.
+        </p>
+        <p>
+          0–30 niedrig, 35–60 mittel, 65–80 hoch, 85–100 sehr hoch. Gewichte und
+          Grenzen sind transparente Einschätzungsregeln, nicht empirisch
+          kalibriert. Für zwei Jahre schließt langsam/mittel/schnell rechnerisch
+          0,2/0,5/0,8 der Fähigkeitslücke ab Q9; Preisdruck wird mit 0,55/0,75/1
+          gewichtet. Bei offenen Risikofragen bleibt diese Einordnung offen.
+          Günstigere KI schafft keine Rechte oder Daten.
+        </p>
+      </>
+    );
   if (isProviderV6(version))
     return (
       <>

@@ -29,6 +29,8 @@ import { ProviderRules } from "../src/quick/ProviderRules";
 
 function rated(values: Record<string, QuickAnswer> = {}) {
   const c = createCheck("idea");
+  c.methodologyVersion = "quick-check-6.0";
+  c.methodologySnapshot = structuredClone(QUICK_METHODS[c.methodologyVersion]);
   for (const q of c.methodologySnapshot)
     answerCheck(c, q.id, values[q.id] ?? 1);
   c.businessDescription = "Wir erstellen Untertitel für Creator.";

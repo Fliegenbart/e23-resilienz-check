@@ -18,7 +18,13 @@ export const EXPERT_ATTACKS = [
   },
 ] as const;
 
-export function ExpertScenarioIntro({ onStart }: { onStart: () => void }) {
+export function ExpertScenarioIntro({
+  onStart,
+  withSupplier = false,
+}: {
+  onStart: () => void;
+  withSupplier?: boolean;
+}) {
   return (
     <main className="expert-scenario-intro results-page">
       <p className="section-index">Ein Gedankenexperiment</p>
@@ -34,6 +40,12 @@ export function ExpertScenarioIntro({ onStart }: { onStart: () => void }) {
           </section>
         ))}
       </div>
+      {withSupplier && (
+        <p className="expert-scenario-note">
+          <strong>Oder Ihr Dienst bleibt dahinter.</strong> Ein Agent übernimmt
+          die Bedienung und bezahlt Sie für das Ergebnis.
+        </p>
+      )}
       <p className="expert-scenario-note">
         Auch Sie haben dieses Team. Daten, Rechte und Zugänge sind nicht
         automatisch dabei.

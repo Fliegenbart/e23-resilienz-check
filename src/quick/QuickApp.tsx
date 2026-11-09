@@ -16,7 +16,7 @@ import { loadChecks, saveChecks } from "./storage";
 import { ExpertIntro } from "./ExpertIntro";
 import { Question } from "./Question";
 import { Results } from "./Results";
-import { isProviderMethod, isProviderV6 } from "./provider-questions";
+import { isProviderMethod, isExpertMethod } from "./provider-questions";
 import { ExpertScenarioIntro } from "./ExpertScenarioIntro";
 import { ProviderLanding } from "./ProviderLanding";
 import { ProviderResults } from "./ProviderResults";
@@ -599,8 +599,9 @@ export default function QuickApp() {
                 />
               </Suspense>
             ) : current.view === "intro" &&
-              isProviderV6(current.methodologyVersion) ? (
+              isExpertMethod(current.methodologyVersion) ? (
               <ExpertScenarioIntro
+                withSupplier={current.methodologyVersion === "quick-check-7.0"}
                 onStart={() => {
                   update((c) => {
                     c.view = "questions";

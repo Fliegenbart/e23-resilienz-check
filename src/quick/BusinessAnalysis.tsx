@@ -44,7 +44,7 @@ export function BusinessAnalysisControl({
     setBusy(true);
     const timeout = setTimeout(
       () => controller.abort(new DOMException("Timeout", "TimeoutError")),
-      55_000,
+      check.methodologyVersion === "quick-check-7.0" ? 105_000 : 55_000,
     );
     try {
       const analysis = await requestBusinessAnalysis(input, {
@@ -125,9 +125,15 @@ export function BusinessAnalysisControl({
       <p className="business-analysis-disclosure">
         Auf Klick: Beschreibung, {check.businessMoat?.trim() ? "Vorteil, " : ""}
         Antworten und Szenario an OpenAI über Vercel senden.
+        {check.methodologyVersion === "quick-check-7.0" &&
+          " Öffentliche Sachthemen werden über Parallel recherchiert."}
       </p>
       <p className="business-analysis-status" role="status" aria-live="polite">
-        {busy ? "Ihre konkrete Auswertung entsteht …" : message}
+        {busy
+          ? check.methodologyVersion === "quick-check-7.0"
+            ? "Anbieterquellen und Ihr Geschäft werden geprüft …"
+            : "Ihre konkrete Auswertung entsteht …"
+          : message}
       </p>
     </section>
   );

@@ -984,3 +984,54 @@ details[open] > summary > .provider-toggle {
     font-size: 19px;
   }
 }
+/* Current evidence and the paid service behind an agent. */
+.current-capabilities,
+.agent-role {
+  padding-block: 1.4rem;
+  border-top: 1px solid var(--line, #dedee2);
+}
+.current-capabilities h2,
+.agent-role h2 {
+  font-size: 1rem;
+  margin: 0 0 0.8rem;
+}
+.agent-role h3 {
+  font-size: 1.25rem;
+  line-height: 1.35;
+  margin: 0 0 0.8rem;
+}
+.current-capabilities p,
+.agent-role p {
+  margin: 0.5rem 0;
+}
+.capability-limit {
+  color: var(--muted, #52525b);
+  font-size: 0.9rem;
+}
+.capability-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  font-size: 0.8rem;
+}
+.capability-links a,
+.capability-sources a {
+  overflow-wrap: anywhere;
+}
+.capability-sources,
+.agent-role details {
+  font-size: 0.85rem;
+  margin-top: 0.8rem;
+}
+.capability-sources summary,
+.agent-role summary,
+details.expert-attacks summary {
+  cursor: pointer;
+}
+details.expert-attacks > summary {
+  font-weight: 650;
+  padding-block: 0.4rem;
+}
+.capability-finding + .capability-finding {
+  margin-top: 1rem;
+}

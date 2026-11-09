@@ -1,6 +1,6 @@
 import { useId } from "react";
 import type { QuickCheck } from "./model";
-import { isProviderRiskMethod, isProviderV6 } from "./provider-questions";
+import { isProviderRiskMethod, isExpertMethod } from "./provider-questions";
 import { evaluateProviderScenario } from "./provider-analysis";
 import {
   PROVIDER_PACES,
@@ -40,7 +40,7 @@ export function ProviderScenario({
             : "Szenario"}
         </span>
       </header>
-      {isProviderV6(check.methodologyVersion) && (
+      {isExpertMethod(check.methodologyVersion) && (
         <p className="expert-scenario-note">
           Besser heißt: mehr Aufgaben auf Expertenniveau. Günstiger heißt: mehr
           parallele Einsätze für alle. Das Tempo bleibt Ihre Annahme.

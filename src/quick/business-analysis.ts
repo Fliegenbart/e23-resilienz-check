@@ -1,5 +1,6 @@
 import { z } from "zod";
 import type { QuickCheck } from "./model.js";
+import { providerResearchSchema, hasSourceQuote } from "./provider-research.js";
 import { supportsBusinessAnalysis } from "./provider-questions.js";
 import {
   BUSINESS_DESCRIPTION_MAX_LENGTH,
@@ -14,6 +15,7 @@ export const BUSINESS_ANALYSIS_MODEL = "openai/gpt-5.2";
 export const BUSINESS_ANALYSIS_VERSION = "business-analysis-2.0";
 export const BUSINESS_MOAT_ANALYSIS_VERSION = "business-analysis-3.0";
 export const BUSINESS_EXPERT_ANALYSIS_VERSION = "business-analysis-4.0";
+export const BUSINESS_AGENT_ANALYSIS_VERSION = "business-analysis-5.0";
 export const BUSINESS_ANALYSIS_MIN_LENGTH = 20;
 const ids = [
   "Q1",
@@ -40,6 +42,7 @@ export const analysisInputSchema = z
       "quick-check-4.0",
       "quick-check-5.0",
       "quick-check-6.0",
+      "quick-check-7.0",
     ]),
     businessDescription: z.string().trim().max(BUSINESS_DESCRIPTION_MAX_LENGTH),
     businessMoat: z.string().trim().max(BUSINESS_MOAT_MAX_LENGTH).optional(),
@@ -50,7 +53,9 @@ export const analysisInputSchema = z
   .superRefine((input, ctx) => {
     if (
       input.businessMoat &&
-      !["quick-check-5.0", "quick-check-6.0"].includes(input.methodologyVersion)
+      !["quick-check-5.0", "quick-check-6.0", "quick-check-7.0"].includes(
+        input.methodologyVersion,
+      )
     )
       ctx.addIssue({
         code: "custom",
@@ -136,7 +141,10 @@ export const moatReviewSchema = z
       ),
   })
   .strict();
-export type MoatReview = z.infer<typeof moatReviewSchema>;
+export type MoatReview = Omit<
+  z.infer<typeof moatReviewSchema>,
+  "basisQuote"
+> & { basisQuote: string | null };
 export const analysisWithMoatSchema = analysisResultSchema
   .extend({ moatReview: moatReviewSchema })
   .strict();
@@ -164,6 +172,76 @@ export const expertAnalysisResultSchema = analysisResultSchema
     moatReview: moatReviewSchema.nullable(),
   })
   .strict();
+export const REVIEW_QUESTION_IDS = [
+  "Q1",
+  "Q2",
+  "Q5",
+  "Q6",
+  "Q7",
+  "Q8",
+  "Q10",
+] as const;
+export function isProtectiveAnswer(id: string, value: unknown) {
+  return (
+    typeof value === "number" &&
+    (["Q6", "Q7", "Q8"].includes(id) ? value >= 7 : value <= 6)
+  );
+}
+export const agentAnalysisResultSchema = expertAnalysisResultSchema
+  .extend({
+    moatReview: moatReviewSchema
+      .extend({ basisQuote: z.string().min(1).max(240).nullable() })
+      .strict()
+      .nullable(),
+    currentCapabilities: z
+      .array(
+        z
+          .object({
+            product: z.string().min(1).max(60),
+            detail: z.string().min(1).max(180),
+            limitation: z.string().min(1).max(180),
+            evidence: z
+              .array(
+                z
+                  .object({
+                    sourceId: z.string().regex(/^S[1-8]$/),
+                    quote: z.string().min(12).max(240),
+                  })
+                  .strict(),
+              )
+              .min(1)
+              .max(2),
+          })
+          .strict(),
+      )
+      .max(2),
+    answerReview: z
+      .array(
+        z
+          .object({
+            questionId: z.enum(REVIEW_QUESTION_IDS),
+            status: z.enum(["unsupported", "contradicted"]),
+            reason: z.string().min(1).max(160),
+          })
+          .strict(),
+      )
+      .max(4),
+    agentRole: z
+      .object({
+        role: z.enum([
+          "replaceable",
+          "paid_supplier",
+          "dependent_supplier",
+          "unclear",
+        ]),
+        contribution: z.string().min(1).max(180),
+        selectionReason: z.string().min(1).max(180),
+        dependency: z.string().min(1).max(180),
+      })
+      .strict(),
+  })
+  .strict();
+export type AgentAnalysisResult = z.infer<typeof agentAnalysisResultSchema>;
 export const MOAT_VERDICTS: Record<MoatReview["verdict"], string> = {
   replaceable: "Leicht ersetzbar",
   conditional: "Schutz nur unter Bedingungen",
@@ -184,11 +262,14 @@ export const businessAnalysisSchema = z
       BUSINESS_ANALYSIS_VERSION,
       BUSINESS_MOAT_ANALYSIS_VERSION,
       BUSINESS_EXPERT_ANALYSIS_VERSION,
+      BUSINESS_AGENT_ANALYSIS_VERSION,
     ]),
     createdAt: z.iso.datetime({ offset: true }),
     model: z.string().min(1).max(120),
     input: analysisInputSchema,
+    research: providerResearchSchema.optional(),
     result: z.union([
+      agentAnalysisResultSchema,
       expertAnalysisResultSchema,
       analysisWithMoatSchema,
       analysisResultSchema,
@@ -206,16 +287,64 @@ export const businessAnalysisSchema = z
         path: ["version"],
       });
     }
-    const expert = analysis.input.methodologyVersion === "quick-check-6.0";
+    const agent = analysis.input.methodologyVersion === "quick-check-7.0";
+    const expert =
+      agent || analysis.input.methodologyVersion === "quick-check-6.0";
     if (
-      expert !== (analysis.version === BUSINESS_EXPERT_ANALYSIS_VERSION) ||
-      expert !== "expertReview" in analysis.result
+      (agent
+        ? analysis.version !== BUSINESS_AGENT_ANALYSIS_VERSION
+        : expert !== (analysis.version === BUSINESS_EXPERT_ANALYSIS_VERSION)) ||
+      expert !== "expertReview" in analysis.result ||
+      agent !== (analysis.version === BUSINESS_AGENT_ANALYSIS_VERSION) ||
+      agent !== "agentRole" in analysis.result ||
+      agent !== (analysis.research !== undefined)
     ) {
       ctx.addIssue({
         code: "custom",
-        message: "Das Expertenszenario benötigt die passende Auswertung 4.0.",
+        message: "Das Expertenszenario benötigt die passende Ausgabeversion.",
         path: ["version"],
       });
+    }
+    if ("agentRole" in analysis.result) {
+      const research = analysis.research;
+      const claims = analysis.result.currentCapabilities;
+      if (claims.length && research?.status !== "retrieved")
+        ctx.addIssue({
+          code: "custom",
+          message: "Aktuelle Fähigkeiten brauchen abgerufene Quellen.",
+        });
+      for (const claim of claims)
+        for (const evidence of claim.evidence) {
+          const source = research?.sources.find(
+            (s) => s.id === evidence.sourceId,
+          );
+          if (
+            !source ||
+            !hasSourceQuote(source.excerpt, evidence.quote) ||
+            evidence.quote.trim().split(/\s+/).length > 25
+          )
+            ctx.addIssue({
+              code: "custom",
+              message: "Die Anbieterquelle belegt das Herkunftszitat nicht.",
+            });
+        }
+      const reviews = analysis.result.answerReview;
+      if (
+        new Set(reviews.map((r) => r.questionId)).size !== reviews.length ||
+        reviews.some(
+          (r) =>
+            typeof analysis.input.answers[r.questionId] !== "number" ||
+            (r.status === "unsupported" &&
+              !isProtectiveAnswer(
+                r.questionId,
+                analysis.input.answers[r.questionId],
+              )),
+        )
+      )
+        ctx.addIssue({
+          code: "custom",
+          message: "Die Rückfrage muss eine konkrete Antwort betreffen.",
+        });
     }
     const moatReview =
       "moatReview" in analysis.result ? analysis.result.moatReview : null;
@@ -236,7 +365,10 @@ export const businessAnalysisSchema = z
       });
     }
     if (moatReview) {
-      if (!analysis.input.businessMoat?.includes(moatReview.basisQuote))
+      if (
+        (!agent || moatReview.basisQuote !== null) &&
+        !analysis.input.businessMoat?.includes(moatReview.basisQuote ?? "")
+      )
         ctx.addIssue({
           code: "custom",
           message: "Das Zitat steht nicht im angegebenen Vorteil.",
@@ -304,14 +436,29 @@ export const businessAnalysisSchema = z
             analysis.result.openQuestions[0] ?? "",
           ].join(" ")
         : visible;
-    if (primaryText.trim().split(/\s+/).length > (expert ? 240 : 180)) {
+    const extraText =
+      "agentRole" in analysis.result
+        ? [
+            ...Object.values(analysis.result.agentRole),
+            ...analysis.result.currentCapabilities.flatMap((c) => [
+              c.product,
+              c.detail,
+              c.limitation,
+            ]),
+            ...analysis.result.answerReview.map((r) => r.reason),
+          ].join(" ")
+        : "";
+    if (
+      (primaryText + " " + extraText).trim().split(/\s+/).length >
+      (agent ? 400 : expert ? 240 : 180)
+    ) {
       ctx.addIssue({
         code: "custom",
         message: "Ergebnis zu lang.",
         path: ["result"],
       });
     }
-    if (/\bQ(?:1[0-2]|[1-9])\b/.test(visible)) {
+    if (/\bQ(?:1[0-2]|[1-9])\b/.test(visible + " " + extraText)) {
       ctx.addIssue({
         code: "custom",
         message: "Ergebnis enthält technische Frage-IDs.",
@@ -398,7 +545,12 @@ export function moatReviewFor(
 export function expertMoatHeadline(
   analysis: BusinessAnalysis | null | undefined,
 ) {
-  if (analysis?.input.methodologyVersion !== "quick-check-6.0") return null;
+  if (
+    !["quick-check-6.0", "quick-check-7.0"].includes(
+      analysis?.input.methodologyVersion ?? "",
+    )
+  )
+    return null;
   const review = moatReviewFor(analysis);
   if (!review) return null;
   return {

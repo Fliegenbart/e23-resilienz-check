@@ -4,7 +4,8 @@ import {
   PROVIDER_BOUNDARIES,
   isProviderV4,
   isProviderV5,
-  isProviderV6,
+  isExpertMethod,
+  isProviderV7,
   isProviderRiskMethod,
   supportsBusinessAnalysis,
 } from "./provider-questions";
@@ -25,16 +26,21 @@ export function ProviderMethodContent({
       {supportsBusinessAnalysis(version) && (
         <p>
           Auf Wunsch bezieht eine KI-Auswertung Ihre Business-Beschreibung,
-          Antworten und das gewählte Szenario auf Ihr Angebot. Sie ergänzt den
-          Check ohne externe Recherche. Geänderte Angaben erfordern eine neue
-          KI-Auswertung.
+          Antworten und das gewählte Szenario auf Ihr Angebot. Sie ergänzt den{" "}
+          {isProviderV7(version)
+            ? "Check mit einem Quellenabgleich aktueller Anbieterfunktionen. Quellen und Abrufdatum stehen im Ergebnis."
+            : "Check ohne externe Recherche."}{" "}
+          Geänderte Angaben erfordern eine neue KI-Auswertung.
         </p>
       )}
       {isProviderRiskMethod(version) && (
         <p>
           Ihren angegebenen Vorteil prüft die KI als Behauptung. Sie nennt
           mögliche Auslöser für eine Ersetzung, kein Datum. Der Score bleibt aus
-          Ihren Antworten berechnet; widerspricht die KI, wird das markiert.
+          Ihren Antworten berechnet;{" "}
+          {isProviderV7(version)
+            ? "beanstandete Angaben öffnen eine Spanne und werden markiert."
+            : "widerspricht die KI, wird das markiert."}
         </p>
       )}
       <p>
@@ -60,7 +66,7 @@ export function ProviderMethodContent({
           <ProviderRules version={version} />
         )}
       </details>
-      {isProviderV6(version) && (
+      {isExpertMethod(version) && (
         <p>
           Alle können das Expertenteam nutzen: Sie, Ihre Kunden, bekannte
           Wettbewerber und neue Anbieter aus anderen Branchen. Der Check sucht
@@ -75,7 +81,7 @@ export function ProviderMethodContent({
         und Anfang 2026. Daraus leiten wir mögliche Angriffswege ab; die
         Zukunftszahlen des Berichts fließen nicht in Ihre Bewertung ein.
       </p>
-      {isProviderV6(version) && (
+      {isExpertMethod(version) && (
         <>
           <p>
             Richard Suttons „The Bitter Lesson“ beschreibt den Vorteil
@@ -91,7 +97,7 @@ export function ProviderMethodContent({
         </>
       )}
       <ul className="provider-sources">
-        {isProviderV6(version) && (
+        {isExpertMethod(version) && (
           <>
             <li>
               <a
@@ -154,7 +160,7 @@ export function ProviderMethodContent({
         Ein Stresstest auf Basis Ihrer Antworten. Die Quellen begründen die
         Fragestellung; sie prüfen Ihr konkretes Angebot nicht. Quellenstand: 7.
         November 2026.{" "}
-        {isProviderV6(version) &&
+        {isExpertMethod(version) &&
           "Expertenszenario ergänzt am 9. November 2026."}
       </p>
     </>

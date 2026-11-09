@@ -1,6 +1,23 @@
 # Übergabe an einen neuen Codex-Chat
 
-## Aktueller Stand: Resilience-Assessment 0.10.0
+## Aktueller Stand: Resilience-Assessment 0.11.0
+
+Stand: 9. November 2026. Happy-Scribe-Probe zeigte: Der Check erkannte die Angriffe, ließ aber bei überoptimistischen Angaben einen Score von 10 stehen und prüfte keine aktuellen Anbieterfunktionen. David beauftragte den Quellenabgleich, eine Sicherung gegen solche Schutzbehauptungen und die neue Rolle als bezahlter Zulieferer hinter Agenten.
+
+- Methode `quick-check-7.0`, KI-Ausgabe `business-analysis-5.0`. V6-Katalog eingefroren, alte Regeln und gespeicherte Ergebnisse bleiben erhalten. Alle acht Methoden importierbar.
+- Zwölf Fragen: Q3 direkte Nutzung und Bezahlung durch Agenten; Q11 Kontrolle über Kundenzugang; Q4 Bedienung separat. V7-Score nutzt nur direkte Ersetzung und austauschbare Anbieter. Bedienung allein zählt nicht als vollständiger Verlust des bezahlten Dienstes.
+- Starke Schutzbehauptungen ohne bestätigte Kaufbelege sowie konkrete KI-Beanstandungen öffnen die Score-Spanne. Keine KI-erfundenen Zahlen, kein grünes Niedrig trotz ungeklärten Schutzes. Auch ein bedingter Burggrabenbefund hält hohe Schutzwerte bei optimistischem Q12 offen; Details markieren den Schutz ebenfalls als ungeklärt. Alte KI-Analysen verlieren bei Eingabeänderungen ihre Wirkung.
+- `server/provider-research.ts`: feste öffentliche Sachthemen, Parallel Search über bestehendes Gateway, offizielle Anbieter-Domains, tatsächliche Tool-Quellen. Keine Geschäftstexte als Suchanfragen. Quelle, Auszug und ursprünglicher Abrufzeitpunkt werden gespeichert. Bei Ausfall oder unpassenden Belegen keine heutigen Fähigkeiten behaupten.
+- `server/agent-analysis.ts`: aktueller Produktabgleich getrennt vom Expertenszenario; ChatGPT-Produkt vs API vs zukünftige Agenten unterscheiden. Standard-SSO, EU-Datenhaltung und Formate nicht automatisch als exklusiven Schutz ausgeben. `agentRole` prüft Beitrag, Auswahlgrund, Bezahlung und Plattformabhängigkeit. Kein pauschaler Rat, nur OpenAI überzeugen zu müssen oder keine Öffentlichkeit mehr zu brauchen.
+- `AgentFindings.tsx`: Heute schon möglich mit Quellen, Ihre Rolle hinter der KI, Auswahlgrund und Abhängigkeit. Angreiferszenarien in V7 eingeklappt. Geteilte Komponenten für Bildschirm und Druck. JSON trägt Quellen und neue Felder mit.
+- Eingabezitate in V7: falsch wiedergegebene optionale Zitate bei vorhandenem Fragenbezug weglassen; keine erfundenen Ersatzbelege. Quellenzitate müssen tatsächlichen Suchauszügen entsprechen. Frühere strikte Prüfungen bleiben erhalten.
+- Budget 5 USD/Monat und Ratenbegrenzung bleiben. V7 max. 95 Sekunden plus 105 Sekunden Browser-Abbruch; Vercel-Funktion 120 Sekunden. Recherche max. 30 Sekunden, bis acht Quellen; Modellantwort max. 6.500 Tokens. Erfolgreiche Recherche im Prozess max. sechs Stunden gecacht, ursprünglicher Zeitpunkt bleibt erhalten.
+
+Prüfung: 231 Tests in 20 Dateien, Build und nativer API-Smoke-Test bestanden. Echte KI-Antworten auf Vercel-Vorschau: Happy Scribe 75/100 mit belegter ChatGPT-Audiofunktion; überoptimistische Schutzangaben 0–100 mit „Angaben prüfen“; fiktiver Sensor-Zulieferer 5/100 mit bezahlter Rolle. Ein paralleler Anbieteraufruf war limitiert; der spätere einzelne Aufruf erfolgreich. Budget und Rate wurden nicht angehoben. Browserdurchlauf mit zwölf Fragen, echten importierten KI-Ergebnissen, JSON-Export, Mobil 390 px und Desktop 1440 px ohne horizontalen Überlauf. Live- und JSON-Testartefakte außerhalb von Git: `/private/tmp/e23-v7-qa`. Plan: `docs/superpowers/plans/2026-11-09-agenten-zulieferer.md`.
+
+---
+
+## Historischer Stand: Resilience-Assessment 0.10.0
 
 Stand: 9. November 2026. David will keine Fragen, in denen Nutzer die KI-Zukunft vorhersagen müssen. Das Tool soll den Blick öffnen: günstige, rund um die Uhr und parallel arbeitende Expertenteams stehen Kunden, bekannten Wettbewerbern, bislang unbekannten Anbietern aus anderen Branchen und dem eigenen Unternehmen zur Verfügung. Ergebnisfrage: Hält der behauptete Burggraben auch gegen andere Lösungen des Kundenproblems?
 
