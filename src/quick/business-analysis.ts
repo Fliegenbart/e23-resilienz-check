@@ -1,6 +1,6 @@
 import { z } from "zod";
 import type { QuickCheck } from "./model.js";
-import { isProviderV4 } from "./provider-questions.js";
+import { supportsBusinessAnalysis } from "./provider-questions.js";
 import { BUSINESS_DESCRIPTION_MAX_LENGTH } from "./business-description.js";
 import {
   DEFAULT_PROVIDER_SCENARIO,
@@ -8,7 +8,7 @@ import {
 } from "./provider-scenario.js";
 
 export const BUSINESS_ANALYSIS_MODEL = "openai/gpt-5.2";
-export const BUSINESS_ANALYSIS_VERSION = "business-analysis-1.0";
+export const BUSINESS_ANALYSIS_VERSION = "business-analysis-2.0";
 export const BUSINESS_ANALYSIS_MIN_LENGTH = 20;
 const ids = [
   "Q1",
@@ -31,7 +31,7 @@ const answer = z.union([
 ]);
 export const analysisInputSchema = z
   .object({
-    methodologyVersion: z.literal("quick-check-4.0"),
+    methodologyVersion: z.enum(["quick-check-4.0", "quick-check-5.0"]),
     businessDescription: z
       .string()
       .trim()
@@ -86,7 +86,7 @@ export type BusinessFinding = z.infer<typeof findingSchema>;
 
 export const businessAnalysisSchema = z
   .object({
-    version: z.literal(BUSINESS_ANALYSIS_VERSION),
+    version: z.enum(["business-analysis-1.0", BUSINESS_ANALYSIS_VERSION]),
     createdAt: z.iso.datetime({ offset: true }),
     model: z.string().min(1).max(120),
     input: analysisInputSchema,
@@ -94,6 +94,16 @@ export const businessAnalysisSchema = z
   })
   .strict()
   .superRefine((analysis, ctx) => {
+    if (
+      analysis.input.methodologyVersion === "quick-check-5.0" &&
+      analysis.version !== BUSINESS_ANALYSIS_VERSION
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Die neue Methode benötigt die neue KI-Auswertung.",
+        path: ["version"],
+      });
+    }
     const findings = [
       ...analysis.result.takeover,
       ...analysis.result.protection,
@@ -142,7 +152,7 @@ export type BusinessAnalysis = z.infer<typeof businessAnalysisSchema>;
 export function analysisInputFor(
   check: QuickCheck,
 ): BusinessAnalysisInput | null {
-  if (!isProviderV4(check.methodologyVersion)) return null;
+  if (!supportsBusinessAnalysis(check.methodologyVersion)) return null;
   const parsed = analysisInputSchema.safeParse({
     methodologyVersion: check.methodologyVersion,
     businessDescription: check.businessDescription ?? "",

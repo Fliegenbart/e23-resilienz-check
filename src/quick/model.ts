@@ -2,13 +2,17 @@ import { z } from "zod";
 import oldQuestions from "./methods/quick-check-1.0.json" with { type: "json" };
 import providerV3 from "./methods/quick-check-3.0.json" with { type: "json" };
 import providerV31 from "./methods/quick-check-3.1.json" with { type: "json" };
+import providerV4 from "./methods/quick-check-4.0.json" with { type: "json" };
 import { EXPERT_QUESTIONS } from "./expert-questions.js";
 import {
   PROVIDER_METHOD,
   PROVIDER_QUESTIONS,
   PROVIDER_GROUPS,
   isProviderMethod,
+  isProviderV5,
+  supportsBusinessAnalysis,
 } from "./provider-questions.js";
+import { providerRiskV5 } from "./provider-analysis-5.js";
 import { scenarioWorkspaceSchema } from "./scenario-model.js";
 import type { ScenarioWorkspace } from "./scenario-model.js";
 import {
@@ -47,6 +51,7 @@ export const QUICK_METHODS: Record<string, QuickQuestion[]> = {
   "quick-check-2.0": EXPERT_QUESTIONS,
   "quick-check-3.0": providerV3 as QuickQuestion[],
   "quick-check-3.1": providerV31 as QuickQuestion[],
+  "quick-check-4.0": providerV4 as QuickQuestion[],
   [QUICK_METHOD]: QUICK_QUESTIONS,
 };
 export interface QuickCheck {
@@ -134,8 +139,11 @@ export function calculateRisk(c: QuickCheck) {
       b.value - a.value || Number(a.id.slice(1)) - Number(b.id.slice(1)),
   );
   return {
-    score:
-      !provider && rated.length === 12 ? norm(rated.map((q) => q.value)) : null,
+    score: isProviderV5(c.methodologyVersion)
+      ? providerRiskV5(c).score
+      : !provider && rated.length === 12
+        ? norm(rated.map((q) => q.value))
+        : null,
     answered: rated.length,
     processed: questions.filter((q) => c.answers[q.id] != null).length,
     groups,
@@ -172,6 +180,7 @@ const checkSchema = z
       "quick-check-2.0",
       "quick-check-3.0",
       "quick-check-3.1",
+      "quick-check-4.0",
       QUICK_METHOD,
     ]),
     methodologySnapshot: z.array(questionSchema).length(12),
@@ -202,8 +211,10 @@ const checkSchema = z
   .refine(
     (c) =>
       c.businessAnalysis === undefined ||
-      (c.methodologyVersion === "quick-check-4.0" && c.schemaVersion === "1.1"),
-    "Individuelle Business-Auswertungen gehören zur Methode 4.0 mit Schema 1.1.",
+      (supportsBusinessAnalysis(c.methodologyVersion) &&
+        c.schemaVersion === "1.1" &&
+        c.businessAnalysis.input.methodologyVersion === c.methodologyVersion),
+    "Die Business-Auswertung muss zur gespeicherten Methode mit Schema 1.1 passen.",
   )
   .refine(
     (c) =>
@@ -235,7 +246,7 @@ export function serializeChecks(checks: QuickCheck[]) {
     {
       format: "e23-quick-check",
       schemaVersion: QUICK_SCHEMA,
-      appVersion: "0.7.0",
+      appVersion: "0.8.0",
       exportedAt: new Date().toISOString(),
       checks,
     },
@@ -298,7 +309,9 @@ export function checkTitle(c: QuickCheck) {
 }
 export function exampleCheck() {
   const c = createCheck("existing");
-  const values = [9, 9, 8, 8, 8, 2, 1, 7, 6, 2, 9, 3];
+  const values = [10, 10, 10, 8, 9, 2, 2, 3, 8, 8, 9, 1];
+  c.businessDescription =
+    "Unsere App erstellt aus Audiodateien Transkripte und SRT-Untertitel für einzelne Content-Creator. Kunden zahlen für die automatische Umwandlung und den Download.";
   QUICK_QUESTIONS.forEach((q, i) => answerCheck(c, q.id, values[i]));
   c.isExample = true;
   c.view = "results";

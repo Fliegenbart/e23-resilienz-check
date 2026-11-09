@@ -1,7 +1,15 @@
 import type { QuickCheck } from "./model";
 import { checkTitle } from "./model";
 import { evaluateProvider } from "./provider-analysis";
-import { providerPremise, PROVIDER_BOUNDARIES } from "./provider-questions";
+import {
+  providerPremise,
+  PROVIDER_BOUNDARIES,
+  isProviderV5,
+} from "./provider-questions";
+import {
+  ProviderRiskScore,
+  ProviderPurchaseFindings,
+} from "./ProviderRiskSummary";
 import { ProviderFindings } from "./ProviderResults";
 import { ProviderScenario } from "./ProviderScenario";
 import { ProviderRules } from "./ProviderRules";
@@ -11,6 +19,7 @@ import { BusinessAnalysisFindings } from "./BusinessAnalysis";
 export function ProviderReport({ check }: { check: QuickCheck }) {
   const r = evaluateProvider(check);
   const personal = currentBusinessAnalysis(check);
+  const current = isProviderV5(check.methodologyVersion);
   return (
     <article className="quick-print-report provider-print-report">
       <header className="print-brand">
@@ -21,8 +30,11 @@ export function ProviderReport({ check }: { check: QuickCheck }) {
         {checkTitle(check)}
         {check.isExample ? " · Fiktives Beispiel" : ""}
       </p>
-      <h1>{personal?.result.headline ?? r.headline}</h1>
-      <p>{personal?.result.summary ?? r.summary}</p>
+      {current && <ProviderRiskScore check={check} />}
+      <h1>
+        {current ? r.headline : (personal?.result.headline ?? r.headline)}
+      </h1>
+      {!current && <p>{personal?.result.summary ?? r.summary}</p>}
       {personal && (
         <p>KI-Auswertung aus Ihrer Beschreibung und Ihren Antworten.</p>
       )}
@@ -39,14 +51,17 @@ export function ProviderReport({ check }: { check: QuickCheck }) {
           <p>{check.businessDescription}</p>
         </section>
       )}
+      {current && <ProviderPurchaseFindings check={check} print />}
       <ProviderScenario check={check} print />
-      {personal && <BusinessAnalysisFindings analysis={personal} print />}
+      {!current && personal && (
+        <BusinessAnalysisFindings analysis={personal} print />
+      )}
       <section className="print-block">
         <h2>Grundannahme des Stresstests</h2>
         <p>{providerPremise(check.methodologyVersion)}</p>
         <p>{PROVIDER_BOUNDARIES}</p>
       </section>
-      <ProviderFindings check={check} print />
+      {!current && <ProviderFindings check={check} print />}
       <h2 className="print-page-start">Ihre Antworten</h2>
       {check.methodologySnapshot.map((q) => (
         <section className="print-block print-answer" key={q.id}>

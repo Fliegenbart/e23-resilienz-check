@@ -1,8 +1,10 @@
-import { createCheck, answerCheck } from "../../src/quick/model";
+import { createCheck, answerCheck, QUICK_METHODS } from "../../src/quick/model";
 import type { BusinessAnalysisResult } from "../../src/quick/business-analysis";
 
 export function businessCheck() {
   const check = createCheck("existing");
+  check.methodologyVersion = "quick-check-4.0";
+  check.methodologySnapshot = structuredClone(QUICK_METHODS["quick-check-4.0"]);
   check.businessDescription =
     "Wir prüfen Lieferantendokumente für kleine Hersteller. Wir haften für das geprüfte Ergebnis.";
   check.methodologySnapshot.forEach((q) => answerCheck(check, q.id, 8));

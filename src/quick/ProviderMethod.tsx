@@ -3,6 +3,8 @@ import {
   providerPremise,
   PROVIDER_BOUNDARIES,
   isProviderV4,
+  isProviderV5,
+  supportsBusinessAnalysis,
 } from "./provider-questions";
 import { ProviderRules } from "./ProviderRules";
 
@@ -18,7 +20,7 @@ export function ProviderMethodContent({
       <p>{providerPremise(version)}</p>
       <p>{PROVIDER_BOUNDARIES}</p>
       <h3>So entsteht Ihr Ergebnis</h3>
-      {isProviderV4(version) && (
+      {supportsBusinessAnalysis(version) && (
         <p>
           Auf Wunsch bezieht eine KI-Auswertung Ihre Business-Beschreibung,
           Antworten und das gewählte Szenario auf Ihr Angebot. Sie ergänzt den
@@ -32,13 +34,22 @@ export function ProviderMethodContent({
         ausdrücken. Maßgeblich sind die beiden Texte an der Skala.
       </p>
       <p>
-        {isProviderV4(version)
-          ? "Was KI übernehmen kann, was Sie schützt und wie Sie selbst profitieren: drei getrennte Befunde."
-          : "Wir betrachten drei Wege getrennt: digitale Arbeit übernehmen, im vorhandenen Paket mitliefern und Ihre Oberfläche umgehen. Eigene Vorteile werden davon nicht abgezogen."}
+        {isProviderV5(version)
+          ? "Der stärkste Übernahmeweg bestimmt das Risiko. Ein Kaufgrund trägt nur, wenn Ihr Beitrag nötig, schwer ersetzbar und den Aufpreis wert bleibt."
+          : isProviderV4(version)
+            ? "Was KI übernehmen kann, was Sie schützt und wie Sie selbst profitieren: drei getrennte Befunde."
+            : "Wir betrachten drei Wege getrennt: digitale Arbeit übernehmen, im vorhandenen Paket mitliefern und Ihre Oberfläche umgehen. Eigene Vorteile werden davon nicht abgezogen."}
       </p>
       <details>
         <summary>Die Auswertungsregeln im Detail</summary>
-        <ProviderRules version={version} />
+        {isProviderV5(version) ? (
+          <p>
+            Der KI-Risiko-Score reicht von 0 bis 100. Hohe Werte bedeuten einen
+            leicht ersetzbaren Kaufgrund. Er ist keine Pleitewahrscheinlichkeit.
+          </p>
+        ) : (
+          <ProviderRules version={version} />
+        )}
       </details>
       <h3>Was die Quellen beitragen</h3>
       <p>

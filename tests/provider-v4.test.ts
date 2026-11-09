@@ -4,7 +4,8 @@ import { describe, expect, it } from "vitest";
 import {
   answerCheck,
   calculateRisk,
-  createCheck,
+  createCheck as createNewCheck,
+  QUICK_METHODS,
   parseChecks,
   serializeChecks,
   type QuickQuestion,
@@ -19,6 +20,13 @@ import { ProviderMethodContent } from "../src/quick/ProviderMethod";
 import { QuickReport } from "../src/quick/Report";
 import { DEFAULT_PROVIDER_SCENARIO } from "../src/quick/provider-scenario";
 
+function createCheck(type: "existing" | "idea") {
+  const check = createNewCheck(type);
+  check.methodologyVersion = "quick-check-4.0";
+  check.methodologySnapshot = structuredClone(QUICK_METHODS["quick-check-4.0"]);
+  return check;
+}
+
 function rated(value = 9) {
   const check = createCheck("existing");
   check.methodologySnapshot.forEach((q) => answerCheck(check, q.id, value));
@@ -27,7 +35,7 @@ function rated(value = 9) {
 }
 
 describe("Zwölf Fragen zu KI-Risiko, Schutz und eigenem Nutzen", () => {
-  it("fragt die neuen Faktoren direkt und weiterhin in genau zwölf Fragen ab", () => {
+  it("bewahrt die V4-Faktoren direkt und weiterhin in genau zwölf Fragen ab", () => {
     const c = createCheck("existing");
     expect(c.methodologyVersion).toBe("quick-check-4.0");
     expect(c.methodologySnapshot).toHaveLength(12);

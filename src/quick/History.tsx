@@ -1,7 +1,8 @@
 import type { QuickCheck } from "./model";
 import { calculateRisk, riskLabel, checkTitle } from "./model";
 import { Arrow } from "./ui";
-import { isProviderMethod } from "./provider-questions";
+import { isProviderMethod, isProviderV5 } from "./provider-questions";
+import { providerRiskV5 } from "./provider-analysis-5";
 export function History({
   checks,
   onOpen,
@@ -38,6 +39,9 @@ export function History({
             .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
             .map((c) => {
               const r = calculateRisk(c);
+              const risk = isProviderV5(c.methodologyVersion)
+                ? providerRiskV5(c)
+                : null;
               return (
                 <button
                   className="history-row"
@@ -61,21 +65,25 @@ export function History({
                     </small>
                   </span>
                   <span className="history-score">
-                    {isProviderMethod(c.methodologyVersion)
-                      ? c.view === "results"
-                        ? "Ergebnis"
-                        : `${r.processed}/12`
-                      : c.view === "scenarios"
-                        ? (c.scenarios?.runs.length ?? 0)
-                        : r.score === null
-                          ? "—"
-                          : r.score}
-                    <small>
-                      {isProviderMethod(c.methodologyVersion)
-                        ? "Übernahme & Schutz"
+                    {risk && c.view === "results"
+                      ? (risk.score ?? `${risk.min}–${risk.max}`)
+                      : isProviderMethod(c.methodologyVersion)
+                        ? c.view === "results"
+                          ? "Ergebnis"
+                          : `${r.processed}/12`
                         : c.view === "scenarios"
-                          ? "Szenariostände"
-                          : riskLabel(r.score)}
+                          ? (c.scenarios?.runs.length ?? 0)
+                          : r.score === null
+                            ? "—"
+                            : r.score}
+                    <small>
+                      {risk && c.view === "results"
+                        ? `KI-Risiko · ${risk.label}`
+                        : isProviderMethod(c.methodologyVersion)
+                          ? "Übernahme & Schutz"
+                          : c.view === "scenarios"
+                            ? "Szenariostände"
+                            : riskLabel(r.score)}
                     </small>
                   </span>
                   <Arrow />
@@ -113,7 +121,7 @@ export function History({
       </p>
       <p className="storage-hint">
         Frühere Checks behalten ihre ursprünglichen Fragen und Ergebnisse. Der
-        neue Assessment betrachtet Übernahme und Schutz getrennt.
+        neue Check bewertet den verbleibenden Kaufgrund.
       </p>
     </main>
   );

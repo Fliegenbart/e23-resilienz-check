@@ -12,7 +12,10 @@ import {
   evaluateProvider,
   evaluateProviderScenario,
 } from "../src/quick/provider-analysis.js";
-import { providerPremise } from "../src/quick/provider-questions.js";
+import {
+  providerPremise,
+  isProviderV5,
+} from "../src/quick/provider-questions.js";
 
 const MAX_REQUEST_BYTES = 20_480;
 const SYSTEM = `Sie analysieren auf Deutsch, was von einem konkreten Geschäft bleibt, wenn leistungsfähige, günstige KI-Agenten digitale Arbeit übernehmen.
@@ -34,7 +37,15 @@ export function buildAnalysisPrompt(input: BusinessAnalysisInput) {
   check.providerScenario = input.scenario;
   const evaluated = evaluateProvider(check);
   return {
-    system: SYSTEM,
+    system:
+      SYSTEM +
+      (isProviderV5(input.methodologyVersion)
+        ? `
+Für diese Methode steht der verbleibende Kaufgrund im Zentrum. Prüfen Sie das bezahlte Kundenergebnis, nicht nur einzelne Tätigkeiten. Drei unterschiedliche Fälle: (1) der Assistent liefert das fertige Ergebnis selbst; (2) der Agent übernimmt die Bedienung, nutzt aber weiterhin bezahlte Software; (3) der Agent wählt austauschbare Dienstleister und übernimmt den Kundenzugang. Wenn ein Agent ein Programm bedient, ist dessen Technik nicht automatisch überflüssig. Ebenso garantiert physische Ausführung keinen Schutz, wenn ein Agent andere Anbieter beauftragen kann.
+Q1–Q5 und Q10 betreffen die Übernahmewege. Q6 ist der weiterhin nötige Beitrag, Q7 dessen schwere Ersetzbarkeit, Q8 der zusätzliche Kaufgrund. Alle drei müssen gemeinsam tragen. Q9 ist die heute getestete KI-Leistung, Q11 der separate eigene Nutzen, Q12 sind Kaufbelege. Legen Sie an die Beschreibung denselben Maßstab an: Benennen Sie das konkrete Ergebnis und den konkreten verbliebenen Beitrag, soweit angegeben. Erfinden Sie keine Schutzfaktoren. Fehlende Kunden bei neuen Ideen sind fehlende Belege, nicht automatisch hohes Risiko.
+Das Feld protection beantwortet ausschließlich: Wofür könnten Kunden trotz KI weiter extra zahlen? Eine notwendige Technik kann bezahlbar bleiben, eine Oberfläche allein nicht. Ist kein Kaufgrund beschrieben oder gestützt, sagen Sie das ausdrücklich. Bei Widersprüchen formulieren Sie bedingt und benennen die offene Bedingung.
+Der serverseitig berechnete KI-Risiko-Score und die Spannweite sind verbindlich; berechnen oder erfinden Sie keinen eigenen Score. Schreiben Sie keine davon abweichende Risikostufe in headline oder summary. Der Zwei-Jahres-Blick ist eine getrennte Annahme. Ein langsames Szenario beseitigt das grundsätzliche Risiko nicht. Die drei sichtbaren Kernbefunde takeover, protection und nextStep müssen ohne weitere Erklärung verständlich sein.`
+        : ""),
     prompt: JSON.stringify(
       {
         assumption: providerPremise(input.methodologyVersion),
@@ -48,6 +59,14 @@ export function buildAnalysisPrompt(input: BusinessAnalysisInput) {
         })),
         scenario: input.scenario,
         findings: {
+          ...(evaluated.risk
+            ? {
+                risk: evaluated.risk,
+                verdict: evaluated.headline,
+                remainingPurchaseReason: evaluated.payment,
+                contradictions: evaluated.contradictions,
+              }
+            : {}),
           takeover: evaluated.routes.map((r) => ({
             title: r.title,
             level: r.level,

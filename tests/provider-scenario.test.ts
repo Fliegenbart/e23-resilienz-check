@@ -116,6 +116,8 @@ describe("Zwei-Jahres-Szenario", () => {
 
   it("lässt fehlende Antworten auch bei langsamem Fortschritt offen", () => {
     const check = createCheck("existing");
+    check.methodologyVersion = "quick-check-3.1";
+    check.methodologySnapshot = structuredClone(providerV31) as QuickQuestion[];
     check.providerScenario = { ...settings, capabilityPace: "slow" };
     expect(analysis).toHaveProperty("evaluateProviderScenario");
     const result = analysis.evaluateProviderScenario(check);

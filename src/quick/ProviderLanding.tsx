@@ -31,7 +31,7 @@ export function ProviderLanding({
             <span className="highlight-word">vernichten?</span>
           </h1>
           <p className="provider-lead">
-            Was kann KI übernehmen? Was schützt Ihr Geschäft?
+            Was übernimmt KI? Wofür zahlen Kunden weiter?
           </p>
           <BusinessDescription
             value={description}

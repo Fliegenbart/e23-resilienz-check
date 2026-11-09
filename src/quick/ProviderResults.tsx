@@ -6,7 +6,11 @@ import {
   PROTECTION_LABELS,
   BENEFIT_LABELS,
 } from "./provider-analysis";
-import { isProviderV4 } from "./provider-questions";
+import { isProviderV5, supportsBusinessAnalysis } from "./provider-questions";
+import {
+  ProviderRiskScore,
+  ProviderPurchaseFindings,
+} from "./ProviderRiskSummary";
 import { Arrow } from "./ui";
 import { ProviderScenario } from "./ProviderScenario";
 import type { ProviderScenarioSettings } from "./provider-scenario";
@@ -184,7 +188,7 @@ export function ProviderFindings({
             </summary>
             <p>{r.evidenceText}</p>
             <div>
-              {!isProviderV4(check.methodologyVersion) && (
+              {!supportsBusinessAnalysis(check.methodologyVersion) && (
                 <span>
                   Vergleich{" "}
                   <strong>
@@ -195,7 +199,7 @@ export function ProviderFindings({
                 </span>
               )}
               <span>
-                {isProviderV4(check.methodologyVersion)
+                {supportsBusinessAnalysis(check.methodologyVersion)
                   ? "Kauf nach KI-Vergleich"
                   : "Kaufentscheidung"}{" "}
                 <strong>
@@ -251,6 +255,7 @@ export function ProviderResults({
 }) {
   const r = evaluateProvider(check);
   const personal = currentBusinessAnalysis(check);
+  const current = isProviderV5(check.methodologyVersion);
   const [answersOpen, setAnswersOpen] = useState(false);
   const [descriptionOpen, setDescriptionOpen] = useState(false);
   return (
@@ -260,24 +265,41 @@ export function ProviderResults({
           Ihr Ergebnis · {r.answered}/12 beantwortet
           {check.isExample ? " · Beispiel" : ""}
         </p>
-        <h1>{personal?.result.headline ?? r.headline}</h1>
-        <p className="provider-result-summary">
-          {personal?.result.summary ?? r.summary}
-        </p>
-        <p className="provider-context">
-          {personal
-            ? "KI-Auswertung aus Ihrer Beschreibung und Ihren Antworten."
-            : "Auswertung Ihrer zwölf Antworten."}
-        </p>
-        {r.unknown.length > 0 && (
+        {current && <ProviderRiskScore check={check} />}
+        <h1>
+          {current ? r.headline : (personal?.result.headline ?? r.headline)}
+        </h1>
+        {!current && (
+          <p className="provider-result-summary">
+            {personal?.result.summary ?? r.summary}
+          </p>
+        )}
+        {!current && (
+          <p className="provider-context">
+            {personal
+              ? "KI-Auswertung aus Ihrer Beschreibung und Ihren Antworten."
+              : "Auswertung Ihrer zwölf Antworten."}
+          </p>
+        )}
+        {(current
+          ? (r.risk?.missing.length ?? 0) > 0
+          : r.unknown.length > 0) && (
           <button
             className="button secondary"
             onClick={() =>
-              onEdit(check.methodologySnapshot.indexOf(r.unknown[0]))
+              onEdit(
+                current
+                  ? check.methodologySnapshot.findIndex(
+                      (q) => q.id === r.risk!.missing[0],
+                    )
+                  : check.methodologySnapshot.indexOf(r.unknown[0]),
+              )
             }
           >
-            {r.unknown.length} offene{" "}
-            {r.unknown.length === 1 ? "Frage klären" : "Fragen klären"}
+            {current ? r.risk!.missing.length : r.unknown.length} offene{" "}
+            {(current ? r.risk!.missing.length : r.unknown.length) === 1
+              ? "Frage klären"
+              : "Fragen klären"}
             <Arrow />
           </button>
         )}
@@ -301,11 +323,20 @@ export function ProviderResults({
           </div>
         )}
       </section>
-      {isProviderV4(check.methodologyVersion) && (
+      {supportsBusinessAnalysis(check.methodologyVersion) && (
         <BusinessAnalysisControl check={check} onComplete={onAnalysisChange} />
       )}
+      {current && <ProviderPurchaseFindings check={check} />}
       <ProviderScenario check={check} onChange={onScenarioChange} />
-      {personal ? (
+      {current ? (
+        <details className="business-analysis-overview">
+          <summary>Risiko und Kaufgrund im Detail</summary>
+          {r.contradictions?.map((text, i) => (
+            <p key={i}>{text}</p>
+          ))}
+          <ProviderFindings check={check} />
+        </details>
+      ) : personal ? (
         <>
           <BusinessAnalysisFindings analysis={personal} />
           <details className="business-analysis-overview">

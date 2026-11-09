@@ -1,5 +1,6 @@
 import { useId } from "react";
 import type { QuickCheck } from "./model";
+import { isProviderV5 } from "./provider-questions";
 import { evaluateProviderScenario } from "./provider-analysis";
 import {
   PROVIDER_PACES,
@@ -33,7 +34,9 @@ export function ProviderScenario({
     >
       <header>
         <h2 id={`${id}-title`}>Nächste 2 Jahre</h2>
-        <span>Szenario</span>
+        <span>
+          {isProviderV5(check.methodologyVersion) ? "Annahme" : "Szenario"}
+        </span>
       </header>
       <div className="provider-scenario-grid">
         {axes.map(({ key, label, result }) => (
@@ -68,11 +71,13 @@ export function ProviderScenario({
               aria-live={print ? undefined : "polite"}
             >
               {result.text}
-              {key === "capabilityPace" && benefit && (
-                <span className="provider-scenario-benefit">
-                  {benefit.text}
-                </span>
-              )}
+              {key === "capabilityPace" &&
+                benefit &&
+                !isProviderV5(check.methodologyVersion) && (
+                  <span className="provider-scenario-benefit">
+                    {benefit.text}
+                  </span>
+                )}
             </p>
           </div>
         ))}

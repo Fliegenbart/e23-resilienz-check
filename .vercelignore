@@ -9,3 +9,6 @@ Start.command
 *.tsbuildinfo
 .env
 .env.*
+.playwright-mcp/
+test-results/
+playwright-report/

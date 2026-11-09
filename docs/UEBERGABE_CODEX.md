@@ -1,6 +1,24 @@
 # Übergabe an einen neuen Codex-Chat
 
-## Aktueller Stand: Resilience-Assessment 0.7.0
+## Aktueller Stand: Resilience-Assessment 0.8.0
+
+Stand: 9. November 2026. David hat den Umbau auf KI-Risiko-Score, konkrete Übernahme und verbleibenden Kaufgrund sowie die erneute Veröffentlichung ausdrücklich beauftragt. Kurz und minimalistisch bleiben.
+
+- Neue Methode `quick-check-5.0`: Q1 digitales Ergebnis, Q2 auch ohne eigenen Anbieter erhältliche Mittel, Q3 direkter Assistentenzugang, Q4 Bedienung, Q5 austauschbare Anbieter, Q6 weiter nötiger Beitrag, Q7 schwere Ersetzbarkeit, Q8 zusätzlicher Kaufgrund, Q9 heutige KI-Leistung, Q10 schwindender KI-Vorsprung, Q11 eigener Nutzen, Q12 Kaufbelege.
+- `provider-analysis-5.ts`: stärkster von drei Übernahmewegen statt Durchschnitt; Schutz nur als Minimum aus Q6/Q7/Q8. Q11 und Q12 werden nicht in Risiko verrechnet. Score 0–100 in Fünferschritten; unbekannte oder widersprüchliche Angaben ergeben eine Spanne. Keine empirisch kalibrierte Überlebenswahrscheinlichkeit. Formeln und Szenariogewichte in README und `ProviderRules.tsx`.
+- Zwei-Jahres-Befunde nutzen Q9 als Ausgangslage. Tempoannahmen verändern den angenommenen Übernahme- und Preisdruck, nicht nur Adjektive. Der grundlegende Stresstest-Score bleibt unabhängig. Fehlender heutiger Vergleich bleibt sichtbar.
+- Kompakte Hauptansicht: Score, klares Urteil, „Was KI übernimmt“, „Wofür Kunden weiter zahlen“, ein Test. Details aufklappbar. Bildschirm und PDF teilen `ProviderRiskSummary.tsx`. Verlauf zeigt den Score.
+- Business-Beschreibung konkretisiert die drei Kernaussagen. Server erhält berechneten Score, verbleibenden Kaufgrund und Widersprüche. Modell unterscheidet Ergebnisersetzung, weiter benötigte Technik hinter dem Agenten und austauschbare Zulieferer. Keine Modell-erfundenen Zahlen. Übertragung weiterhin nur nach Klick.
+- KI-Ausgabe `business-analysis-2.0`; alte 1.0-Ausgaben zur V4 bleiben lesbar. Eingabe-Methoden 4.0 und 5.0 werden getrennt interpretiert; Analyse und gespeicherter Check müssen dieselbe Methode haben. Änderungen machen KI-Texte weiterhin veraltet.
+- V4-Katalog zusätzlich in `methods/quick-check-4.0.json` eingefroren. V1–V4-Auswertungen unverändert. JSON-Schema weiter 1.1, jetzt sechs Methoden. Historische Tests nutzen ausdrücklich ihre damaligen Kataloge.
+- Prüfung: `npm test -- --pool=threads`, `npm run build`, `npm run test:api`, `git diff --check`. Neue Regressionen in `tests/provider-v5.test.ts`: Transkription, bezahlte Technik, Kundenzugang bei physischer Ausführung, Schutz als gemeinsame Bedingung, fehlende und widersprüchliche Angaben, getrennte Evidenz, Szenarien, Bildschirm/PDF, Import/Export und Beschreibungskontext.
+- Browser-QA nutzt Playwright, weil der Browser-Plugin-Skill hier nicht verfügbar ist. Temporäre Artefakte in `.playwright-mcp/` sind von Git und Vercel ausgeschlossen. Der lokale Prüfserver läuft auf `127.0.0.1:5197`; bei Wiederaufnahme prüfen.
+
+Produktion: https://e23-resilienz-check.vercel.app. `flux` veröffentlicht automatisch. Vor jedem Release Remote-Stand prüfen; aktuelles Deployment separat über Vercel bestätigen.
+
+---
+
+## Historischer Stand: Resilience-Assessment 0.7.0
 
 Stand: 7. November 2026. David möchte konkrete Aussagen zu seinem Geschäft aus Business-Beschreibung und zwölf Antworten. Die frühere Veröffentlichungserlaubnis und die Vorgabe kurzer, konkreter Texte gelten weiter.
 

@@ -29,12 +29,12 @@ function rated(values: number[]) {
 describe("Plattform-Check", () => {
   it("beginnt mit konkreten Fragen einer neuen Methode", () => {
     const c = createCheck("existing");
-    expect(c.methodologyVersion).toBe("quick-check-4.0");
+    expect(c.methodologyVersion).toBe("quick-check-5.0");
     expect(c.view).toBe("questions");
     expect(c.methodologySnapshot[0].text).toContain("digital");
   });
-  it("verrechnet Schutz und Angreifbarkeit nicht zu einem Gesamtscore", () => {
-    const c = createCheck("existing");
+  it("bewahrt die scorefreie V3-Auswertung", () => {
+    const c = rated(Array(12).fill(10));
     c.methodologySnapshot.forEach((q) => answerCheck(c, q.id, 10));
     expect(calculateRisk(c).score).toBeNull();
     expect(calculateRisk(c).answered).toBe(12);
