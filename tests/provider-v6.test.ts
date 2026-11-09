@@ -199,6 +199,8 @@ describe("Expertenteams für alle statt vom Nutzer geschätzter KI-Zukunft", () 
     expect(system).toContain("bekannte Wettbewerber");
     expect(system).toContain("unbekannte Anbieter aus anderen Branchen");
     expect(system).toContain("nicht die bisherige Methode");
+    expect(system).toContain("ohne die bisherige Produktform");
+    expect(system).toContain("Echte Kundenvorgaben");
     expect(system).toContain("kein Versprechen für 12–18 Monate");
     expect(system).toContain("Q11 ist KEIN eigener KI-Nutzen");
     expect(system).toContain("keine automatische Entwarnung");

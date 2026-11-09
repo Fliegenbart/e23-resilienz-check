@@ -62,7 +62,7 @@ export function BusinessDescription({
           readOnly={busy}
           maxLength={BUSINESS_DESCRIPTION_MAX_LENGTH}
           rows={3}
-          placeholder="Was bieten Sie an, für wen – und warum kaufen Kunden bei Ihnen?"
+          placeholder="Welches Problem lösen Sie, für wen – und wofür zahlen Kunden?"
           aria-describedby={`${id}-hint ${id}-status`}
         />
         <div className="business-input-tools">
