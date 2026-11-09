@@ -98,6 +98,9 @@ describe("Serverseitige individuelle Auswertung", () => {
       generate: vi.fn().mockRejectedValue(new Error("secret upstream details")),
     })(request());
     expect(response.status).toBe(502);
+    expect(response.headers.get("X-Analysis-Failure")).toBe(
+      "upstream_unavailable",
+    );
     expect(await response.text()).not.toContain("secret");
     const bad = structuredClone(analysisResult);
     bad.protection[0].basisQuote = "Erfundene Exklusivrechte";
@@ -105,14 +108,17 @@ describe("Serverseitige individuelle Auswertung", () => {
       generate: vi.fn().mockResolvedValue(bad),
     })(request());
     expect(response.status).toBe(502);
+    expect(response.headers.get("X-Analysis-Failure")).toBe(
+      "output_source_quote",
+    );
     expect(log.mock.calls).toEqual([
       [
         "business_analysis_failed",
-        { status: null, reason: "upstream_or_invalid_output" },
+        { status: null, reason: "upstream_unavailable" },
       ],
       [
         "business_analysis_failed",
-        { status: null, reason: "upstream_or_invalid_output" },
+        { status: null, reason: "output_source_quote" },
       ],
     ]);
     log.mockRestore();
