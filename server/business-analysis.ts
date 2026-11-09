@@ -204,7 +204,9 @@ export function createAnalysisHandler({
       const result = await generate(input, signal);
       signal.throwIfAborted();
       const analysis = businessAnalysisSchema.parse({
-        version: BUSINESS_ANALYSIS_VERSION,
+        version: isProviderV5(input.methodologyVersion)
+          ? BUSINESS_ANALYSIS_VERSION
+          : "business-analysis-1.0",
         createdAt: new Date().toISOString(),
         model: BUSINESS_ANALYSIS_MODEL,
         input,

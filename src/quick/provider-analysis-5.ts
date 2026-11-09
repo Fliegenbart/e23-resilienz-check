@@ -82,7 +82,13 @@ export function providerRiskV5(check: QuickCheck) {
     conflicts,
     label:
       score === null
-        ? "Noch offen"
+        ? min >= 85
+          ? "Sehr hoch"
+          : min >= 65
+            ? max >= 85
+              ? "Hoch bis sehr hoch"
+              : "Hoch"
+            : "Noch offen"
         : score >= 85
           ? "Sehr hoch"
           : score >= 65
@@ -92,7 +98,9 @@ export function providerRiskV5(check: QuickCheck) {
               : "Niedrig",
     tone:
       score === null
-        ? "unknown"
+        ? min >= 65
+          ? "high"
+          : "unknown"
         : score >= 65
           ? "high"
           : score >= 35
@@ -224,11 +232,13 @@ export function evaluateProviderV5(check: QuickCheck) {
     unknown:
       "Kaufbelege sind noch offen. Das erhöht die Unsicherheit, nicht den Risiko-Score.",
   }[evidence];
-  const strongestIndex = upper.routes.indexOf(Math.max(...upper.routes));
+  const decidingRoutes =
+    risk.score === null && risk.min >= 65 ? lower.routes : upper.routes;
+  const strongestIndex = decidingRoutes.indexOf(Math.max(...decidingRoutes));
   const strongest = routes[strongestIndex];
   const protectedContribution =
     lower.protection >= 2 / 3 && !risk.conflicts.length;
-  const score = risk.score;
+  const score = risk.score ?? (risk.min >= 65 ? risk.min : null);
   const headline =
     score === null
       ? "Ihr Kaufgrund ist noch nicht klar."
@@ -242,7 +252,7 @@ export function evaluateProviderV5(check: QuickCheck) {
               ? "Die Bedienung verliert ihren Kaufgrund."
               : score >= 35
                 ? "Ein Teil Ihres Kaufgrunds gerät unter Druck."
-                : "Ein eigener Kaufgrund bleibt erkennbar.";
+                : "Der Stresstest zeigt wenig KI-Risiko.";
   const payment = risk.conflicts.length
     ? "Ihre Angaben zum nötigen Beitrag und seiner Ersetzbarkeit widersprechen sich noch."
     : protectedContribution
@@ -252,7 +262,7 @@ export function evaluateProviderV5(check: QuickCheck) {
       : protectionIds.some((id) => numeric(check, id) === null)
         ? "Welcher nötige, schwer ersetzbare Beitrag Ihren Aufpreis rechtfertigt, ist noch offen."
         : numeric(check, "Q6")! <= 3 || numeric(check, "Q8")! <= 3
-          ? "Kein klarer Kaufgrund nach der KI-Übernahme erkennbar."
+          ? "Kein klarer Kaufgrund zusätzlich zum KI-Angebot erkennbar."
           : numeric(check, "Q7")! <= 3
             ? "Ihr Beitrag kann nötig bleiben, ist aber leicht anderswo erhältlich."
             : "Ein zusätzlicher Kaufgrund ist möglich, aber noch nicht stark genug begründet.";

@@ -24,9 +24,23 @@ describe("Serverseitige individuelle Auswertung", () => {
     expect(response.status).toBe(200);
     expect(response.headers.get("Cache-Control")).toContain("no-store");
     const result = await response.json();
+    expect(result.version).toBe("business-analysis-1.0");
     expect(result.input).toEqual(analysisInputFor(businessCheck()));
     expect(result.result).toEqual(analysisResult);
     expect(generate).toHaveBeenCalledOnce();
+  });
+  it("liefert die neue Ausgabeversion für den KI-Risiko-Check", async () => {
+    const input = {
+      ...analysisInputFor(businessCheck())!,
+      methodologyVersion: "quick-check-5.0",
+    };
+    const response = await createAnalysisHandler({
+      generate: vi.fn().mockResolvedValue(analysisResult),
+    })(request(input));
+    expect(response.status).toBe(200);
+    const result = await response.json();
+    expect(result.version).toBe("business-analysis-2.0");
+    expect(result.input.methodologyVersion).toBe("quick-check-5.0");
   });
   it("stoppt fremde Origins, GET, falsche Formate, Methoden und zu große Anfragen vor dem Modellaufruf", async () => {
     const generate = vi.fn();

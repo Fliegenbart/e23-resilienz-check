@@ -14,7 +14,7 @@ Stand: 9. November 2026. David hat den Umbau auf KI-Risiko-Score, konkrete Über
 - Prüfung: `npm test -- --pool=threads`, `npm run build`, `npm run test:api`, `git diff --check`. Neue Regressionen in `tests/provider-v5.test.ts`: Transkription, bezahlte Technik, Kundenzugang bei physischer Ausführung, Schutz als gemeinsame Bedingung, fehlende und widersprüchliche Angaben, getrennte Evidenz, Szenarien, Bildschirm/PDF, Import/Export und Beschreibungskontext.
 - Browser-QA nutzt Playwright, weil der Browser-Plugin-Skill hier nicht verfügbar ist. Temporäre Artefakte in `.playwright-mcp/` sind von Git und Vercel ausgeschlossen. Der lokale Prüfserver läuft auf `127.0.0.1:5197`; bei Wiederaufnahme prüfen.
 
-Produktion: https://e23-resilienz-check.vercel.app. `flux` veröffentlicht automatisch. Vor jedem Release Remote-Stand prüfen; aktuelles Deployment separat über Vercel bestätigen.
+Produktion: https://e23-resilienz-check.vercel.app. Freigegebener Git-Stand auf `flux`. Beim Release 0.8.0 war nach dem Push kein neues Produktionsdeployment sichtbar; daher direkt mit `vercel deploy --prod --yes` veröffentlichen. Vor jedem Release Remote-Stand prüfen; aktuelles Deployment separat über Vercel bestätigen.
 
 ---
 

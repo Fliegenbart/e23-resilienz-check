@@ -84,6 +84,21 @@ describe("Kaufgrund und KI-Risiko", () => {
     expect(r.risk.max).toBe(100);
     expect(r.risk.label).toBe("Noch offen");
   });
+  it("behält ein gesichertes hohes Risiko trotz einer offenen Detailfrage sichtbar", () => {
+    const c = rated({ ...transcript, Q10: 9 });
+    answerCheck(c, "Q2", "unknown");
+    const r = evaluateProviderV5(c);
+    expect(r.risk.score).toBeNull();
+    expect(r.risk.min).toBeGreaterThanOrEqual(85);
+    expect(r.risk.label).toBe("Sehr hoch");
+    expect(r.headline).toContain("KI-Funktion");
+  });
+  it("macht niedriges KI-Risiko nicht zum Beleg für einen Kaufgrund", () => {
+    const r = evaluateProviderV5(rated());
+    expect(r.risk.score).toBe(0);
+    expect(r.headline).toBe("Der Stresstest zeigt wenig KI-Risiko.");
+    expect(r.payment).toContain("Kein klarer Kaufgrund");
+  });
   it("macht widersprüchliche starke Schutzbehauptungen nicht zu Entwarnung", () => {
     const r = evaluateProviderV5(
       rated({ ...transcript, Q6: 10, Q7: 10, Q8: 10 }),

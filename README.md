@@ -77,4 +77,4 @@ Einstieg: `src/main.tsx` → `src/quick/QuickApp.tsx`. Neue Fragen liegen in `pr
 
 Übergabe: [docs/UEBERGABE_CODEX.md](docs/UEBERGABE_CODEX.md). Umsetzungsplan: [Plattform-Check](docs/superpowers/plans/2026-11-07-plattform-check.md).
 
-Vercel baut mit `npm run build` nach `dist`. Der GitHub-Anschluss veröffentlicht den Branch `flux` automatisch; ein Push dorthin ist eine Veröffentlichung.
+Vercel baut mit `npm run build` nach `dist`. Der freigegebene Git-Stand liegt auf `flux`. Ein Push allein ist kein Nachweis einer Veröffentlichung: beim Release 0.8.0 war danach kein neues Produktionsdeployment sichtbar. Direkt veröffentlichen mit `vercel deploy --prod --yes`, anschließend Status und öffentliche Alias-Adresse auf Vercel sowie den Browserablauf prüfen.
