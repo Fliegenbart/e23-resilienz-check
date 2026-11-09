@@ -1,6 +1,6 @@
 # e23 Resilience-Assessment
 
-**Wird ein KI-Gigant Ihr Business vernichten?**
+**Wie einfach kann Ihr Business von KI disruptiert werden?**
 
 Das Resilience-Assessment beantwortet diese Frage mit zwölf konkreten Einschätzungen. Das Ergebnis zeigt einen KI-Risiko-Score, aktuell dokumentierte Anbieterfunktionen, was KI übernehmen könnte und eine mögliche bezahlte Rolle hinter Agenten. Der verbleibende Kaufgrund steht im Mittelpunkt. Eigenständiges Projekt außerhalb von ViralFlux.
 

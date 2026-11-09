@@ -20,8 +20,8 @@ export function ProviderLanding({
       <section className="provider-intro">
         <div>
           <h1>
-            Wird ein KI-Gigant Ihr Business{" "}
-            <span className="highlight-word">vernichten?</span>
+            Wie einfach kann Ihr Business von KI{" "}
+            <span className="highlight-word">disruptiert werden?</span>
           </h1>
           <p className="provider-lead">
             Was übernimmt KI? Wofür zahlen Kunden weiter?
