@@ -271,4 +271,43 @@ describe("Expertenteams für alle statt vom Nutzer geschätzter KI-Zukunft", () 
       BUSINESS_EXPERT_ANALYSIS_VERSION,
     );
   });
+  it("zählt zusätzliche Herkunftstitel nicht als lange Hauptaussage", () => {
+    const analysis = reviewed();
+    const result = analysis.result;
+    if (!("expertReview" in result)) throw new Error("Expertenszenario fehlt");
+    const findings = [
+      ...result.takeover,
+      ...result.protection,
+      result.nextStep,
+      result.opportunity,
+      ...Object.values(result.expertReview),
+    ];
+    findings.forEach((finding) => {
+      finding.title = "A ".repeat(28).trim();
+    });
+    expect(businessAnalysisSchema.safeParse(analysis).success).toBe(true);
+    result.summary = "Die Angaben bei Q10 sind offen.";
+    expect(businessAnalysisSchema.safeParse(analysis).success).toBe(false);
+  });
+  it("begrenzt die eigentlichen Hauptaussagen weiterhin", () => {
+    const analysis = reviewed();
+    const result = analysis.result;
+    if (!("expertReview" in result)) throw new Error("Expertenszenario fehlt");
+    [
+      ...result.takeover,
+      ...result.protection,
+      result.nextStep,
+      ...Object.values(result.expertReview),
+    ].forEach((finding) => {
+      finding.detail = "Wort ".repeat(30).trim() + ".";
+    });
+    const parsed = businessAnalysisSchema.safeParse(analysis);
+    expect(parsed.success).toBe(false);
+    if (!parsed.success)
+      expect(
+        parsed.error.issues.some(
+          (issue) => issue.message === "Ergebnis zu lang.",
+        ),
+      ).toBe(true);
+  });
 });

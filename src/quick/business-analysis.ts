@@ -289,13 +289,32 @@ export const businessAnalysisSchema = z
       ...analysis.result.openQuestions,
       ...(moatReview ? [moatReview.reason] : []),
     ].join(" ");
-    if (
-      visible.trim().split(/\s+/).length > (expert ? 240 : 180) ||
-      /\bQ(?:1[0-2]|[1-9])\b/.test(visible)
-    ) {
+    // V6 renders fixed headings and a rule/moat headline. Generated summaries,
+    // provenance titles and the optional own-benefit detail are not main copy.
+    const primaryText =
+      "expertReview" in analysis.result
+        ? [
+            ...analysis.result.takeover.map((finding) => finding.detail),
+            ...analysis.result.protection.map((finding) => finding.detail),
+            analysis.result.nextStep.detail,
+            ...Object.values(analysis.result.expertReview).map(
+              (finding) => finding.detail,
+            ),
+            ...(moatReview ? [moatReview.reason] : []),
+            analysis.result.openQuestions[0] ?? "",
+          ].join(" ")
+        : visible;
+    if (primaryText.trim().split(/\s+/).length > (expert ? 240 : 180)) {
       ctx.addIssue({
         code: "custom",
-        message: "Ergebnis zu lang oder mit technischen Frage-IDs.",
+        message: "Ergebnis zu lang.",
+        path: ["result"],
+      });
+    }
+    if (/\bQ(?:1[0-2]|[1-9])\b/.test(visible)) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Ergebnis enthält technische Frage-IDs.",
         path: ["result"],
       });
     }
