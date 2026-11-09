@@ -5,6 +5,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import {
   answerCheck,
   createCheck,
+  QUICK_METHODS,
   parseChecks,
   serializeChecks,
 } from "../src/quick/model";
@@ -27,6 +28,8 @@ import { analysisResult } from "./fixtures/business-analysis";
 
 function checkWithMoat() {
   const check = createCheck("idea");
+  check.methodologyVersion = "quick-check-5.0";
+  check.methodologySnapshot = structuredClone(QUICK_METHODS["quick-check-5.0"]);
   check.businessDescription =
     "Wir erstellen Transkripte und Untertitel für Creator.";
   check.businessMoat =

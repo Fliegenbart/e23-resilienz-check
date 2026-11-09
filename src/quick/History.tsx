@@ -1,8 +1,8 @@
 import type { QuickCheck } from "./model";
 import { calculateRisk, riskLabel, checkTitle } from "./model";
 import { Arrow } from "./ui";
-import { isProviderMethod, isProviderV5 } from "./provider-questions";
-import { providerRiskV5 } from "./provider-analysis-5";
+import { isProviderMethod, isProviderRiskMethod } from "./provider-questions";
+import { evaluateProvider } from "./provider-analysis";
 import {
   currentBusinessAnalysis,
   moatDisputesScore,
@@ -43,8 +43,8 @@ export function History({
             .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
             .map((c) => {
               const r = calculateRisk(c);
-              const risk = isProviderV5(c.methodologyVersion)
-                ? providerRiskV5(c)
+              const risk = isProviderRiskMethod(c.methodologyVersion)
+                ? evaluateProvider(c).risk
                 : null;
               const disputed = moatDisputesScore(
                 currentBusinessAnalysis(c),
@@ -129,7 +129,7 @@ export function History({
       </p>
       <p className="storage-hint">
         Frühere Checks behalten ihre ursprünglichen Fragen und Ergebnisse. Der
-        neue Check bewertet den verbleibenden Kaufgrund.
+        neue Check prüft Ihren Burggraben gegen Expertenteams für alle.
       </p>
     </main>
   );

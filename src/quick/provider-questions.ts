@@ -1,12 +1,13 @@
 import type { GroupId, QuickQuestion } from "./model.js";
 
-export const PROVIDER_METHOD = "quick-check-5.0";
+export const PROVIDER_METHOD = "quick-check-6.0";
 export function isProviderMethod(version: string) {
   return [
     "quick-check-3.0",
     "quick-check-3.1",
     "quick-check-4.0",
     "quick-check-5.0",
+    "quick-check-6.0",
   ].includes(version);
 }
 export const PROVIDER_PREMISE =
@@ -27,10 +28,19 @@ export function isProviderV4(version: string) {
 export function isProviderV5(version: string) {
   return version === "quick-check-5.0";
 }
-export function supportsBusinessAnalysis(version: string) {
-  return isProviderV4(version) || isProviderV5(version);
+export function isProviderV6(version: string) {
+  return version === "quick-check-6.0";
 }
+export function isProviderRiskMethod(version: string) {
+  return isProviderV5(version) || isProviderV6(version);
+}
+export function supportsBusinessAnalysis(version: string) {
+  return isProviderV4(version) || isProviderRiskMethod(version);
+}
+export const EXPERT_PREMISE =
+  "Stellen Sie sich ein Team aus Spitzenexperten vor: rund um die Uhr, parallel und viel günstiger. Ihre Kunden, bekannte Wettbewerber und neue Anbieter aus anderen Branchen haben dasselbe Team wie Sie. Es darf das Kundenproblem ganz anders lösen. Welcher Burggraben bleibt?";
 export function providerPremise(version: string) {
+  if (isProviderV6(version)) return EXPERT_PREMISE;
   if (isProviderV5(version))
     return "Sehr leistungsfähige KI kann Aufgaben erledigen, Programme bedienen und andere Anbieter beauftragen. Was braucht der Kunde dann noch von Ihnen – und wofür zahlt er extra?";
   return isProviderV4(version)
@@ -55,24 +65,25 @@ export const PROVIDER_QUESTIONS: QuickQuestion[] = [
   {
     id: "Q2",
     group: "value",
-    text: "Sind die nötigen Daten und Mittel auch ohne Sie erhältlich?",
-    low: "Nicht ersetzbar",
-    high: "Leicht erhältlich",
-    help: "Zählen Sie Kundendaten, Standardsoftware und beauftragbare Dienste. Der Kunde muss sie heute noch nicht besitzen.",
+    text: "Kann ein Außenstehender die nötigen Daten und Zugänge bekommen?",
+    low: "Kaum",
+    high: "Leicht",
+    help: "Zählen Sie Kundendaten mit Erlaubnis, Schnittstellen und andere Anbieter.",
     example:
-      "Audiodatei und Transkriptionssoftware sind verfügbar. Exklusive Messdaten oder Rechte können fehlen.",
-    action: "Den fehlenden Beitrag prüfen",
+      "Eine Audiodatei lässt sich teilen. Exklusive laufende Messdaten oder Zugangsrechte können fehlen.",
+    action: "Daten und Zugänge prüfen",
     actionDetail:
-      "Was fehlt selbst einem sehr guten Agenten? Lässt es sich beschaffen, nachbauen oder anderswo einkaufen?",
+      "Was braucht ein externer Experte? Welche Daten, Rechte oder Zugänge kann der Kunde bereitstellen?",
   },
   {
     id: "Q3",
     group: "value",
-    text: "Kann der Kunde den Auftrag direkt einem KI-Assistenten geben?",
-    low: "Anderer Zugang nötig",
-    high: "Ein Auftrag genügt",
-    help: "Denken Sie an ChatGPT, Claude oder Gemini als Einstieg – auch wenn der Kunde sie heute noch nicht nutzt.",
-    example: "Datei hochladen und fertige Untertitel anfordern.",
+    text: "Nutzen Ihre Zielkunden bereits KI-Assistenten?",
+    low: "Kaum",
+    high: "Fast alle",
+    help: "Denken Sie an ChatGPT, Claude, Gemini oder Assistenten in der Unternehmenssoftware.",
+    example:
+      "Der Assistent ist bereits dort verfügbar, wo der Kundenauftrag entsteht.",
     action: "Den direkten Auftrag testen",
     actionDetail:
       "Formulieren Sie den Kundenauftrag in einem Satz. Was fehlt bis zum fertigen Ergebnis?",
@@ -80,10 +91,10 @@ export const PROVIDER_QUESTIONS: QuickQuestion[] = [
   {
     id: "Q4",
     group: "competition",
-    text: "Wie viel Ihres Nutzens steckt in der Bedienung?",
+    text: "Wie viel Ihrer Leistung besteht aus Software-Bedienung?",
     low: "Kaum etwas",
     high: "Fast alles",
-    help: "Zählen Sie Klicks, Einstellungen und Handarbeit, die ein Agent übernehmen könnte.",
+    help: "Zählen Sie Klicks, Einstellungen und das Übertragen von Daten zwischen Programmen.",
     example:
       "Ein Agent bedient das Schnittprogramm. Dessen Verarbeitung kann trotzdem nötig bleiben.",
     action: "Bedienung und Technik trennen",
@@ -93,10 +104,10 @@ export const PROVIDER_QUESTIONS: QuickQuestion[] = [
   {
     id: "Q5",
     group: "competition",
-    text: "Wie leicht kann ein Agent andere Anbieter beauftragen?",
+    text: "Wie leicht können Kunden auf andere Lösungen ausweichen?",
     low: "Kaum möglich",
     high: "Leicht austauschbar",
-    help: "Gemeint sind Anbieter mit einem für den Kunden ausreichend guten Ergebnis.",
+    help: "Zählen Sie andere Anbieter, Selbstmachen und Lösungen aus anderen Branchen.",
     example:
       "Ein Agent wählt einen beliebigen Druck-, Übersetzungs- oder Transkriptionsdienst.",
     action: "Eine Alternative beauftragen",
@@ -106,41 +117,41 @@ export const PROVIDER_QUESTIONS: QuickQuestion[] = [
   {
     id: "Q6",
     group: "advantage",
-    text: "Bleibt Ihr Beitrag für das fertige Ergebnis nötig?",
-    low: "Nicht mehr nötig",
-    high: "Unverzichtbar",
-    help: "Nehmen Sie an, der Agent erledigt alle digitalen Schritte und bedient alle Programme.",
+    text: "Braucht ein Expertenteam etwas, das nur Sie liefern?",
+    low: "Nichts",
+    high: "Unverzichtbaren Beitrag",
+    help: "Denken Sie an Daten, Rechte, Zugänge oder Ausführung. Fachwissen allein zählt hier nicht.",
     example:
-      "Weiter nötig sein können eigene Messdaten, eine spezielle Verarbeitung, ein Netzwerk oder eine verbindliche Prüfung.",
+      "Ein Experte kann Messdaten auswerten. Die laufende Messung am gesperrten Standort braucht er trotzdem.",
     action: "Den verbleibenden Beitrag benennen",
     actionDetail:
-      "Was kann der Kunde auch mit einem sehr guten Agenten ohne Sie nicht erhalten?",
+      "Welcher eigene Beitrag bleibt für das Kundenproblem nötig, auch bei einem anderen Lösungsweg?",
   },
   {
     id: "Q7",
     group: "advantage",
-    text: "Wie schwer lässt sich dieser Beitrag ersetzen?",
+    text: "Wie schwer ist dieser Beitrag anderswo zu bekommen?",
     low: "Leicht ersetzbar",
     high: "Sehr schwer ersetzbar",
-    help: "Prüfen Sie Nachbauen, andere Datenquellen und andere Anbieter. KI kann auch beim Wechsel helfen.",
+    help: "Zählen Sie andere Datenquellen, Anbieter und Wege zum gleichen Kundennutzen.",
     example:
       "Eine Standard-Schnittstelle ist leichter ersetzbar als exklusive laufende Messungen.",
     action: "Die beste Alternative suchen",
     actionDetail:
-      "Wie würde ein KI-Anbieter den nötigen Beitrag beschaffen, ohne mit Ihnen zusammenzuarbeiten?",
+      "Kann ein externer Experte den Beitrag einkaufen, neu beschaffen oder durch einen anderen Lösungsweg umgehen?",
   },
   {
     id: "Q8",
     group: "advantage",
-    text: "Wie stark ist der Grund, weiter extra zu zahlen?",
-    low: "Kein Kaufgrund",
-    high: "Klarer Kaufgrund",
-    help: "Für welchen verbleibenden Unterschied lohnt sich Ihr Preis? Bei einer Idee zählt zunächst Ihre Annahme.",
+    text: "Wie stark hängt der Kauf an diesem Beitrag?",
+    low: "Kaum",
+    high: "Kaufentscheidend",
+    help: "Gemeint ist der Beitrag aus den beiden vorigen Fragen. Bei einer Idee zählt Ihre Annahme.",
     example:
-      "Der Kunde bezahlt eine verbindliche Ergebnisprüfung, die sein KI-Assistent nicht mitliefert.",
+      "Kunden kaufen den Zugang zu laufenden Messdaten, nicht nur die Auswertung.",
     action: "Den Preis begründen",
     actionDetail:
-      "Benennen Sie den konkreten Unterschied zur mitgelieferten KI-Lösung, für den der Kunde extra zahlen würde.",
+      "Prüfen Sie mit Kunden, ob sie für den besonderen Beitrag oder nur für das fertige Ergebnis zahlen.",
   },
   {
     id: "Q9",
@@ -158,37 +169,38 @@ export const PROVIDER_QUESTIONS: QuickQuestion[] = [
   {
     id: "Q10",
     group: "competition",
-    text: "Wie viel Ihres Vorsprungs verschwindet mit besserer KI?",
-    low: "Fast nichts",
-    high: "Fast alles",
-    help: "Gemeint sind heutige KI-Schwächen wie kurze Kontexte, Erkennungsfehler oder schwierige Bedienung.",
+    text: "Könnte ein Expertenteam Ihr Kundenproblem ohne Sie lösen?",
+    low: "Kaum",
+    high: "Vollständig",
+    help: "Auch auf einem ganz anderen Weg. Daten, Zugänge und Ausführung prüfen wir getrennt.",
     example:
-      "Ihr Werkzeug zerlegt Texte, weil das Modell sie noch nicht am Stück verarbeiten kann.",
-    action: "Den Vorsprung erneut testen",
+      "Der Kunde braucht verständliche Inhalte. Ein Experte könnte sie anders aufbereiten, statt Ihr PDF-Werkzeug nachzubauen.",
+    action: "Einen anderen Lösungsweg prüfen",
     actionDetail:
-      "Wiederholen Sie einen Auftrag mit besserer KI. Welche Hilfsschritte werden noch bezahlt?",
+      "Lassen Sie einen Fachkundigen das Kundenproblem lösen, ohne Ihr Produkt oder Ihren bisherigen Ablauf zu übernehmen.",
   },
   {
     id: "Q11",
     group: "control",
-    text: "Wie stark profitiert Ihr Angebot von besserer KI?",
-    low: "Kaum",
-    high: "Sehr stark",
-    help: "Bessere Ergebnisse oder weniger Aufwand für Sie. Das allein verhindert keine Ersetzung.",
+    text: "Wie häufig brauchen Ihre Zielkunden diese Lösung?",
+    low: "Selten",
+    high: "Laufend",
+    help: "Wiederkehrender Bedarf kann eine skalierbare Lösung attraktiv machen. Marktgröße und Kosten bleiben separat zu prüfen.",
     example:
-      "Sie können mehr geprüfte Ergebnisse liefern. Wettbewerber können dieselbe KI nutzen.",
-    action: "Den eigenen Nutzen messen",
-    actionDetail: "Vergleichen Sie Qualität und Aufwand mit besserer KI.",
+      "Täglich viele Dokumente prüfen oder eine seltene Sonderaufgabe erledigen.",
+    action: "Den wirtschaftlichen Anreiz prüfen",
+    actionDetail:
+      "Wer spart Zeit oder Geld? Wie viele Kunden sind erreichbar, und was kosten Datenzugang, Betrieb und verlässliche Lieferung?",
   },
   {
     id: "Q12",
     group: "control",
-    text: "Zahlen Kunden nach einem KI-Vergleich weiter?",
+    text: "Zahlen Kunden trotz guter Alternativen für Ihren Vorteil?",
     low: "Noch nicht getestet",
     high: "Mehrfach bestätigt",
-    help: "Gemeint sind echte Käufe nach demselben Auftrag. Eine neue Idee ohne Belege ist unsicher, nicht automatisch riskanter.",
+    help: "Gemeint sind echte Käufe nach einem Vergleich. Eine neue Idee ohne Belege bleibt eine Annahme.",
     example:
-      "Ein Kunde sieht die günstigere KI-Lösung und bezahlt trotzdem Ihr Angebot.",
+      "Ein Kunde vergleicht KI, Fachleute oder andere Anbieter und bezahlt trotzdem Ihren besonderen Beitrag.",
     action: "Den Kaufgrund testen",
     actionDetail:
       "Zeigen Sie fünf typische Ergebnisse im direkten Vergleich. Für welchen Unterschied würden Kunden extra zahlen?",

@@ -3,6 +3,7 @@ import type { QuickCheck, QuickAnswer } from "./model";
 import { groupsForCheck } from "./model";
 import {
   isProviderMethod,
+  isProviderV6,
   providerPremise,
   PROVIDER_BOUNDARIES,
 } from "./provider-questions";
@@ -73,6 +74,9 @@ export function Question({
         <h1 ref={heading} tabIndex={-1}>
           {q.text}
         </h1>
+        {isProviderV6(check.methodologyVersion) && q.id === "Q10" && (
+          <p className="question-help">Auch mit einer völlig anderen Lösung.</p>
+        )}
         {!provider &&
           (q.example ? (
             <>

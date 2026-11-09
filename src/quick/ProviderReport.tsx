@@ -4,7 +4,7 @@ import { evaluateProvider } from "./provider-analysis";
 import {
   providerPremise,
   PROVIDER_BOUNDARIES,
-  isProviderV5,
+  isProviderRiskMethod,
 } from "./provider-questions";
 import {
   ProviderRiskScore,
@@ -16,13 +16,14 @@ import { ProviderRules } from "./ProviderRules";
 import {
   currentBusinessAnalysis,
   moatDisputesScore,
+  expertMoatHeadline,
 } from "./business-analysis";
 import { BusinessAnalysisFindings } from "./BusinessAnalysis";
 
 export function ProviderReport({ check }: { check: QuickCheck }) {
   const r = evaluateProvider(check);
   const personal = currentBusinessAnalysis(check);
-  const current = isProviderV5(check.methodologyVersion);
+  const current = isProviderRiskMethod(check.methodologyVersion);
   return (
     <article className="quick-print-report provider-print-report">
       <header className="print-brand">
@@ -36,9 +37,10 @@ export function ProviderReport({ check }: { check: QuickCheck }) {
       {current && <ProviderRiskScore check={check} />}
       <h1>
         {current
-          ? moatDisputesScore(personal, r.risk?.score ?? null)
-            ? "Die KI hält Ihren Vorteil für ersetzbar."
-            : r.headline
+          ? (expertMoatHeadline(personal) ??
+            (moatDisputesScore(personal, r.risk?.score ?? null)
+              ? "Die KI hält Ihren Vorteil für ersetzbar."
+              : r.headline))
           : (personal?.result.headline ?? r.headline)}
       </h1>
       {!current && <p>{personal?.result.summary ?? r.summary}</p>}

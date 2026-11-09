@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   createCheck,
+  QUICK_METHODS,
   answerCheck,
   parseChecks,
   serializeChecks,
@@ -25,6 +26,8 @@ import { analysisResult } from "./fixtures/business-analysis";
 
 function rated(values: Record<string, QuickAnswer> = {}) {
   const c = createCheck("idea");
+  c.methodologyVersion = "quick-check-5.0";
+  c.methodologySnapshot = structuredClone(QUICK_METHODS["quick-check-5.0"]);
   for (const q of c.methodologySnapshot)
     answerCheck(c, q.id, values[q.id] ?? 1);
   return c;

@@ -1,4 +1,4 @@
-import { isProviderV4, isProviderV5 } from "./provider-questions";
+import { isProviderV4, isProviderV5, isProviderV6 } from "./provider-questions";
 import {
   ROUTE_LABELS,
   PROTECTION_LABELS,
@@ -8,6 +8,64 @@ import { PROVIDER_SCENARIO_METHOD } from "./provider-scenario";
 
 // One explanation for screen and print, selected by the saved method.
 export function ProviderRules({ version }: { version: string }) {
+  if (isProviderV6(version))
+    return (
+      <>
+        <p>
+          Methode {version}. Der KI-Risiko-Score beschreibt die Ersetzbarkeit,
+          wenn günstige Expertenteams für alle verfügbar sind: Kunden, bekannte
+          Wettbewerber, neue Anbieter und Sie selbst. Andere Lösungen für das
+          Kundenproblem zählen genauso wie Nachbauen. Kein Eintrittsdatum, keine
+          Wahrscheinlichkeit.
+        </p>
+        <p>
+          Antworten werden mit (Wert − 1) / 9 normiert. Drei Wege: direkte
+          Lösung = min(Q1, Q2, Q10) × (0,7 + 0,3 × Q3); Bedienung = min(Q4, Q2);
+          andere Anbieter = min(Q5, Q2) × (0,7 + 0,3 × Q3). Expertenwissen
+          allein umgeht keine fehlenden Daten oder Zugänge. Niedriger heutiger
+          Assistentenzugang begrenzt den Faktor auf 0,7, ist keine dauerhafte
+          Sperre.
+        </p>
+        <p>
+          Schutz = min(Q6, Q7, Q8): eigener Beitrag nötig, schwer ersetzbar und
+          kaufentscheidend. Score = 100 × stärkster Übernahmeweg × (1 − 0,75 ×
+          Schutz), auf Fünferschritte gerundet. 0–30 niedrig, 35–60 mittel,
+          65–80 hoch, 85–100 sehr hoch. Gewichte und Grenzen sind offengelegte
+          Einschätzungsregeln, nicht empirisch kalibriert.
+        </p>
+        <p>
+          Unbekannte Antworten ergeben eine Spanne aus den möglichen Extremen.
+          Hohe Ersetzbarkeit und hoher Schutz zugleich (Q2/Q6 oder Q5/Q7 jeweils
+          ab 7) lassen den Schutz offen; die obere Grenze wird ohne Schutzabzug
+          berechnet. Die KI kann solche Angaben hinterfragen, ändert aber keine
+          Zahl.
+        </p>
+        <p>
+          Q11 beschreibt die Häufigkeit des Bedarfs. Das ist nur ein Hinweis auf
+          wirtschaftlichen Nutzen. Erreichbare Kunden, Zahlungsbereitschaft,
+          Zugang, Betriebskosten und Bündelung werden separat geprüft. Eine
+          kleine Nische schützt nicht automatisch. Q11 verändert den
+          Ersetzbarkeits-Score nicht.
+        </p>
+        <p>
+          Q12 beschreibt echte Käufe nach einem Vergleich mit Alternativen: 1–3
+          Annahmen, 4–6 erste Belege, 7–10 Praxistest laut Angaben. Fehlende
+          Kaufbelege erhöhen die Unsicherheit, nicht den Score. Neue Ideen
+          werden nicht automatisch schlechter bewertet.
+        </p>
+        <p>
+          Der Zwei-Jahres-Blick bleibt ein Szenario: Q9 ist der heutige
+          KI-Vergleich. Langsam/mittel/schnell schließt rechnerisch 0,2/0,5/0,8
+          der verbleibenden Fähigkeitslücke; Kostendruck gewichtet mit
+          0,55/0,75/1. Der stärkste wirksame Weg wird damit gewichtet. Ab 0,65
+          hoher, ab 0,35 teilweiser, darunter begrenzter Druck. Ohne
+          Ausgangslage bleibt der Blick offen. Diese Gewichte sind keine
+          gemessenen Wachstumsraten und versprechen kein Expertenniveau in 12–18
+          Monaten. Niedrige Kosten ermöglichen mehr parallele Einsätze, erzeugen
+          aber keine Rechte oder Daten.
+        </p>
+      </>
+    );
   if (isProviderV5(version))
     return (
       <>

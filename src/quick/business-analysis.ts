@@ -13,6 +13,7 @@ import {
 export const BUSINESS_ANALYSIS_MODEL = "openai/gpt-5.2";
 export const BUSINESS_ANALYSIS_VERSION = "business-analysis-2.0";
 export const BUSINESS_MOAT_ANALYSIS_VERSION = "business-analysis-3.0";
+export const BUSINESS_EXPERT_ANALYSIS_VERSION = "business-analysis-4.0";
 export const BUSINESS_ANALYSIS_MIN_LENGTH = 20;
 const ids = [
   "Q1",
@@ -35,7 +36,11 @@ const answer = z.union([
 ]);
 export const analysisInputSchema = z
   .object({
-    methodologyVersion: z.enum(["quick-check-4.0", "quick-check-5.0"]),
+    methodologyVersion: z.enum([
+      "quick-check-4.0",
+      "quick-check-5.0",
+      "quick-check-6.0",
+    ]),
     businessDescription: z.string().trim().max(BUSINESS_DESCRIPTION_MAX_LENGTH),
     businessMoat: z.string().trim().max(BUSINESS_MOAT_MAX_LENGTH).optional(),
     answers: z.record(z.enum(ids), answer),
@@ -43,10 +48,13 @@ export const analysisInputSchema = z
   })
   .strict()
   .superRefine((input, ctx) => {
-    if (input.businessMoat && input.methodologyVersion !== "quick-check-5.0")
+    if (
+      input.businessMoat &&
+      !["quick-check-5.0", "quick-check-6.0"].includes(input.methodologyVersion)
+    )
       ctx.addIssue({
         code: "custom",
-        message: "Die Prüfung des Vorteils gehört zur Methode 5.0.",
+        message: "Die Prüfung des Vorteils gehört zur Methode ab 5.0.",
         path: ["businessMoat"],
       });
     if (
@@ -132,6 +140,30 @@ export type MoatReview = z.infer<typeof moatReviewSchema>;
 export const analysisWithMoatSchema = analysisResultSchema
   .extend({ moatReview: moatReviewSchema })
   .strict();
+export const expertAnalysisResultSchema = analysisResultSchema
+  .extend({
+    expertReview: z
+      .object({
+        customer: findingSchema.describe(
+          "Der Kunde nutzt sein eigenes Expertenteam: konkrete Selbstbedienung statt Kauf. Höchstens 16 Wörter.",
+        ),
+        competitor: findingSchema.describe(
+          "Ein bekannter Wettbewerber nutzt dasselbe Expertenteam: konkreter Preis- oder Leistungsvorteil. Höchstens 16 Wörter.",
+        ),
+        newEntrant: findingSchema.describe(
+          "Ein plausibler neuer Anbieter aus einer anderen Branche löst das Problem anders. Hypothese, keine erfundene Firma. Höchstens 16 Wörter.",
+        ),
+        access: findingSchema.describe(
+          "Welche Daten, Rechte oder Zugänge ein Experte für die alternative Lösung braucht; Verfügbarkeit nicht erfinden.",
+        ),
+        incentive: findingSchema.describe(
+          "Konkreter wirtschaftlicher Anreiz für Anbieter, Kunden oder Wettbewerber; Aufwand und fehlende Angaben beachten.",
+        ),
+      })
+      .strict(),
+    moatReview: moatReviewSchema.nullable(),
+  })
+  .strict();
 export const MOAT_VERDICTS: Record<MoatReview["verdict"], string> = {
   replaceable: "Leicht ersetzbar",
   conditional: "Schutz nur unter Bedingungen",
@@ -151,11 +183,16 @@ export const businessAnalysisSchema = z
       "business-analysis-1.0",
       BUSINESS_ANALYSIS_VERSION,
       BUSINESS_MOAT_ANALYSIS_VERSION,
+      BUSINESS_EXPERT_ANALYSIS_VERSION,
     ]),
     createdAt: z.iso.datetime({ offset: true }),
     model: z.string().min(1).max(120),
     input: analysisInputSchema,
-    result: z.union([analysisWithMoatSchema, analysisResultSchema]),
+    result: z.union([
+      expertAnalysisResultSchema,
+      analysisWithMoatSchema,
+      analysisResultSchema,
+    ]),
   })
   .strict()
   .superRefine((analysis, ctx) => {
@@ -169,14 +206,27 @@ export const businessAnalysisSchema = z
         path: ["version"],
       });
     }
+    const expert = analysis.input.methodologyVersion === "quick-check-6.0";
+    if (
+      expert !== (analysis.version === BUSINESS_EXPERT_ANALYSIS_VERSION) ||
+      expert !== "expertReview" in analysis.result
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Das Expertenszenario benötigt die passende Auswertung 4.0.",
+        path: ["version"],
+      });
+    }
     const moatReview =
       "moatReview" in analysis.result ? analysis.result.moatReview : null;
     const hasMoat = Boolean(analysis.input.businessMoat);
     if (
-      (analysis.version === BUSINESS_MOAT_ANALYSIS_VERSION) !==
-        (hasMoat && moatReview !== null) ||
-      (analysis.version !== BUSINESS_MOAT_ANALYSIS_VERSION &&
-        (hasMoat || moatReview !== null))
+      expert
+        ? hasMoat !== (moatReview !== null)
+        : (analysis.version === BUSINESS_MOAT_ANALYSIS_VERSION) !==
+            (hasMoat && moatReview !== null) ||
+          (analysis.version !== BUSINESS_MOAT_ANALYSIS_VERSION &&
+            (hasMoat || moatReview !== null))
     ) {
       ctx.addIssue({
         code: "custom",
@@ -228,6 +278,9 @@ export const businessAnalysisSchema = z
       ...analysis.result.protection,
       analysis.result.opportunity,
       analysis.result.nextStep,
+      ...("expertReview" in analysis.result
+        ? Object.values(analysis.result.expertReview)
+        : []),
     ];
     const visible = [
       analysis.result.headline,
@@ -237,7 +290,7 @@ export const businessAnalysisSchema = z
       ...(moatReview ? [moatReview.reason] : []),
     ].join(" ");
     if (
-      visible.trim().split(/\s+/).length > 180 ||
+      visible.trim().split(/\s+/).length > (expert ? 240 : 180) ||
       /\bQ(?:1[0-2]|[1-9])\b/.test(visible)
     ) {
       ctx.addIssue({
@@ -311,12 +364,30 @@ export function currentBusinessAnalysis(check: QuickCheck) {
     : null;
 }
 
+export function expertReviewFor(analysis: BusinessAnalysis | null | undefined) {
+  return analysis && "expertReview" in analysis.result
+    ? analysis.result.expertReview
+    : null;
+}
 export function moatReviewFor(
   analysis: BusinessAnalysis | null | undefined,
 ): MoatReview | null {
   return analysis && "moatReview" in analysis.result
     ? analysis.result.moatReview
     : null;
+}
+export function expertMoatHeadline(
+  analysis: BusinessAnalysis | null | undefined,
+) {
+  if (analysis?.input.methodologyVersion !== "quick-check-6.0") return null;
+  const review = moatReviewFor(analysis);
+  if (!review) return null;
+  return {
+    replaceable: "Ihr genannter Burggraben ist angreifbar.",
+    conditional: "Ihr Burggraben hält nur unter Bedingungen.",
+    durable: "Ihr Burggraben bleibt auch für Expertenteams eine Hürde.",
+    unclear: "Ihr Burggraben ist noch nicht bewertbar.",
+  }[review.verdict];
 }
 export function moatDisputesScore(
   analysis: BusinessAnalysis | null | undefined,

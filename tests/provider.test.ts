@@ -29,7 +29,7 @@ function rated(values: number[]) {
 describe("Plattform-Check", () => {
   it("beginnt mit konkreten Fragen einer neuen Methode", () => {
     const c = createCheck("existing");
-    expect(c.methodologyVersion).toBe("quick-check-5.0");
+    expect(c.methodologyVersion).toBe("quick-check-6.0");
     expect(c.view).toBe("questions");
     expect(c.methodologySnapshot[0].text).toContain("digital");
   });

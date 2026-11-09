@@ -1,7 +1,9 @@
 import type { QuickCheck } from "./model";
-import { evaluateProviderV5 } from "./provider-analysis-5";
+import { evaluateProvider } from "./provider-analysis";
+import { isProviderV6 } from "./provider-questions";
 import {
   currentBusinessAnalysis,
+  expertReviewFor,
   moatReviewFor,
   moatDisputesScore,
   quoteSource,
@@ -9,9 +11,10 @@ import {
   MOAT_PACES,
   type BusinessAnalysis,
 } from "./business-analysis";
+import { EXPERT_ATTACKS } from "./ExpertScenarioIntro";
 
 export function ProviderRiskScore({ check }: { check: QuickCheck }) {
-  const { risk } = evaluateProviderV5(check);
+  const risk = evaluateProvider(check).risk!;
   const disputed = moatDisputesScore(
     currentBusinessAnalysis(check),
     risk.score,
@@ -32,7 +35,10 @@ export function ProviderRiskScore({ check }: { check: QuickCheck }) {
         </div>
       )}
       <p className="provider-risk-caption">
-        Sehr leistungsfähige KI · 0 niedrig, 100 hoch · keine Wahrscheinlichkeit
+        {isProviderV6(check.methodologyVersion)
+          ? "KI auf Expertenniveau"
+          : "Sehr leistungsfähige KI"}{" "}
+        · 0 niedrig, 100 hoch · keine Wahrscheinlichkeit
       </p>
       <p className="provider-risk-basis">
         Basis: {risk.basis}
@@ -55,13 +61,19 @@ export function ProviderRiskScore({ check }: { check: QuickCheck }) {
 function MoatReviewPanel({ analysis }: { analysis: BusinessAnalysis | null }) {
   const review = moatReviewFor(analysis);
   if (!review) return null;
+  const expert = isProviderV6(analysis!.input.methodologyVersion);
+  const title = expert ? "Ihr Burggraben" : "KI-Prüfung Ihres Vorteils";
   return (
     <section
       className={`provider-moat-review moat-${review.verdict} print-block`}
-      aria-label="KI-Prüfung Ihres Vorteils"
+      aria-label={title}
     >
-      <h2>KI-Prüfung Ihres Vorteils</h2>
-      <p className="provider-moat-verdict">{MOAT_VERDICTS[review.verdict]}</p>
+      <h2>{title}</h2>
+      <p className="provider-moat-verdict">
+        {expert && review.verdict === "durable"
+          ? "Hürde auch für Expertenteams"
+          : MOAT_VERDICTS[review.verdict]}
+      </p>
       <p>{review.reason}</p>
       <p className="provider-moat-pace">{MOAT_PACES[review.pace]}</p>
     </section>
@@ -75,14 +87,17 @@ export function ProviderPurchaseFindings({
   check: QuickCheck;
   print?: boolean;
 }) {
-  const r = evaluateProviderV5(check);
+  const r = evaluateProvider(check);
   const personal = currentBusinessAnalysis(check);
   const moatReview = moatReviewFor(personal);
+  const expert = isProviderV6(check.methodologyVersion);
+  const expertReview = expertReviewFor(personal);
   const findings = personal
     ? [
         personal.result.takeover[0],
         personal.result.protection[0],
         personal.result.nextStep,
+        ...(expertReview ? Object.values(expertReview) : []),
       ]
     : [];
   return (
@@ -101,6 +116,34 @@ export function ProviderPurchaseFindings({
           <p>{personal?.result.protection[0].detail ?? r.payment}</p>
         </section>
       </div>
+      {expertReview && (
+        <section
+          aria-label="Drei mögliche Angreifer"
+          className="expert-attacks print-block"
+        >
+          <h2>Drei mögliche Angreifer</h2>
+          <div className="expert-attack-grid">
+            {EXPERT_ATTACKS.map(({ id, title }) => (
+              <section key={id}>
+                <h3>{title}</h3>
+                <p>{expertReview[id].detail}</p>
+              </section>
+            ))}
+          </div>
+        </section>
+      )}
+      {expert && (
+        <details
+          className="expert-conditions print-block"
+          open={print || undefined}
+        >
+          <summary>Zugang und wirtschaftlicher Anreiz</summary>
+          <h3>Was die Angreifer brauchen</h3>
+          <p>{expertReview?.access.detail ?? r.access}</p>
+          <h3>Warum sich der Angriff lohnen könnte</h3>
+          <p>{expertReview?.incentive.detail ?? r.incentive}</p>
+        </details>
+      )}
       <section className="provider-purchase-test print-block">
         <h2>Nächster Test</h2>
         <p>{personal?.result.nextStep.detail ?? r.nextStep}</p>

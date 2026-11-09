@@ -6,7 +6,11 @@ import {
   PROTECTION_LABELS,
   BENEFIT_LABELS,
 } from "./provider-analysis";
-import { isProviderV5, supportsBusinessAnalysis } from "./provider-questions";
+import {
+  isProviderRiskMethod,
+  isProviderV6,
+  supportsBusinessAnalysis,
+} from "./provider-questions";
 import {
   ProviderRiskScore,
   ProviderPurchaseFindings,
@@ -23,6 +27,7 @@ import {
 import {
   currentBusinessAnalysis,
   moatDisputesScore,
+  expertMoatHeadline,
   type BusinessAnalysis,
 } from "./business-analysis";
 
@@ -202,7 +207,9 @@ export function ProviderFindings({
               )}
               <span>
                 {supportsBusinessAnalysis(check.methodologyVersion)
-                  ? "Kauf nach KI-Vergleich"
+                  ? isProviderV6(check.methodologyVersion)
+                    ? "Kauf nach Vergleich"
+                    : "Kauf nach KI-Vergleich"
                   : "Kaufentscheidung"}{" "}
                 <strong>
                   {typeof check.answers.Q12 === "number"
@@ -259,7 +266,7 @@ export function ProviderResults({
 }) {
   const r = evaluateProvider(check);
   const personal = currentBusinessAnalysis(check);
-  const current = isProviderV5(check.methodologyVersion);
+  const current = isProviderRiskMethod(check.methodologyVersion);
   const [answersOpen, setAnswersOpen] = useState(false);
   const [descriptionOpen, setDescriptionOpen] = useState(false);
   return (
@@ -272,9 +279,10 @@ export function ProviderResults({
         {current && <ProviderRiskScore check={check} />}
         <h1>
           {current
-            ? moatDisputesScore(personal, r.risk?.score ?? null)
-              ? "Die KI hält Ihren Vorteil für ersetzbar."
-              : r.headline
+            ? (expertMoatHeadline(personal) ??
+              (moatDisputesScore(personal, r.risk?.score ?? null)
+                ? "Die KI hält Ihren Vorteil für ersetzbar."
+                : r.headline))
             : (personal?.result.headline ?? r.headline)}
         </h1>
         {!current && (

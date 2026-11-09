@@ -16,7 +16,8 @@ import { loadChecks, saveChecks } from "./storage";
 import { ExpertIntro } from "./ExpertIntro";
 import { Question } from "./Question";
 import { Results } from "./Results";
-import { isProviderMethod } from "./provider-questions";
+import { isProviderMethod, isProviderV6 } from "./provider-questions";
+import { ExpertScenarioIntro } from "./ExpertScenarioIntro";
 import { ProviderLanding } from "./ProviderLanding";
 import { ProviderResults } from "./ProviderResults";
 import { ProviderMethodContent } from "./ProviderMethod";
@@ -315,6 +316,7 @@ export default function QuickApp() {
   };
   const start = () => {
     const c = createCheck("existing");
+    c.view = "intro";
     if (businessDraft.trim()) c.businessDescription = businessDraft.trim();
     if (moatDraft.trim()) c.businessMoat = moatDraft.trim();
     setChecks((list) => [...list, c]);
@@ -493,6 +495,11 @@ export default function QuickApp() {
                 className="text-link"
                 onClick={() => {
                   const c = createCheck(current.type);
+                  c.view = "intro";
+                  if (current.businessDescription)
+                    c.businessDescription = current.businessDescription;
+                  if (current.businessMoat)
+                    c.businessMoat = current.businessMoat;
                   setChecks((list) => [...list, c]);
                   open(c.id);
                 }}
@@ -591,6 +598,16 @@ export default function QuickApp() {
                   onPrint={() => window.print()}
                 />
               </Suspense>
+            ) : current.view === "intro" &&
+              isProviderV6(current.methodologyVersion) ? (
+              <ExpertScenarioIntro
+                onStart={() => {
+                  update((c) => {
+                    c.view = "questions";
+                  });
+                  window.scrollTo(0, 0);
+                }}
+              />
             ) : current.view === "intro" &&
               !isProviderMethod(current.methodologyVersion) ? (
               <ExpertIntro

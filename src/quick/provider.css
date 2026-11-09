@@ -916,3 +916,71 @@ details[open] > summary > .provider-toggle {
     overflow-wrap: anywhere;
   }
 }
+.expert-scenario-intro {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 48px 4vw;
+}
+.expert-scenario-intro h1 {
+  max-width: 850px;
+  font-size: clamp(30px, 4vw, 50px);
+  line-height: 1.12;
+  margin: 24px 0;
+}
+.expert-scenario-lead {
+  max-width: 680px;
+  font-size: 22px;
+  line-height: 1.5;
+}
+.expert-attack-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+  margin: 36px 0;
+}
+.expert-attacks {
+  margin-top: 32px;
+}
+.expert-attack-grid section {
+  border-top: 1px solid #d5d5da;
+  padding-top: 18px;
+}
+.expert-attack-grid h2,
+.expert-attack-grid h3 {
+  font-size: 18px;
+  line-height: 1.4;
+  margin: 0 0 10px;
+}
+.expert-attack-grid p {
+  font-size: 17px;
+  line-height: 1.5;
+  margin: 0;
+}
+.expert-scenario-note {
+  max-width: 680px;
+  color: #55565e;
+  margin: 28px 0;
+}
+.expert-conditions {
+  margin: 26px 0;
+}
+.expert-conditions summary {
+  cursor: pointer;
+}
+.expert-conditions h3 {
+  font-size: 17px;
+  margin-bottom: 8px;
+}
+@media (max-width: 700px) {
+  .expert-scenario-intro {
+    padding: 28px 22px;
+  }
+  .expert-attack-grid {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    margin: 28px 0;
+  }
+  .expert-scenario-lead {
+    font-size: 19px;
+  }
+}

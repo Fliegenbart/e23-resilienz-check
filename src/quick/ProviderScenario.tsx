@@ -1,6 +1,6 @@
 import { useId } from "react";
 import type { QuickCheck } from "./model";
-import { isProviderV5 } from "./provider-questions";
+import { isProviderRiskMethod, isProviderV6 } from "./provider-questions";
 import { evaluateProviderScenario } from "./provider-analysis";
 import {
   PROVIDER_PACES,
@@ -35,9 +35,17 @@ export function ProviderScenario({
       <header>
         <h2 id={`${id}-title`}>Nächste 2 Jahre</h2>
         <span>
-          {isProviderV5(check.methodologyVersion) ? "Annahme" : "Szenario"}
+          {isProviderRiskMethod(check.methodologyVersion)
+            ? "Annahme"
+            : "Szenario"}
         </span>
       </header>
+      {isProviderV6(check.methodologyVersion) && (
+        <p className="expert-scenario-note">
+          Besser heißt: mehr Aufgaben auf Expertenniveau. Günstiger heißt: mehr
+          parallele Einsätze für alle. Das Tempo bleibt Ihre Annahme.
+        </p>
+      )}
       <div className="provider-scenario-grid">
         {axes.map(({ key, label, result }) => (
           <div key={key}>
@@ -73,7 +81,7 @@ export function ProviderScenario({
               {result.text}
               {key === "capabilityPace" &&
                 benefit &&
-                !isProviderV5(check.methodologyVersion) && (
+                !isProviderRiskMethod(check.methodologyVersion) && (
                   <span className="provider-scenario-benefit">
                     {benefit.text}
                   </span>

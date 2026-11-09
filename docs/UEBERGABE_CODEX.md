@@ -1,6 +1,25 @@
 # Übergabe an einen neuen Codex-Chat
 
-## Aktueller Stand: Resilience-Assessment 0.9.0
+## Aktueller Stand: Resilience-Assessment 0.10.0
+
+Stand: 9. November 2026. David will keine Fragen, in denen Nutzer die KI-Zukunft vorhersagen müssen. Das Tool soll den Blick öffnen: günstige, rund um die Uhr und parallel arbeitende Expertenteams stehen Kunden, bekannten Wettbewerbern, bislang unbekannten Anbietern aus anderen Branchen und dem eigenen Unternehmen zur Verfügung. Ergebnisfrage: Hält der behauptete Burggraben auch gegen andere Lösungen des Kundenproblems?
+
+- Neue Methode `quick-check-6.0`; alle zwölf Fragen nach beobachtbaren Geschäftsfakten überarbeitet. Q10 fragt nach einer Lösung durch ein Expertenteam ohne das eigene Angebot. Q11 beschreibt Häufigkeit des Bedarfs; Q12 echte Käufe nach Vergleich mit Alternativen. Keine alte Frage-ID neu interpretieren: V5-Katalog in `methods/quick-check-5.0.json`, alte Auswertung unverändert.
+- `ExpertScenarioIntro.tsx`: drei kurze Szenarien vor dem ersten Fragebogen. Keine zusätzlichen Pflichtfelder. `view=intro` wird wie andere Ansichten gespeichert.
+- `provider-analysis-6.ts`: direkte Lösung = min(Q1,Q2,Q10) × (0,7+0,3×Q3), Bedienung = min(Q4,Q2), Anbieterwechsel = min(Q5,Q2) × (0,7+0,3×Q3). Daten/Zugänge begrenzen jetzt alle Wege. Schutz weiterhin min(Q6,Q7,Q8). Q11 wirtschaftlicher Anreiz separat; seltene Nutzung ist keine Entwarnung. Q12 verändert den Score nicht. Formeln und Grenzen in README und ProviderRules.
+- KI-Ausgabe 4.0 für V6: `expertReview.customer/competitor/newEntrant/access/incentive` als begründete, quellengestützte Hypothesen. `moatReview` bei USP vorhanden, sonst null. Kurze alternative Lösung, verbleibender Kaufgrund, Burggraben und nächster Test. Sichtbare Texte maximal 240 Wörter insgesamt, Ziel 180. Ausgabelimit 5.000 Tokens; bisherige Methoden weiter 4.000. Timeout 45 s, Budget und Rate unverändert.
+- Prompt prüft andere Lösungswege statt bloßen Nachbau. Keine erfundenen Konkurrentennamen, Marktgrößen, Profite oder Markteintritte. Wirtschaftliche Absicht liegt bei Unternehmen/Kunden, nicht bei der KI. Expertenniveau bleibt Annahme; keine allgemeine Fähigkeits- oder Datumsbehauptung für 12–18 Monate. Drei Angreifer in der Hauptansicht, Zugang/Anreiz und Herkunft aufklappbar; Bildschirm/PDF teilen Komponenten.
+- Zwei-Jahres-Regler bleiben zwei unabhängige Szenarien. Besser = mehr Aufgaben auf Expertenniveau; billiger = mehr parallele Einsätze für alle. Keine Rechte/Daten aus höheren Fähigkeiten oder niedrigeren Kosten ableiten.
+- Plan und Quellen: `docs/superpowers/plans/2026-11-09-expertenszenario.md`. Suttons The Bitter Lesson begründet skalierbare Suche/Lernen, keinen Übernahmetermin. METR-Aufgabenhorizonte sind domänen- und zuverlässigkeitsabhängig. Quellen am 9.11.2026 geprüft; Original-Sutton-Seite zeitweise nicht erreichbar, identischer Originaltext über PDF-Spiegel gelesen.
+- Regressionen in `tests/provider-v6.test.ts`: Datenzugang, verschiedene Übernahmewege, Nische/Anreiz, unabhängige Tempi, drei Angreifer, Prompt und Ausgabeversion, Herkunft, Export/Import, Bericht und echte API-Validierung. Frühere Tests ausdrücklich auf V5 festgelegt.
+
+Prüfung vor Veröffentlichung: 206 Tests in 19 Dateien bestanden, TypeScript/Vite-Build und nativer API-Smoke-Test erfolgreich. Lokaler Browser: drei Szenarien, alle zwölf Fragen, mobiler Ergebnisbericht, Speicherung/Wiederöffnung, veraltete KI-Ausgabe nach USP-Änderung und unveränderter V5-Check geprüft. Desktop 1440 und Mobil 390 ohne horizontalen Überlauf; keine Konsolenfehler. Die lokalen KI-Antworten waren kontrollierte Testausgaben; echte Modellantworten separat auf Vercel prüfen.
+
+Veröffentlichung bleibt über `flux` auf https://e23-resilienz-check.vercel.app. Arbeitsbranch `codex/quick-check`. Git-Stand, Vercel-READY und Alias nach Veröffentlichung separat prüfen. Browser-QA nutzt fiktive Fälle und keine fremden Geschäftsdaten.
+
+---
+
+## Historischer Stand: Resilience-Assessment 0.9.0
 
 Stand: 9. November 2026. David möchte einen eigenen USP oder Moat frei beschreiben und von KI kritisch gegen eine Intelligenzexplosion prüfen lassen. Minimalismus und die bestehende Veröffentlichungserlaubnis gelten weiter.
 

@@ -2,6 +2,7 @@ import { z } from "zod";
 import oldQuestions from "./methods/quick-check-1.0.json" with { type: "json" };
 import providerV3 from "./methods/quick-check-3.0.json" with { type: "json" };
 import providerV31 from "./methods/quick-check-3.1.json" with { type: "json" };
+import providerV5 from "./methods/quick-check-5.0.json" with { type: "json" };
 import providerV4 from "./methods/quick-check-4.0.json" with { type: "json" };
 import { EXPERT_QUESTIONS } from "./expert-questions.js";
 import {
@@ -10,8 +11,11 @@ import {
   PROVIDER_GROUPS,
   isProviderMethod,
   isProviderV5,
+  isProviderV6,
+  isProviderRiskMethod,
   supportsBusinessAnalysis,
 } from "./provider-questions.js";
+import { providerRiskV6 } from "./provider-analysis-6.js";
 import { providerRiskV5 } from "./provider-analysis-5.js";
 import { scenarioWorkspaceSchema } from "./scenario-model.js";
 import type { ScenarioWorkspace } from "./scenario-model.js";
@@ -55,6 +59,7 @@ export const QUICK_METHODS: Record<string, QuickQuestion[]> = {
   "quick-check-3.0": providerV3 as QuickQuestion[],
   "quick-check-3.1": providerV31 as QuickQuestion[],
   "quick-check-4.0": providerV4 as QuickQuestion[],
+  "quick-check-5.0": providerV5 as QuickQuestion[],
   [QUICK_METHOD]: QUICK_QUESTIONS,
 };
 export interface QuickCheck {
@@ -143,11 +148,13 @@ export function calculateRisk(c: QuickCheck) {
       b.value - a.value || Number(a.id.slice(1)) - Number(b.id.slice(1)),
   );
   return {
-    score: isProviderV5(c.methodologyVersion)
-      ? providerRiskV5(c).score
-      : !provider && rated.length === 12
-        ? norm(rated.map((q) => q.value))
-        : null,
+    score: isProviderV6(c.methodologyVersion)
+      ? providerRiskV6(c).score
+      : isProviderV5(c.methodologyVersion)
+        ? providerRiskV5(c).score
+        : !provider && rated.length === 12
+          ? norm(rated.map((q) => q.value))
+          : null,
     answered: rated.length,
     processed: questions.filter((q) => c.answers[q.id] != null).length,
     groups,
@@ -185,6 +192,7 @@ const checkSchema = z
       "quick-check-3.0",
       "quick-check-3.1",
       "quick-check-4.0",
+      "quick-check-5.0",
       QUICK_METHOD,
     ]),
     methodologySnapshot: z.array(questionSchema).length(12),
@@ -214,8 +222,10 @@ const checkSchema = z
   })
   .strict()
   .refine(
-    (c) => c.businessMoat === undefined || isProviderV5(c.methodologyVersion),
-    "Der zusätzliche Vorteil gehört zum KI-Risiko-Check 5.0.",
+    (c) =>
+      c.businessMoat === undefined ||
+      isProviderRiskMethod(c.methodologyVersion),
+    "Der zusätzliche Vorteil gehört zum KI-Risiko-Check ab 5.0.",
   )
   .refine(
     (c) =>
@@ -255,7 +265,7 @@ export function serializeChecks(checks: QuickCheck[]) {
     {
       format: "e23-quick-check",
       schemaVersion: QUICK_SCHEMA,
-      appVersion: "0.9.0",
+      appVersion: "0.10.0",
       exportedAt: new Date().toISOString(),
       checks,
     },

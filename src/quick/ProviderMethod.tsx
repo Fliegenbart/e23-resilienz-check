@@ -4,6 +4,8 @@ import {
   PROVIDER_BOUNDARIES,
   isProviderV4,
   isProviderV5,
+  isProviderV6,
+  isProviderRiskMethod,
   supportsBusinessAnalysis,
 } from "./provider-questions";
 import { ProviderRules } from "./ProviderRules";
@@ -28,7 +30,7 @@ export function ProviderMethodContent({
           KI-Auswertung.
         </p>
       )}
-      {isProviderV5(version) && (
+      {isProviderRiskMethod(version) && (
         <p>
           Ihren angegebenen Vorteil prüft die KI als Behauptung. Sie nennt
           mögliche Auslöser für eine Ersetzung, kein Datum. Der Score bleibt aus
@@ -41,7 +43,7 @@ export function ProviderMethodContent({
         ausdrücken. Maßgeblich sind die beiden Texte an der Skala.
       </p>
       <p>
-        {isProviderV5(version)
+        {isProviderRiskMethod(version)
           ? "Der stärkste Übernahmeweg bestimmt das Risiko. Ein Kaufgrund trägt nur, wenn Ihr Beitrag nötig, schwer ersetzbar und den Aufpreis wert bleibt."
           : isProviderV4(version)
             ? "Was KI übernehmen kann, was Sie schützt und wie Sie selbst profitieren: drei getrennte Befunde."
@@ -58,6 +60,13 @@ export function ProviderMethodContent({
           <ProviderRules version={version} />
         )}
       </details>
+      {isProviderV6(version) && (
+        <p>
+          Alle können das Expertenteam nutzen: Sie, Ihre Kunden, bekannte
+          Wettbewerber und neue Anbieter aus anderen Branchen. Der Check sucht
+          deshalb auch nach anderen Lösungen für dasselbe Kundenproblem.
+        </p>
+      )}
       <h3>Was die Quellen beitragen</h3>
       <p>
         ARK Invest, <cite>Big Ideas 2026</cite>: sinkende Tokenpreise (S. 20 und
@@ -66,7 +75,44 @@ export function ProviderMethodContent({
         und Anfang 2026. Daraus leiten wir mögliche Angriffswege ab; die
         Zukunftszahlen des Berichts fließen nicht in Ihre Bewertung ein.
       </p>
+      {isProviderV6(version) && (
+        <>
+          <p>
+            Richard Suttons „The Bitter Lesson“ beschreibt den Vorteil
+            skalierbarer Suche und Lernverfahren gegenüber fest eingebauten
+            menschlichen Lösungswegen. Daraus folgt kein Termin für allgemeines
+            Expertenniveau.
+          </p>
+          <p>
+            METR misst Aufgabenhorizonte in ausgewählten Fachgebieten. Diese
+            Werte hängen von Aufgabe und Zuverlässigkeit ab; sie sind keine
+            Vorhersage, wann Ihr Geschäft ersetzt wird.
+          </p>
+        </>
+      )}
       <ul className="provider-sources">
+        {isProviderV6(version) && (
+          <>
+            <li>
+              <a
+                href="https://www.incompleteideas.net/IncIdeas/BitterLesson.html"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Richard Sutton: The Bitter Lesson
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://metr.org/notes/2026-01-22-time-horizon-limitations/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                METR: Grenzen der Aufgabenhorizonte
+              </a>
+            </li>
+          </>
+        )}
         <li>
           <a
             href="https://metr.org/time-horizons/"
@@ -106,8 +152,10 @@ export function ProviderMethodContent({
       </ul>
       <p className="method-note">
         Ein Stresstest auf Basis Ihrer Antworten. Die Quellen begründen die
-        Fragestellung; sie prüfen Ihr konkretes Angebot nicht. Quellenprüfung:
-        7. November 2026.
+        Fragestellung; sie prüfen Ihr konkretes Angebot nicht. Quellenstand: 7.
+        November 2026.{" "}
+        {isProviderV6(version) &&
+          "Expertenszenario ergänzt am 9. November 2026."}
       </p>
     </>
   );
