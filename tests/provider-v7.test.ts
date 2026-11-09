@@ -27,6 +27,7 @@ import {
 } from "../src/quick/provider-research";
 import {
   researchTopics,
+  researchBatches,
   researchFromToolResults,
 } from "../server/provider-research";
 import {
@@ -272,6 +273,19 @@ describe("V7: Ersetzung, bezahlte Zuliefererrolle und geprüftes Risiko", () => 
 });
 
 describe("V7: echte Anbieterquellen und begrenzte öffentliche Recherche", () => {
+  it("reserviert eigene Quellen für die Kernleistung statt sie von Sicherheitsfunktionen verdrängen zu lassen", () => {
+    const batches = researchBatches({
+      businessDescription: "Happy Scribe transkribiert Audio und Video.",
+      businessMoat: "EU-Datenhaltung und SSO.",
+    });
+    expect(batches).toHaveLength(2);
+    expect(batches[0].map((t) => t.id)).toEqual(["audio"]);
+    expect(batches[1].map((t) => t.id)).toContain("security");
+    expect(JSON.stringify(batches)).not.toContain("Happy Scribe");
+    expect(
+      researchBatches({ businessDescription: "diesdas ananas" }),
+    ).toHaveLength(1);
+  });
   it("sendet nur feste Sachthemen statt Geschäftsbeschreibung an die Suche", () => {
     const topics = researchTopics({
       businessDescription:
