@@ -49,7 +49,7 @@ export function Question({
   }, [q.id]);
   return (
     <main
-      className={`question-page${provider ? " provider-question" : ""}`}
+      className={`question-page${provider ? " provider-question" : ""}${stress ? " stress-question" : ""}`}
       aria-label="Check bearbeiten"
     >
       <div

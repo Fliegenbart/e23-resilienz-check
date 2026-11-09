@@ -403,7 +403,7 @@ export default function QuickApp() {
     }
   };
   return (
-    <div className="quick-app">
+    <div className="quick-app theme-stress">
       <a className="skip-link" href="#quick-content">
         Zum Inhalt
       </a>

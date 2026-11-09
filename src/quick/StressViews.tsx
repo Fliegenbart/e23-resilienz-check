@@ -4,7 +4,6 @@ import { checkTitle } from "./model";
 import {
   STRESS_SCENARIOS,
   STRESS_STATUS_LABELS,
-  STRESS_BANDS,
   STRESS_PREMISE,
   evaluateStress,
   stressInputFor,
@@ -12,6 +11,8 @@ import {
   currentStressAnalysis,
   requestStressAnalysis,
   type StressAnalysis,
+  type StressStatus,
+  type StressEvaluation,
 } from "./stress";
 import { BusinessDescription } from "./BusinessDescription";
 import { BusinessMoat } from "./BusinessMoat";
@@ -24,34 +25,229 @@ const CLAIM_LABELS = {
   unclear: "Noch nicht bewertbar",
 };
 
-export function StressIntro({ onStart }: { onStart: () => void }) {
+type Verdict = { status: StressStatus; claimed?: boolean };
+
+// The signature image: a load curve. It holds, yields or fractures.
+export function StressCurve({
+  today,
+  expert,
+  blank = false,
+}: {
+  today?: Verdict;
+  expert?: Verdict;
+  blank?: boolean;
+}) {
+  const X = [90, 500, 910];
+  const Y = { top: 70, mid: 185, base: 300 };
+  const level = (status: StressStatus, previous: number) =>
+    status === "holds"
+      ? Y.top
+      : status === "pressure"
+        ? Y.mid
+        : status === "breaks"
+          ? Y.base
+          : previous;
+  const points: { x: number; y: number; verdict: Verdict }[] = [];
+  let y = Y.top;
+  let broken = false;
+  for (const [index, verdict] of [today, expert].entries()) {
+    if (!verdict || broken) break;
+    y = level(verdict.status, y);
+    points.push({ x: X[index + 1], y, verdict });
+    broken = verdict.status === "breaks";
+  }
+  const segment = (
+    from: { x: number; y: number },
+    to: { x: number; y: number; verdict: Verdict },
+  ) =>
+    to.verdict.status === "breaks"
+      ? `M${from.x},${from.y} L${to.x - 90},${from.y} C${to.x - 30},${from.y} ${to.x - 8},${from.y + 40} ${to.x},${to.y}`
+      : `M${from.x},${from.y} C${from.x + 200},${from.y} ${to.x - 200},${to.y} ${to.x},${to.y}`;
+  const origin = { x: X[0], y: Y.top };
   return (
-    <main className="expert-scenario-intro results-page">
-      <p className="section-index">Umgekehrter Stresstest</p>
-      <h1>Welches Szenario bringt Ihr Geschäft um?</h1>
-      <p className="expert-scenario-lead">
-        Wir fragen nicht, wie wahrscheinlich es ist. Wir fragen, was dann
-        bleibt.
-      </p>
-      <div className="stress-scenarios">
-        {STRESS_SCENARIOS.map((scenario) => (
-          <section className="stress-scenario" key={scenario.id}>
-            <p className="stress-scenario-head">
-              <span>Szenario {scenario.letter}</span>
-              <span>{scenario.when}</span>
-            </p>
-            <h2>{scenario.title}</h2>
-            <p>{scenario.text}</p>
-          </section>
-        ))}
+    <svg
+      className="curve"
+      viewBox="0 0 1000 350"
+      role="img"
+      aria-label={
+        blank
+          ? "Belastungskurve: von heute über Szenario A zu Szenario B"
+          : `Belastungskurve: Szenario A ${today ? STRESS_STATUS_LABELS[today.status] : "offen"}, Szenario B ${expert ? STRESS_STATUS_LABELS[expert.status] : "offen"}`
+      }
+    >
+      {Array.from({ length: 10 }, (_, i) => (
+        <line
+          key={`v${i}`}
+          className="curve-grid"
+          x1={X[0] + i * 91.1}
+          x2={X[0] + i * 91.1}
+          y1={40}
+          y2={Y.base}
+        />
+      ))}
+      {[Y.top, Y.mid].map((line) => (
+        <line
+          key={line}
+          className="curve-grid"
+          x1={X[0]}
+          x2={X[2]}
+          y1={line}
+          y2={line}
+        />
+      ))}
+      <line
+        className="curve-axis"
+        x1={X[0]}
+        x2={X[2] + 30}
+        y1={Y.base}
+        y2={Y.base}
+      />
+      <line className="curve-axis" x1={X[0]} x2={X[0]} y1={40} y2={Y.base} />
+      <text className="curve-label" x={X[0] + 12} y={34}>
+        Wofür Kunden Ihnen zahlen
+      </text>
+      {["Heute", "A", "B"].map((label, i) => (
+        <g key={label}>
+          <line
+            className="curve-tick"
+            x1={X[i]}
+            x2={X[i]}
+            y1={Y.base}
+            y2={Y.base + 10}
+          />
+          <text
+            className={i ? "curve-letter" : "curve-label"}
+            x={X[i]}
+            y={Y.base + 38}
+            textAnchor="middle"
+          >
+            {label}
+          </text>
+        </g>
+      ))}
+      {blank && (
+        <path
+          className="curve-line curve-ghost"
+          d={`M${X[0]},${Y.top} L${X[2]},${Y.top}`}
+        />
+      )}
+      {points.map((point, i) => {
+        const from = i ? points[i - 1] : origin;
+        const style =
+          point.verdict.status === "open"
+            ? "curve-open"
+            : point.verdict.claimed
+              ? "curve-claimed"
+              : "curve-solid";
+        return (
+          <path
+            key={i}
+            className={`curve-line ${style}`}
+            d={segment(from, point)}
+            pathLength={style === "curve-solid" ? 1 : undefined}
+            style={
+              style === "curve-solid"
+                ? { animationDelay: `${i * 0.9}s` }
+                : undefined
+            }
+          />
+        );
+      })}
+      <circle className="curve-dot" cx={origin.x} cy={origin.y} r={9} />
+      {points.map((point, i) =>
+        point.verdict.status === "breaks" ? (
+          <g
+            key={i}
+            className="curve-break"
+            style={{ animationDelay: `${i * 0.9 + 0.8}s` }}
+          >
+            <line
+              x1={point.x - 16}
+              x2={point.x + 16}
+              y1={point.y - 16}
+              y2={point.y + 16}
+            />
+            <line
+              x1={point.x - 16}
+              x2={point.x + 16}
+              y1={point.y + 16}
+              y2={point.y - 16}
+            />
+          </g>
+        ) : (
+          <circle
+            key={i}
+            className={`curve-dot dot-${point.verdict.status}`}
+            cx={point.x}
+            cy={point.y}
+            r={11}
+          />
+        ),
+      )}
+    </svg>
+  );
+}
+
+function ScenarioColumns({
+  items,
+}: {
+  items: {
+    letter: string;
+    title: string;
+    when: string;
+    text: string;
+    status?: StressStatus;
+    tag?: string;
+    note?: string;
+  }[];
+}) {
+  return (
+    <div className="scenario-columns">
+      {items.map((item) => (
+        <section key={item.letter}>
+          {item.status && (
+            <span className={`state state-${item.status}`}>{item.tag}</span>
+          )}
+          <h2>
+            <span className="scenario-letter">{item.letter}</span> {item.title}
+          </h2>
+          <p className="scenario-when">{item.when}</p>
+          <p>{item.text}</p>
+          {item.note && <p className="scenario-note">{item.note}</p>}
+        </section>
+      ))}
+    </div>
+  );
+}
+
+export function StressIntro({ onStart }: { onStart: () => void }) {
+  const [a, b, c] = STRESS_SCENARIOS;
+  return (
+    <main className="stress-page stress-intro">
+      <div className="intro-text">
+        <h1>Welches Szenario bringt Ihr Geschäft um?</h1>
+        <p className="lede">
+          Wir fragen nicht, wie wahrscheinlich es ist. Wir fragen, was dann von
+          Ihrem Geschäft bleibt.
+        </p>
+        <p className="principle">
+          Was aus Intelligenz besteht, wird billig: Wissen, Software, Bedienung.
+          Daten, Rechte, Anlagen und Kundenzugang werden es nicht automatisch.
+        </p>
+        <button className="go" onClick={onStart}>
+          Stresstest starten
+        </button>
       </div>
-      <p className="expert-scenario-note">
-        Was aus Intelligenz besteht, wird billig: Wissen, Software, Bedienung.
-        Daten, Rechte, Anlagen und Kundenzugang werden es nicht automatisch.
-      </p>
-      <button className="button primary" onClick={onStart}>
-        Stresstest starten <Arrow />
-      </button>
+      <div className="intro-chart">
+        <div className="curve-block">
+          <StressCurve blank />
+          <ScenarioColumns items={[a, b]} />
+        </div>
+        <p className="aside">
+          Szenario C ist dasselbe in sechs Monaten: wie B, nur schneller. Zum
+          Umbauen bleibt kaum Zeit.
+        </p>
+      </div>
     </main>
   );
 }
@@ -74,29 +270,23 @@ export function StressContext({
     check.businessDescription?.trim() || check.businessMoat?.trim(),
   );
   return (
-    <main className="business-context-page">
-      <p className="section-index">Zwei Sätze genügen</p>
+    <main className="stress-page stress-context">
       <h1 ref={heading} tabIndex={-1}>
         Was verkaufen Sie? Und was schützt es?
       </h1>
+      <p className="lede">
+        Zwei Sätze genügen. Gesendet wird noch nichts; danach folgen zehn kurze
+        Fragen.
+      </p>
       <BusinessDescription
         value={check.businessDescription ?? ""}
         onChange={onDescriptionChange}
         onBusyChange={setDictating}
       />
       <BusinessMoat value={check.businessMoat ?? ""} onChange={onMoatChange} />
-      <p className="stress-note">
-        Gesendet wird noch nichts. Danach folgen zehn kurze Fragen.
-      </p>
-      <div className="business-context-actions">
-        <button
-          className="button primary"
-          onClick={onContinue}
-          disabled={dictating}
-        >
-          {described ? "Weiter" : "Ohne Beschreibung weiter"} <Arrow />
-        </button>
-      </div>
+      <button className="go" onClick={onContinue} disabled={dictating}>
+        {described ? "Weiter zu den Fragen" : "Ohne Beschreibung weiter"}
+      </button>
     </main>
   );
 }
@@ -165,8 +355,8 @@ export function StressAnalysisControl({
   };
   if (fresh)
     return (
-      <p className="stress-note stress-rerun">
-        <button className="text-link" onClick={run} disabled={busy}>
+      <p className="rerun">
+        <button className="quiet" onClick={run} disabled={busy}>
           {busy ? "Nachruf wird neu geschrieben …" : "Nachruf neu schreiben"}
         </button>{" "}
         <span role="status" aria-live="polite">
@@ -175,53 +365,43 @@ export function StressAnalysisControl({
       </p>
     );
   return (
-    <section className="stress-attack" aria-label="Nachruf auf Ihr Geschäft">
-      <p className="stress-attack-kicker">Der eigentliche Stresstest</p>
-      <h2>Wie endet Ihr Geschäft? Lesen Sie den Nachruf.</h2>
+    <section className="obituary-call" aria-label="Nachruf auf Ihr Geschäft">
+      <h2>Wie endet Ihr Geschäft?</h2>
       <p>
         Die KI spielt den Angriff auf genau Ihr Geschäft durch: wer Sie ersetzt,
         auf welchem Weg, was übrig bleibt und was Sie jetzt tun können.
       </p>
       {input ? (
         <>
-          <div className="stress-attack-actions">
+          <button className="go go-large" onClick={run} disabled={busy}>
+            {busy ? "Der Nachruf entsteht …" : "Nachruf schreiben lassen"}
+          </button>
+          {busy && (
             <button
-              className="stress-attack-button"
-              onClick={run}
-              disabled={busy}
+              className="quiet"
+              onClick={() => {
+                active.current?.abort();
+                active.current = null;
+                setBusy(false);
+              }}
             >
-              {busy ? "Der Nachruf entsteht …" : "Nachruf schreiben lassen"}
-              {!busy && <Arrow />}
+              Abbrechen
             </button>
-            {busy && (
-              <button
-                className="text-link"
-                onClick={() => {
-                  active.current?.abort();
-                  active.current = null;
-                  setBusy(false);
-                }}
-              >
-                Abbrechen
-              </button>
-            )}
-          </div>
-          <p className="stress-attack-small">
+          )}
+          <p className="small">
             {check.stressAnalysis
               ? "Ihre Angaben haben sich geändert. Der frühere Nachruf gilt nicht mehr. "
               : ""}
-            Auf Klick: Beschreibung, Schutz und zehn Antworten an OpenAI über
-            Vercel senden. Dauer etwa 20 Sekunden.
+            Auf Klick gehen Beschreibung, Schutz und zehn Antworten an OpenAI
+            über Vercel. Das dauert etwa 20 Sekunden.
           </p>
         </>
       ) : (
-        <div className="stress-attack-actions">
-          <button className="stress-attack-button" onClick={onEditContext}>
-            Geschäft in zwei Sätzen beschreiben <Arrow />
-          </button>
-        </div>
+        <button className="go go-large" onClick={onEditContext}>
+          Geschäft in zwei Sätzen beschreiben
+        </button>
       )}
-      <p className="stress-attack-small" role="status" aria-live="polite">
+      <p className="small" role="status" aria-live="polite">
         {message}
       </p>
     </section>
@@ -232,66 +412,126 @@ export function StressScore({ check }: { check: QuickCheck }) {
   const r = evaluateStress(check);
   return (
     <div
-      className={`stress-score band-${r.band?.id ?? "open"}`}
+      className={`score band-${r.band?.id ?? "open"}`}
       aria-label="Resilienz-Score"
     >
-      <p className="stress-score-label">Resilienz-Score</p>
-      <p className="stress-score-value">
-        <strong>{r.score ?? "–"}</strong>
-        {r.score !== null && <span>/100</span>}
-        <span className="stress-score-band">
-          {r.band?.label ?? "Noch offen"}
+      <p className="score-number">{r.score ?? "–"}</p>
+      <p className="score-meta">
+        <span className="score-band">{r.band?.label ?? "Noch offen"}</span>
+        <span>
+          Resilienz-Score von 100
+          {r.disputed ? ", von der KI nach unten korrigiert" : ""}
         </span>
-      </p>
-      <div className="stress-score-track" aria-hidden="true">
-        {STRESS_BANDS.map((band) => (
-          <span key={band.id} className={`segment-${band.id}`} />
-        ))}
-        {r.score !== null && (
-          <i style={{ left: `${Math.min(98, Math.max(2, r.score))}%` }} />
-        )}
-      </div>
-      <p className="stress-score-caption">
-        0 akut gefährdet · 100 robust · Einschätzung, keine Wahrscheinlichkeit
-        {r.disputed ? " · von der KI nach unten korrigiert" : ""}
       </p>
     </div>
   );
 }
 
-function Recommendations({ check }: { check: QuickCheck }) {
+const CTA_TEXT =
+  "Die Frage ist nicht, ob Sie KI nutzen. Die Frage ist, wie Ihr Geschäft mehr von dem bekommt, was nicht aus einfach ersetzbarer Intelligenz besteht. Daran arbeiten wir mit Ihnen.";
+
+const verdictOf = (r: StressEvaluation, index: number): Verdict => ({
+  status: r.scenarios[index].status,
+  claimed: r.scenarios[index].status === "holds" && r.claimed,
+});
+
+function Verdicts({ check }: { check: QuickCheck }) {
   const r = evaluateStress(check);
-  const { own, general } = r.recommendations;
-  if (!own.length && !general.length) return null;
+  const [a, b] = r.scenarios;
+  const tag = (index: number) =>
+    STRESS_STATUS_LABELS[r.scenarios[index].status] +
+    (verdictOf(r, index).claimed ? ", laut Ihren Angaben" : "");
   return (
-    <section className="stress-block stress-advice print-block">
-      <h2>Was Sie jetzt tun können</h2>
-      {own.length > 0 && (
-        <ol>
-          {own.map((item, i) => (
-            <li key={i}>{item}</li>
-          ))}
-        </ol>
-      )}
-      {general.length > 0 && (
-        <>
-          {own.length > 0 && (
-            <p className="stress-note">Grundsätzlich hilft außerdem:</p>
-          )}
-          <ul>
-            {general.map((item) => (
-              <li key={item.id}>
-                <strong>{item.title}.</strong> {item.detail}
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
-    </section>
+    <>
+      <div className="curve-block">
+        <StressCurve today={verdictOf(r, 0)} expert={verdictOf(r, 1)} />
+        <ScenarioColumns
+          items={[a, b].map((scenario, index) => ({
+            letter: scenario.letter,
+            title: scenario.title,
+            when: scenario.when,
+            text: scenario.reason,
+            status: scenario.status,
+            tag: tag(index),
+            note: scenario.disputed
+              ? "Die KI urteilt hier strenger als Ihre Antworten."
+              : undefined,
+          }))}
+        />
+      </div>
+      <p className="aside">
+        Szenario C, dasselbe schon in sechs Monaten: {r.scenarios[2].reason}
+        {r.time ? ` ${r.time}` : ""}
+      </p>
+    </>
   );
 }
 
-export function StressFindings({
+function Remains({ check }: { check: QuickCheck }) {
+  const r = evaluateStress(check);
+  const ai = r.analysis?.result;
+  if (!ai) return null;
+  return (
+    <>
+      <div className="ledger">
+        <section>
+          <h2>Aus Intelligenz gebaut</h2>
+          <p className="ledger-fate">Das wird billig.</p>
+          {ai.madeOfIntelligence.length ? (
+            <ul className="ledger-gone">
+              {ai.madeOfIntelligence.map((item, i) => (
+                <li key={i}>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="small">Nichts Konkretes beschrieben.</p>
+          )}
+        </section>
+        <section>
+          <h2>Nicht aus Intelligenz gebaut</h2>
+          <p className="ledger-fate">Das kann bleiben.</p>
+          {ai.notMadeOfIntelligence.length ? (
+            <ul className="ledger-stays">
+              {ai.notMadeOfIntelligence.map((item, i) => (
+                <li key={i}>{item}</li>
+              ))}
+            </ul>
+          ) : (
+            <p className="ledger-empty">Hier steht noch nichts.</p>
+          )}
+        </section>
+      </div>
+      <div className="facts">
+        {ai.claim && (
+          <section>
+            <h3>Ihr genannter Schutz: {CLAIM_LABELS[ai.claim.verdict]}</h3>
+            <p>{ai.claim.reason}</p>
+          </section>
+        )}
+        <section>
+          <h3>Wofür Kunden dann noch zahlen könnten</h3>
+          <p>{ai.remains}</p>
+        </section>
+        {ai.doubts.map((doubt) => (
+          <section className="doubt" key={doubt.questionId}>
+            <h3>
+              Rückfrage zu:{" "}
+              {
+                check.methodologySnapshot.find((q) => q.id === doubt.questionId)
+                  ?.text
+              }
+            </h3>
+            <p>{doubt.reason}</p>
+          </section>
+        ))}
+      </div>
+    </>
+  );
+}
+
+function Actions({
   check,
   print = false,
 }: {
@@ -300,111 +540,41 @@ export function StressFindings({
 }) {
   const r = evaluateStress(check);
   const ai = r.analysis?.result;
+  const { own, general } = r.recommendations;
   const [copied, setCopied] = useState(false);
   return (
     <>
-      {ai && (
-        <section className="stress-block stress-obituary print-block">
-          <h2>Nachruf</h2>
-          <p>{ai.obituary}</p>
-        </section>
-      )}
-      <div className="stress-scenarios" aria-label="Die drei Szenarien">
-        {r.scenarios.map((scenario) => (
-          <section
-            className={`stress-scenario tone-${scenario.status} print-block`}
-            key={scenario.id}
-          >
-            <p className="stress-scenario-head">
-              <span>Szenario {scenario.letter}</span>
-              <span>{scenario.when}</span>
-            </p>
-            <h3>{scenario.title}</h3>
-            <span className={`stress-status status-${scenario.status}`}>
-              {STRESS_STATUS_LABELS[scenario.status]}
-              {scenario.status === "holds" && r.claimed
-                ? " · laut Ihren Angaben"
-                : ""}
-            </span>
-            <p>{scenario.reason}</p>
-            {scenario.disputed && (
-              <p className="stress-assumption">
-                Die KI urteilt hier strenger als Ihre Antworten.
-              </p>
-            )}
-          </section>
-        ))}
-      </div>
-      {r.time && <p className="stress-note">{r.time}</p>}
-      {ai && (
-        <>
-          <div className="stress-split">
-            <section className="print-block">
-              <h2>Aus Intelligenz gebaut · wird billig</h2>
-              {ai.madeOfIntelligence.length ? (
-                <ul>
-                  {ai.madeOfIntelligence.map((item, i) => (
-                    <li key={i}>{item}</li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="stress-empty">Nichts Konkretes beschrieben.</p>
-              )}
-            </section>
-            <section className="print-block">
-              <h2>Nicht aus Intelligenz gebaut · kann bleiben</h2>
-              {ai.notMadeOfIntelligence.length ? (
-                <ul>
-                  {ai.notMadeOfIntelligence.map((item, i) => (
-                    <li key={i}>{item}</li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="stress-empty">Nichts Konkretes beschrieben.</p>
-              )}
-            </section>
-          </div>
-          {ai.claim && (
-            <section className="stress-block print-block">
-              <h2>Ihr genannter Schutz: {CLAIM_LABELS[ai.claim.verdict]}</h2>
-              <p>{ai.claim.reason}</p>
-            </section>
-          )}
-          <section className="stress-block print-block">
-            <h2>Wofür Kunden dann noch zahlen könnten</h2>
-            <p>{ai.remains}</p>
-          </section>
-          {ai.doubts.map((doubt) => (
-            <section
-              className="stress-block stress-doubt print-block"
-              key={doubt.questionId}
-            >
-              <h2>
-                Rückfrage zu:{" "}
-                {
-                  check.methodologySnapshot.find(
-                    (q) => q.id === doubt.questionId,
-                  )?.text
-                }
-              </h2>
-              <p>{doubt.reason}</p>
-            </section>
+      {own.length > 0 && (
+        <ol className="advice">
+          {own.map((item, i) => (
+            <li key={i}>{item}</li>
           ))}
+        </ol>
+      )}
+      {general.length > 0 && (
+        <>
+          {own.length > 0 && <h3>Grundsätzlich hilft außerdem</h3>}
+          <ul className={own.length ? "advice-general" : "advice advice-plain"}>
+            {general.map((item) => (
+              <li key={item.id}>
+                <strong>{item.title}.</strong> {item.detail}
+              </li>
+            ))}
+          </ul>
         </>
       )}
-      <Recommendations check={check} />
-      <section className="stress-block print-block">
-        <h2>Test für Montag</h2>
+      <section className="monday">
+        <h3>Test für Montag</h3>
         <p>{r.nextStep}</p>
         {ai && r.scenarios[0].status !== "open" && (
           <>
-            <p className="stress-note">
+            <p className="small">
               Geben Sie diesen Auftrag einem aktuellen KI-Agenten:
             </p>
-            <p className="stress-brief">{ai.attackBrief}</p>
+            <p className="brief">{ai.attackBrief}</p>
             {!print && (
               <button
-                className="text-link"
+                className="quiet"
                 onClick={() => {
                   void navigator.clipboard
                     ?.writeText(ai.attackBrief)
@@ -417,71 +587,36 @@ export function StressFindings({
           </>
         )}
         {ai?.openQuestion && (
-          <p className="stress-note">Noch zu klären: {ai.openQuestion}</p>
+          <p className="small">Noch zu klären: {ai.openQuestion}</p>
         )}
       </section>
-      <p className="stress-basis">
-        Grundlage: {r.basis}. Die Szenarien sind Annahmen, keine Prognosen.
-        {ai
-          ? " Die KI-Einschätzung beruht nur auf Ihren Angaben und ist nicht extern geprüft."
-          : ""}
-      </p>
     </>
   );
 }
 
-const CTA_TEXT =
-  "Die Frage ist nicht, ob Sie KI nutzen. Die Frage ist, wie Ihr Geschäft mehr von dem bekommt, was nicht aus einfach ersetzbarer Intelligenz besteht. Daran arbeiten wir mit Ihnen.";
-
-// Appears once when the reader reaches the end of the result.
-function StressCta() {
-  const sentinel = useRef<HTMLDivElement>(null);
-  const [state, setState] = useState<"waiting" | "open" | "closed">("waiting");
-  useEffect(() => {
-    const node = sentinel.current;
-    if (!node || state !== "waiting" || !("IntersectionObserver" in window))
-      return;
-    const observer = new IntersectionObserver((entries) => {
-      if (entries.some((entry) => entry.isIntersecting)) setState("open");
-    });
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [state]);
-  useEffect(() => {
-    if (state !== "open") return;
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setState("closed");
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [state]);
+// Linear version for the printed report.
+export function StressFindings({ check }: { check: QuickCheck }) {
+  const r = evaluateStress(check);
+  const ai = r.analysis?.result;
   return (
     <>
-      <div ref={sentinel} className="stress-cta-sentinel" aria-hidden="true" />
-      {state === "open" && (
-        <div
-          className="stress-overlay no-print"
-          onClick={() => setState("closed")}
-        >
-          <div
-            className="stress-overlay-card"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="stress-cta-title"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <h2 id="stress-cta-title">Und jetzt?</h2>
-            <p>{CTA_TEXT}</p>
-            <button
-              className="button primary"
-              autoFocus
-              onClick={() => setState("closed")}
-            >
-              Verstanden <Arrow />
-            </button>
-          </div>
-        </div>
+      <Verdicts check={check} />
+      {ai && (
+        <section className="print-block">
+          <h2>Nachruf</h2>
+          <p className="obituary-text">{ai.obituary}</p>
+        </section>
       )}
+      <section className="print-block">
+        <Remains check={check} />
+      </section>
+      <section className="print-block">
+        <h2>Was Sie jetzt tun können</h2>
+        <Actions check={check} print />
+      </section>
+      <p className="small">
+        Grundlage: {r.basis}. Die Szenarien sind Annahmen, keine Prognosen.
+      </p>
     </>
   );
 }
@@ -504,74 +639,193 @@ export function StressResults({
   onExport: () => void;
 }) {
   const r = evaluateStress(check);
+  const ai = r.analysis?.result;
+  const steps = [
+    { id: "verdict", label: "Urteil" },
+    { id: "obituary", label: "Nachruf" },
+    ...(ai ? [{ id: "remains", label: "Was bleibt" }] : []),
+    { id: "actions", label: "Was tun" },
+    { id: "next", label: "Und jetzt" },
+  ];
+  const [stepId, setStepId] = useState("verdict");
   const [answersOpen, setAnswersOpen] = useState(false);
+  const index = Math.max(
+    0,
+    steps.findIndex((step) => step.id === stepId),
+  );
+  const heading = useRef<HTMLHeadingElement>(null);
+  const go = (target: number) => {
+    const next = steps[Math.min(steps.length - 1, Math.max(0, target))];
+    setStepId(next.id);
+    window.scrollTo(0, 0);
+  };
+  const move = useRef(go);
+  move.current = go;
+  const position = useRef(index);
+  position.current = index;
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (target?.closest("input, textarea, select, dialog")) return;
+      if (event.key === "ArrowRight") move.current(position.current + 1);
+      if (event.key === "ArrowLeft") move.current(position.current - 1);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+  const first = useRef(true);
+  useEffect(() => {
+    if (first.current) first.current = false;
+    else heading.current?.focus({ preventScroll: true });
+  }, [stepId]);
+  const step = steps[index].id;
   return (
-    <main className="results-page provider-results stress-results">
-      <header className="provider-result-intro">
-        <p className="section-index">
-          Ihr Stresstest · {r.answered}/{check.methodologySnapshot.length}{" "}
-          beantwortet{check.isExample ? " · Beispiel" : ""}
-        </p>
-        <StressScore check={check} />
-        <h1>{r.headline}</h1>
-        {r.unknown.length > 0 && (
-          <button
-            className="button secondary"
-            onClick={() =>
-              onEdit(check.methodologySnapshot.indexOf(r.unknown[0]))
-            }
-          >
-            {r.unknown.length} offene{" "}
-            {r.unknown.length === 1 ? "Frage klären" : "Fragen klären"}
-            <Arrow />
-          </button>
+    <main className="results-page stress-page stress-results">
+      <div className={`sheet sheet-${step}`} key={step}>
+        {step === "verdict" && (
+          <>
+            <div className="verdict-head">
+              <StressScore check={check} />
+              <div>
+                <h1 ref={heading} tabIndex={-1}>
+                  {r.headline}
+                </h1>
+                {check.isExample && <p className="small">Fiktives Beispiel.</p>}
+                {r.unknown.length > 0 && (
+                  <button
+                    className="quiet"
+                    onClick={() =>
+                      onEdit(check.methodologySnapshot.indexOf(r.unknown[0]))
+                    }
+                  >
+                    {r.unknown.length} offene{" "}
+                    {r.unknown.length === 1 ? "Frage klären" : "Fragen klären"}
+                  </button>
+                )}
+              </div>
+            </div>
+            <Verdicts check={check} />
+          </>
         )}
-      </header>
-      <StressAnalysisControl
-        check={check}
-        onComplete={onAnalysisChange}
-        onEditContext={onEditContext}
-      />
-      <StressFindings check={check} />
-      <StressCta key={r.analysis ? "with" : "without"} />
-      <footer className="provider-result-tools">
-        <button className="button primary" onClick={onPrint}>
-          Ergebnis als PDF <Arrow />
-        </button>
+        {step === "obituary" && (
+          <>
+            {ai ? (
+              <>
+                <h1 ref={heading} tabIndex={-1}>
+                  Nachruf
+                </h1>
+                <p className="obituary-text">{ai.obituary}</p>
+              </>
+            ) : (
+              <h1 ref={heading} tabIndex={-1} className="sr-only">
+                Nachruf
+              </h1>
+            )}
+            <StressAnalysisControl
+              check={check}
+              onComplete={onAnalysisChange}
+              onEditContext={onEditContext}
+            />
+          </>
+        )}
+        {step === "remains" && (
+          <>
+            <h1 ref={heading} tabIndex={-1}>
+              Was davon bleibt
+            </h1>
+            <Remains check={check} />
+          </>
+        )}
+        {step === "actions" && (
+          <>
+            <h1 ref={heading} tabIndex={-1}>
+              Was Sie jetzt tun können
+            </h1>
+            <Actions check={check} />
+          </>
+        )}
+        {step === "next" && (
+          <>
+            <h1 ref={heading} tabIndex={-1}>
+              Und jetzt?
+            </h1>
+            <p className="closing">{CTA_TEXT}</p>
+            <div className="tools">
+              <button className="go" onClick={onPrint}>
+                Ergebnis als PDF
+              </button>
+              <button
+                className="quiet"
+                aria-expanded={answersOpen}
+                aria-controls="stress-answer-list"
+                onClick={() => setAnswersOpen((v) => !v)}
+              >
+                Antworten {answersOpen ? "ausblenden" : "ändern"}
+              </button>
+              <button className="quiet" onClick={onEditContext}>
+                Beschreibung ändern
+              </button>
+              <button className="quiet" onClick={onMethod}>
+                Annahmen und Regeln
+              </button>
+              <button className="quiet" onClick={onExport}>
+                JSON sichern
+              </button>
+            </div>
+            {answersOpen && (
+              <section
+                className="answers"
+                id="stress-answer-list"
+                aria-label="Antworten bearbeiten"
+              >
+                {check.methodologySnapshot.map((q, i) => (
+                  <button key={q.id} onClick={() => onEdit(i)}>
+                    <strong>{q.text}</strong>
+                    <span>{answerText(check, q.id)}</span>
+                  </button>
+                ))}
+              </section>
+            )}
+            <p className="small">
+              Grundlage: {r.basis}. Die Szenarien sind Annahmen, keine
+              Prognosen.
+              {ai
+                ? " Die KI-Einschätzung beruht nur auf Ihren Angaben und ist nicht extern geprüft."
+                : ""}
+            </p>
+          </>
+        )}
+      </div>
+      <nav className="stepper no-print" aria-label="Schritte des Ergebnisses">
         <button
-          className="text-link"
-          aria-expanded={answersOpen}
-          aria-controls="stress-answer-list"
-          onClick={() => setAnswersOpen((v) => !v)}
+          className="stepper-move"
+          onClick={() => go(index - 1)}
+          disabled={index === 0}
+          aria-label="Zurück"
         >
-          Antworten {answersOpen ? "ausblenden" : "ändern"}
+          <Arrow direction="left" />
         </button>
-        <button className="text-link" onClick={onEditContext}>
-          Beschreibung ändern
-        </button>
-        <button className="text-link" onClick={onMethod}>
-          Annahmen und Regeln
-        </button>
-        <button className="text-link" onClick={onExport}>
-          JSON sichern
-        </button>
-      </footer>
-      {answersOpen && (
-        <section
-          className="provider-answer-list"
-          id="stress-answer-list"
-          aria-label="Antworten bearbeiten"
-        >
-          {check.methodologySnapshot.map((q, i) => (
-            <button key={q.id} onClick={() => onEdit(i)}>
-              <span>{String(i + 1).padStart(2, "0")}</span>
-              <strong>{q.text}</strong>
-              <span>{answerText(check, q.id)}</span>
-              <Arrow />
-            </button>
+        <ol>
+          {steps.map((item, i) => (
+            <li key={item.id}>
+              <button
+                aria-current={i === index ? "step" : undefined}
+                onClick={() => go(i)}
+              >
+                {item.label}
+              </button>
+            </li>
           ))}
-        </section>
-      )}
+        </ol>
+        <button
+          className="stepper-move stepper-next"
+          onClick={() => go(index + 1)}
+          disabled={index === steps.length - 1}
+        >
+          {index < steps.length - 1 ? steps[index + 1].label : "Ende"}
+          <Arrow />
+        </button>
+      </nav>
     </main>
   );
 }
@@ -668,7 +922,7 @@ export function StressReport({ check }: { check: QuickCheck }) {
           <p>{check.businessMoat}</p>
         </section>
       )}
-      <StressFindings check={check} print />
+      <StressFindings check={check} />
       <section className="print-block">
         <h2>Und jetzt?</h2>
         <p>{CTA_TEXT}</p>
