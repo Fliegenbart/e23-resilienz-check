@@ -13,7 +13,10 @@ import {
 import { ProviderFindings } from "./ProviderResults";
 import { ProviderScenario } from "./ProviderScenario";
 import { ProviderRules } from "./ProviderRules";
-import { currentBusinessAnalysis } from "./business-analysis";
+import {
+  currentBusinessAnalysis,
+  moatDisputesScore,
+} from "./business-analysis";
 import { BusinessAnalysisFindings } from "./BusinessAnalysis";
 
 export function ProviderReport({ check }: { check: QuickCheck }) {
@@ -32,12 +35,14 @@ export function ProviderReport({ check }: { check: QuickCheck }) {
       </p>
       {current && <ProviderRiskScore check={check} />}
       <h1>
-        {current ? r.headline : (personal?.result.headline ?? r.headline)}
+        {current
+          ? moatDisputesScore(personal, r.risk?.score ?? null)
+            ? "Die KI hält Ihren Vorteil für ersetzbar."
+            : r.headline
+          : (personal?.result.headline ?? r.headline)}
       </h1>
       {!current && <p>{personal?.result.summary ?? r.summary}</p>}
-      {personal && (
-        <p>KI-Auswertung aus Ihrer Beschreibung und Ihren Antworten.</p>
-      )}
+      {personal && <p>KI-Auswertung aus Ihren Angaben.</p>}
       {check.businessAnalysis && !personal && (
         <p>
           Die frühere KI-Auswertung ist nicht mehr aktuell und hier nicht
@@ -49,6 +54,12 @@ export function ProviderReport({ check }: { check: QuickCheck }) {
         <section className="print-business-description">
           <h2>Ihr Business</h2>
           <p>{check.businessDescription}</p>
+        </section>
+      )}
+      {check.businessMoat?.trim() && (
+        <section className="print-business-description">
+          <h2>Ihr genannter Vorteil</h2>
+          <p>{check.businessMoat}</p>
         </section>
       )}
       {current && <ProviderPurchaseFindings check={check} print />}

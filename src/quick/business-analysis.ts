@@ -1,7 +1,10 @@
 import { z } from "zod";
 import type { QuickCheck } from "./model.js";
 import { supportsBusinessAnalysis } from "./provider-questions.js";
-import { BUSINESS_DESCRIPTION_MAX_LENGTH } from "./business-description.js";
+import {
+  BUSINESS_DESCRIPTION_MAX_LENGTH,
+  BUSINESS_MOAT_MAX_LENGTH,
+} from "./business-description.js";
 import {
   DEFAULT_PROVIDER_SCENARIO,
   providerScenarioSchema,
@@ -9,6 +12,7 @@ import {
 
 export const BUSINESS_ANALYSIS_MODEL = "openai/gpt-5.2";
 export const BUSINESS_ANALYSIS_VERSION = "business-analysis-2.0";
+export const BUSINESS_MOAT_ANALYSIS_VERSION = "business-analysis-3.0";
 export const BUSINESS_ANALYSIS_MIN_LENGTH = 20;
 const ids = [
   "Q1",
@@ -32,15 +36,30 @@ const answer = z.union([
 export const analysisInputSchema = z
   .object({
     methodologyVersion: z.enum(["quick-check-4.0", "quick-check-5.0"]),
-    businessDescription: z
-      .string()
-      .trim()
-      .min(BUSINESS_ANALYSIS_MIN_LENGTH)
-      .max(BUSINESS_DESCRIPTION_MAX_LENGTH),
+    businessDescription: z.string().trim().max(BUSINESS_DESCRIPTION_MAX_LENGTH),
+    businessMoat: z.string().trim().max(BUSINESS_MOAT_MAX_LENGTH).optional(),
     answers: z.record(z.enum(ids), answer),
     scenario: providerScenarioSchema,
   })
-  .strict();
+  .strict()
+  .superRefine((input, ctx) => {
+    if (input.businessMoat && input.methodologyVersion !== "quick-check-5.0")
+      ctx.addIssue({
+        code: "custom",
+        message: "Die Prüfung des Vorteils gehört zur Methode 5.0.",
+        path: ["businessMoat"],
+      });
+    if (
+      input.businessDescription.length < BUSINESS_ANALYSIS_MIN_LENGTH &&
+      !input.businessMoat
+    )
+      ctx.addIssue({
+        code: "custom",
+        message:
+          "Bitte Ihr Business oder Ihren besonderen Vorteil beschreiben.",
+        path: ["businessDescription"],
+      });
+  });
 export type BusinessAnalysisInput = z.infer<typeof analysisInputSchema>;
 
 const findingSchema = z
@@ -84,25 +103,125 @@ export const analysisResultSchema = z
 export type BusinessAnalysisResult = z.infer<typeof analysisResultSchema>;
 export type BusinessFinding = z.infer<typeof findingSchema>;
 
+export const moatReviewSchema = z
+  .object({
+    verdict: z.enum(["replaceable", "conditional", "durable", "unclear"]),
+    pace: z.enum([
+      "feature_update",
+      "better_agents",
+      "external_hurdle",
+      "unclear",
+    ]),
+    reason: z
+      .string()
+      .min(1)
+      .max(180)
+      .describe(
+        "Ein kurzer Satz: konkreter Übernahmeweg oder entscheidende Schutzbedingung, höchstens 25 Wörter.",
+      ),
+    basisQuote: z
+      .string()
+      .min(1)
+      .max(240)
+      .describe(
+        "Exakter zusammenhängender Ausschnitt aus businessMoat, nie aus einer anderen Quelle.",
+      ),
+  })
+  .strict();
+export type MoatReview = z.infer<typeof moatReviewSchema>;
+export const analysisWithMoatSchema = analysisResultSchema
+  .extend({ moatReview: moatReviewSchema })
+  .strict();
+export const MOAT_VERDICTS: Record<MoatReview["verdict"], string> = {
+  replaceable: "Leicht ersetzbar",
+  conditional: "Schutz nur unter Bedingungen",
+  durable: "Auch für starke KI eine Hürde",
+  unclear: "Noch nicht bewertbar",
+};
+export const MOAT_PACES: Record<MoatReview["pace"], string> = {
+  feature_update: "Ein Funktionsupdate könnte reichen.",
+  better_agents: "Mit besseren Agenten angreifbar.",
+  external_hurdle: "Mehr Intelligenz allein genügt nicht.",
+  unclear: "Tempo offen.",
+};
+
 export const businessAnalysisSchema = z
   .object({
-    version: z.enum(["business-analysis-1.0", BUSINESS_ANALYSIS_VERSION]),
+    version: z.enum([
+      "business-analysis-1.0",
+      BUSINESS_ANALYSIS_VERSION,
+      BUSINESS_MOAT_ANALYSIS_VERSION,
+    ]),
     createdAt: z.iso.datetime({ offset: true }),
     model: z.string().min(1).max(120),
     input: analysisInputSchema,
-    result: analysisResultSchema,
+    result: z.union([analysisWithMoatSchema, analysisResultSchema]),
   })
   .strict()
   .superRefine((analysis, ctx) => {
     if (
       analysis.input.methodologyVersion === "quick-check-5.0" &&
-      analysis.version !== BUSINESS_ANALYSIS_VERSION
+      analysis.version === "business-analysis-1.0"
     ) {
       ctx.addIssue({
         code: "custom",
         message: "Die neue Methode benötigt die neue KI-Auswertung.",
         path: ["version"],
       });
+    }
+    const moatReview =
+      "moatReview" in analysis.result ? analysis.result.moatReview : null;
+    const hasMoat = Boolean(analysis.input.businessMoat);
+    if (
+      (analysis.version === BUSINESS_MOAT_ANALYSIS_VERSION) !==
+        (hasMoat && moatReview !== null) ||
+      (analysis.version !== BUSINESS_MOAT_ANALYSIS_VERSION &&
+        (hasMoat || moatReview !== null))
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        message:
+          "Die Vorteilsprüfung muss zum eingegebenen Vorteil und zur Ausgabeversion passen.",
+        path: ["result"],
+      });
+    }
+    if (moatReview) {
+      if (!analysis.input.businessMoat?.includes(moatReview.basisQuote))
+        ctx.addIssue({
+          code: "custom",
+          message: "Das Zitat steht nicht im angegebenen Vorteil.",
+          path: ["result", "moatReview"],
+        });
+      if (
+        moatReview.verdict === "unclear" &&
+        (moatReview.pace !== "unclear" ||
+          analysis.result.openQuestions.length === 0)
+      )
+        ctx.addIssue({
+          code: "custom",
+          message:
+            "Ein unklarer Vorteil braucht eine Rückfrage und ein offenes Tempo.",
+          path: ["result", "moatReview"],
+        });
+      if (
+        moatReview.verdict === "durable" &&
+        moatReview.pace !== "external_hurdle"
+      )
+        ctx.addIssue({
+          code: "custom",
+          message: "Eine verbleibende Hürde braucht eine Schutzbedingung.",
+          path: ["result", "moatReview"],
+        });
+      if (
+        moatReview.verdict === "replaceable" &&
+        !["feature_update", "better_agents"].includes(moatReview.pace)
+      )
+        ctx.addIssue({
+          code: "custom",
+          message:
+            "Ein ersetzbarer Vorteil braucht einen passenden Übernahmeweg.",
+          path: ["result", "moatReview"],
+        });
     }
     const findings = [
       ...analysis.result.takeover,
@@ -115,6 +234,7 @@ export const businessAnalysisSchema = z
       analysis.result.summary,
       ...findings.flatMap((finding) => [finding.title, finding.detail]),
       ...analysis.result.openQuestions,
+      ...(moatReview ? [moatReview.reason] : []),
     ].join(" ");
     if (
       visible.trim().split(/\s+/).length > 180 ||
@@ -129,12 +249,12 @@ export const businessAnalysisSchema = z
     for (const finding of findings) {
       if (
         finding.basisQuote !== null &&
-        !analysis.input.businessDescription.includes(finding.basisQuote)
+        !analysis.input.businessDescription.includes(finding.basisQuote) &&
+        !analysis.input.businessMoat?.includes(finding.basisQuote)
       ) {
         ctx.addIssue({
           code: "custom",
-          message:
-            "Ein Herkunftszitat steht nicht in der Business-Beschreibung.",
+          message: "Ein Herkunftszitat steht nicht in Ihren Angaben.",
           path: ["result"],
         });
       }
@@ -156,6 +276,7 @@ export function analysisInputFor(
   const parsed = analysisInputSchema.safeParse({
     methodologyVersion: check.methodologyVersion,
     businessDescription: check.businessDescription ?? "",
+    ...(check.businessMoat?.trim() ? { businessMoat: check.businessMoat } : {}),
     answers: Object.fromEntries(ids.map((id) => [id, check.answers[id]])),
     scenario: check.providerScenario ?? DEFAULT_PROVIDER_SCENARIO,
   });
@@ -166,6 +287,7 @@ export function analysisInputKey(input: BusinessAnalysisInput) {
   return JSON.stringify({
     methodologyVersion: input.methodologyVersion,
     businessDescription: input.businessDescription.trim(),
+    businessMoat: input.businessMoat?.trim() ?? "",
     answers: Object.fromEntries(ids.map((id) => [id, input.answers[id]])),
     scenario: [
       input.scenario.version,
@@ -187,6 +309,34 @@ export function currentBusinessAnalysis(check: QuickCheck) {
     analysisMatches(check, check.businessAnalysis)
     ? check.businessAnalysis
     : null;
+}
+
+export function moatReviewFor(
+  analysis: BusinessAnalysis | null | undefined,
+): MoatReview | null {
+  return analysis && "moatReview" in analysis.result
+    ? analysis.result.moatReview
+    : null;
+}
+export function moatDisputesScore(
+  analysis: BusinessAnalysis | null | undefined,
+  score: number | null,
+) {
+  return (
+    moatReviewFor(analysis)?.verdict === "replaceable" &&
+    score !== null &&
+    score < 65
+  );
+}
+export function quoteSource(
+  analysis: BusinessAnalysis,
+  finding: BusinessFinding,
+) {
+  return finding.basisQuote &&
+    !analysis.input.businessDescription.includes(finding.basisQuote) &&
+    analysis.input.businessMoat?.includes(finding.basisQuote)
+    ? "Ihr Vorteil"
+    : "Ihre Beschreibung";
 }
 
 export async function requestBusinessAnalysis(

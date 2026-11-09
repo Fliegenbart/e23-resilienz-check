@@ -6,22 +6,24 @@ Das Resilience-Assessment beantwortet diese Frage mit zwölf konkreten Einschät
 
 Repository: https://github.com/Fliegenbart/e23-resilienz-check
 
-Produktionsadresse: https://e23-resilienz-check.vercel.app. Anwendungsversion **0.8.0** ergänzt den KI-Risiko-Score und die Methode `quick-check-5.0`.
+Produktionsadresse: https://e23-resilienz-check.vercel.app. Anwendungsversion **0.9.0** ergänzt die kritische KI-Prüfung des angegebenen USP. Die Score-Methode bleibt `quick-check-5.0`.
 
 ## Nutzung
 
-1. Optional das Business kurz beschreiben – tippen oder „Diktieren“ verwenden. Dann „Assessment starten“ anklicken. Die erste Frage erscheint direkt, ohne Auswahl zwischen bestehendem Angebot und neuer Idee.
+1. Optional das Business kurz beschreiben – tippen oder „Diktieren“ verwenden. Im zweiten Feld den eigenen USP oder Moat nennen. Dann „Assessment starten“ anklicken.
 2. Zwölf kurze Fragen beantworten: eine Frage pro Ansicht, Werte von 1 bis 10 oder „Weiß ich nicht“. Nach kurzer gelber Bestätigung folgt automatisch die nächste Frage. Hilfen und Beispiele stehen unter „Details“.
 3. Das Ergebnis lesen: **KI-Risiko-Score**, **Was KI übernimmt**, **Wofür Kunden weiter zahlen**, **Nächster Test**. Unter „Nächste 2 Jahre“ unabhängig einstellen, wie schnell KI besser und günstiger wird: langsam, mittel oder schnell. Voreinstellung: mittel/mittel. Die heutige KI-Leistung und die Tempoannahmen verändern die Einstufung des Zwei-Jahres-Blicks; der grundlegende Stresstest-Score bleibt separat. Details und Belege sind aufklappbar.
 4. Den Check über „Bisherige Checks“ wieder öffnen, als JSON sichern oder importieren. „Ergebnis als PDF“ öffnet die Druckfunktion des Browsers.
 
 Keine Anmeldung und keine erforderlichen Texteingaben. Checks werden im jeweiligen Browser gespeichert. Eine hohe Zahl ist nicht pauschal gut oder schlecht: Die ersten Fragen beschreiben den möglichen Zugriff der Plattform, die späteren eigene Vorteile und Belege.
 
-Die Beschreibung wird beim Start mit dem Check gespeichert und ist im Ergebnis unter „Ihr Business“ bearbeitbar. Sie erscheint auch in JSON und Druckbericht. Maximal 5.000 Zeichen. Das optionale Feld `businessDescription` verändert vorhandene Checks ohne Beschreibung nicht.
+Beschreibung und Vorteil werden beim Start gespeichert und sind im Ergebnis unter „Business und Vorteil“ bearbeitbar. Beide erscheinen in JSON und Druckbericht. Maximal 5.000 Zeichen für `businessDescription`, 2.000 für `businessMoat`. Bestehende Checks ohne diese optionalen Felder bleiben lesbar; das Vorteilsfeld gehört ausschließlich zur Methode 5.0.
 
-Ab 20 Zeichen bietet das Ergebnis „Mein Business auswerten“ an. Erst dieser Klick sendet Beschreibung, zwölf Antworten und Szenario an OpenAI über Vercel. Die Auswertung nennt konkrete übernehmbare Tätigkeiten, den verbleibenden Kaufgrund und einen Praxistest. Eigener Nutzen und Herkunftsbezüge stehen in den Details. Der Score wird nachvollziehbar aus den Antworten berechnet; das Sprachmodell darf ihn nicht ändern. Fehlende Angaben oder Widersprüche werden benannt. Herkunftszitate und Fragebezüge sind aufklappbar. Es findet keine externe Prüfung des Geschäfts statt.
+Ab 20 Zeichen Business-Beschreibung oder einem eingetragenen Vorteil bietet das Ergebnis eine KI-Auswertung an. Mit Vorteil heißt der Button „Mit KI prüfen“. Erst dieser Klick sendet beide Texte, zwölf Antworten und Szenario an OpenAI über Vercel. Die Auswertung nennt konkrete übernehmbare Tätigkeiten, den verbleibenden Kaufgrund und einen Praxistest. Eigener Nutzen und Herkunftsbezüge stehen in den Details. Es findet keine externe Prüfung des Geschäfts statt.
 
-Die KI-Auswertung wird mit ihrem Eingabestand lokal gespeichert und im JSON sowie im Druckbericht erhalten. Änderungen an Beschreibung, Antworten oder Szenario machen sie veraltet; „Auswertung aktualisieren“ erzeugt eine neue. Es gibt keine automatische Übertragung. Alte Methoden erhalten keine neue KI-Interpretation. Bei einem Fehler bleibt die regelbasierte Auswertung nutzbar.
+Die KI prüft den genannten Vorteil als unbestätigte Behauptung gegen sehr leistungsfähige, günstige Agenten: leicht ersetzbar, Schutz unter Bedingungen, verbleibende Hürde oder noch nicht bewertbar. Sie nennt den entscheidenden Auslöser statt eines erfundenen Datums: Funktionsupdate, bessere Agenten oder eine Hürde außerhalb der KI-Intelligenz. Unklare Texte wie „diesdas ananas“ erfordern eine konkrete Rückfrage. Die Prüfung beeinflusst auch den beschriebenen Kaufgrund. Der Score bleibt aus den zwölf Antworten berechnet; hält die KI den Vorteil für ersetzbar, obwohl der Score unter 65 liegt, wird der Widerspruch sichtbar markiert.
+
+Die KI-Auswertung wird mit ihrem Eingabestand lokal gespeichert und im JSON sowie im Druckbericht erhalten. Änderungen an Beschreibung, Vorteil, Antworten oder Szenario machen sie veraltet; „Auswertung aktualisieren“ erzeugt eine neue. Es gibt keine automatische Übertragung. Ausgaben mit Vorteilsprüfung verwenden `business-analysis-3.0`; ohne Vorteil bleiben die bisherigen Ausgabeversionen erhalten. Alte Methoden erhalten keine neue KI-Interpretation. Bei einem Fehler bleibt die regelbasierte Auswertung nutzbar.
 
 Das Diktat nutzt die [Web Speech API des Browsers](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition), auf Deutsch und ausschließlich nach einem Klick auf „Diktieren“. Der Browser kann Audio zur Erkennung an seinen Sprachdienst senden; darauf weist das Feld hin. Die App speichert keine Audiodatei. Nicht unterstützte Browser bieten die normale Texteingabe mit Hinweis auf die Diktierfunktion des Geräts. Stoppen, Fehler oder Verlassen der Ansicht beenden die Sitzung; bereits erkannter Text bleibt editierbar.
 
@@ -69,7 +71,7 @@ git diff --check
 
 React, TypeScript, Vite, Zod, Vitest und IndexedDB. Die regelbasierte Auswertung benötigt keine KI-API. Die optionale individuelle Auswertung verwendet eine Vercel-Node-Funktion und AI SDK mit `openai/gpt-5.2` über AI Gateway. Die Authentifizierung erfolgt über die bestehende Projekt-OIDC-Identität; keine Schlüssel im Browser. Diktat verwendet den Sprachdienst des Browsers. Die Website bzw. der lokale Server muss zum Öffnen erreichbar sein.
 
-`npm run dev` startet nur Vite. API-Tests arbeiten ohne Geheimnisse mit einem injizierten Generator; echte Modelltests erfolgen auf einer Vercel-Bereitstellung mit erfundenen Beispielen. Eingaben sind auf 20 KiB begrenzt, Modellaufrufe auf 45 Sekunden und 4.000 Ausgabetokens einschließlich Reasoning. Der öffentliche Endpunkt benötigt das projektbezogene Gateway-Budget und eine Ratenbegrenzung. Die Anwendung protokolliert bei Fehlern nur Status und feste Fehlerkategorie, keine Prompts oder vollständigen Anbieterfehler. Das Projektbudget beträgt maximal 5 USD pro Monat; der Endpunkt erlaubt fünf Anfragen pro Minute und IP.
+`npm run dev` startet nur Vite. API-Tests arbeiten ohne Geheimnisse mit einem injizierten Generator; echte Modelltests erfolgen auf einer Vercel-Bereitstellung mit erfundenen Beispielen. Eingaben sind auf 32 KiB begrenzt, Modellaufrufe auf 45 Sekunden und 4.000 Ausgabetokens einschließlich Reasoning. Der öffentliche Endpunkt benötigt das projektbezogene Gateway-Budget und eine Ratenbegrenzung. Die Anwendung protokolliert bei Fehlern nur Status und feste Fehlerkategorie, keine Prompts oder vollständigen Anbieterfehler. Das Projektbudget beträgt maximal 5 USD pro Monat; der Endpunkt erlaubt fünf Anfragen pro Minute und IP.
 
 ## Weiterarbeiten
 

@@ -339,6 +339,34 @@
 .provider-purchase {
   margin-bottom: 36px;
 }
+.provider-moat-review {
+  border-top: 1px solid var(--line);
+  padding: 20px 0 24px;
+  margin-bottom: 8px;
+  max-width: 850px;
+}
+.provider-purchase .provider-moat-verdict {
+  font-size: 23px;
+  font-weight: 650;
+  margin: 0 0 10px;
+}
+.provider-purchase .provider-moat-pace {
+  font-size: 14px;
+  margin-top: 12px;
+  color: #55565c;
+}
+.moat-replaceable .provider-moat-verdict,
+.provider-risk-review {
+  color: #a03e23;
+}
+.provider-risk-review {
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 14px 0 0;
+}
+.business-moat .business-input textarea {
+  padding-bottom: 14px;
+}
 .provider-purchase-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);

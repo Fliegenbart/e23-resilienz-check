@@ -15,12 +15,14 @@ import { Arrow } from "./ui";
 import { ProviderScenario } from "./ProviderScenario";
 import type { ProviderScenarioSettings } from "./provider-scenario";
 import { BusinessDescription } from "./BusinessDescription";
+import { BusinessMoat } from "./BusinessMoat";
 import {
   BusinessAnalysisControl,
   BusinessAnalysisFindings,
 } from "./BusinessAnalysis";
 import {
   currentBusinessAnalysis,
+  moatDisputesScore,
   type BusinessAnalysis,
 } from "./business-analysis";
 
@@ -242,6 +244,7 @@ export function ProviderResults({
   onExport,
   onScenarioChange,
   onDescriptionChange,
+  onMoatChange,
   onAnalysisChange,
 }: {
   check: QuickCheck;
@@ -251,6 +254,7 @@ export function ProviderResults({
   onExport: () => void;
   onScenarioChange: (settings: ProviderScenarioSettings) => void;
   onDescriptionChange: (text: string) => void;
+  onMoatChange?: (text: string) => void;
   onAnalysisChange: (analysis: BusinessAnalysis) => void;
 }) {
   const r = evaluateProvider(check);
@@ -267,7 +271,11 @@ export function ProviderResults({
         </p>
         {current && <ProviderRiskScore check={check} />}
         <h1>
-          {current ? r.headline : (personal?.result.headline ?? r.headline)}
+          {current
+            ? moatDisputesScore(personal, r.risk?.score ?? null)
+              ? "Die KI hält Ihren Vorteil für ersetzbar."
+              : r.headline
+            : (personal?.result.headline ?? r.headline)}
         </h1>
         {!current && (
           <p className="provider-result-summary">
@@ -311,7 +319,13 @@ export function ProviderResults({
           aria-controls="provider-business-editor"
           onClick={() => setDescriptionOpen((open) => !open)}
         >
-          {check.businessDescription ? "Ihr Business" : "Business beschreiben"}
+          {current
+            ? check.businessDescription || check.businessMoat
+              ? "Business und Vorteil"
+              : "Business und Vorteil ergänzen"
+            : check.businessDescription
+              ? "Ihr Business"
+              : "Business beschreiben"}
           <span aria-hidden="true">{descriptionOpen ? "−" : "+"}</span>
         </button>
         {descriptionOpen && (
@@ -320,6 +334,12 @@ export function ProviderResults({
               value={check.businessDescription ?? ""}
               onChange={onDescriptionChange}
             />
+            {current && (
+              <BusinessMoat
+                value={check.businessMoat ?? ""}
+                onChange={(text) => onMoatChange?.(text)}
+              />
+            )}
           </div>
         )}
       </section>

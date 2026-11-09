@@ -3,6 +3,7 @@ import { calculateRisk } from "./model";
 import { Arrow } from "./ui";
 import { useState } from "react";
 import { BusinessDescription } from "./BusinessDescription";
+import { BusinessMoat } from "./BusinessMoat";
 
 export function ProviderLanding({
   onStart,
@@ -12,6 +13,8 @@ export function ProviderLanding({
   onMethod,
   description,
   onDescriptionChange,
+  moat = "",
+  onMoatChange,
 }: {
   onStart: () => void;
   onExample: () => void;
@@ -20,6 +23,8 @@ export function ProviderLanding({
   onMethod: () => void;
   description: string;
   onDescriptionChange: (text: string) => void;
+  moat?: string;
+  onMoatChange?: (text: string) => void;
 }) {
   const [dictating, setDictating] = useState(false);
   return (
@@ -37,6 +42,10 @@ export function ProviderLanding({
             value={description}
             onChange={onDescriptionChange}
             onBusyChange={setDictating}
+          />
+          <BusinessMoat
+            value={moat}
+            onChange={(text) => onMoatChange?.(text)}
           />
           <div className="landing-cta">
             <button

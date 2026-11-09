@@ -28,6 +28,13 @@ export function ProviderMethodContent({
           KI-Auswertung.
         </p>
       )}
+      {isProviderV5(version) && (
+        <p>
+          Ihren angegebenen Vorteil prüft die KI als Behauptung. Sie nennt
+          mögliche Auslöser für eine Ersetzung, kein Datum. Der Score bleibt aus
+          Ihren Antworten berechnet; widerspricht die KI, wird das markiert.
+        </p>
+      )}
       <p>
         Jede Skala beschreibt eine konkrete Eigenschaft Ihres Angebots. Eine
         hohe Zahl kann Übernahme erleichtern oder einen eigenen Vorteil

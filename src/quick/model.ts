@@ -19,7 +19,10 @@ import {
   providerScenarioSchema,
   type ProviderScenarioSettings,
 } from "./provider-scenario.js";
-import { BUSINESS_DESCRIPTION_MAX_LENGTH } from "./business-description.js";
+import {
+  BUSINESS_DESCRIPTION_MAX_LENGTH,
+  BUSINESS_MOAT_MAX_LENGTH,
+} from "./business-description.js";
 import {
   businessAnalysisSchema,
   type BusinessAnalysis,
@@ -68,6 +71,7 @@ export interface QuickCheck {
   scenarios?: ScenarioWorkspace;
   providerScenario?: ProviderScenarioSettings;
   businessDescription?: string;
+  businessMoat?: string;
   businessAnalysis?: BusinessAnalysis;
   isExample: boolean;
   originId: string | null;
@@ -203,11 +207,16 @@ const checkSchema = z
       .string()
       .max(BUSINESS_DESCRIPTION_MAX_LENGTH)
       .optional(),
+    businessMoat: z.string().max(BUSINESS_MOAT_MAX_LENGTH).optional(),
     businessAnalysis: businessAnalysisSchema.optional(),
     isExample: z.boolean(),
     originId: z.string().nullable(),
   })
   .strict()
+  .refine(
+    (c) => c.businessMoat === undefined || isProviderV5(c.methodologyVersion),
+    "Der zusätzliche Vorteil gehört zum KI-Risiko-Check 5.0.",
+  )
   .refine(
     (c) =>
       c.businessAnalysis === undefined ||
@@ -246,7 +255,7 @@ export function serializeChecks(checks: QuickCheck[]) {
     {
       format: "e23-quick-check",
       schemaVersion: QUICK_SCHEMA,
-      appVersion: "0.8.0",
+      appVersion: "0.9.0",
       exportedAt: new Date().toISOString(),
       checks,
     },

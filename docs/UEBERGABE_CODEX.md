@@ -1,6 +1,22 @@
 # Übergabe an einen neuen Codex-Chat
 
-## Aktueller Stand: Resilience-Assessment 0.8.0
+## Aktueller Stand: Resilience-Assessment 0.9.0
+
+Stand: 9. November 2026. David möchte einen eigenen USP oder Moat frei beschreiben und von KI kritisch gegen eine Intelligenzexplosion prüfen lassen. Minimalismus und die bestehende Veröffentlichungserlaubnis gelten weiter.
+
+- Optionales Feld „Was macht Ihr Angebot schwer ersetzbar?“ auf der Startseite und im Ergebnis unter „Business und Vorteil“. `businessMoat`, höchstens 2.000 Zeichen, nur Methode 5.0. Speicherung in IndexedDB, JSON und Druckbericht; Änderungen machen die KI-Auswertung veraltet.
+- „Mit KI prüfen“ sendet Beschreibung, Vorteil, Antworten und Szenario erst auf Klick. Auch ein allein angegebener, vager Vorteil kann geprüft werden. Kein automatisches Senden.
+- Zusätzlicher Befund „KI-Prüfung Ihres Vorteils“: ersetzbar, bedingter Schutz, verbleibende Hürde oder unklar; ein kurzer Grund und ein Auslöser (Funktionsupdate, bessere Agenten, äußere Hürde). Keine erfundenen Vernichtungsdaten oder aktuellen Anbieterfähigkeiten. Unklare Angaben verlangen eine konkrete Rückfrage.
+- Der Server prüft die Behauptung unter der Annahme sehr starker, günstiger Agenten. Prompts, Oberflächen, komplexer Code oder heutige Modellschwächen gelten nicht automatisch als Schutz. Daten, Rechte und Ausführung müssen weiterhin nötig, schwer ersetzbar und kaufrelevant sein. Keine erfundenen Belege; Anweisungen in beiden Textfeldern ignorieren.
+- Kritik fließt in Kaufgrund und nächsten Test ein. Zwölf Fragen und Score-Formel bleiben unverändert (`quick-check-5.0`). Bei ersetzbarem Vorteil und Score unter 65 werden Headline und Score als Widerspruch markiert; keine KI-erfundene Zahl.
+- Ausgabe mit Vorteil `business-analysis-3.0`, sonst weiterhin 2.0 (V5) bzw. 1.0 (V4). Strikte Schema-, Methoden- und Originalzitatprüfung. Historische Methoden und alte gespeicherte Ausgaben bleiben erhalten. API-Größenlimit jetzt 32 KiB für beide Textfelder einschließlich Unicode.
+- Neue Komponenten/Regressionen: `BusinessMoat.tsx`, `tests/business-moat.test.ts`; gemeinsame Anzeige im Bildschirm und Bericht. 195 Tests, TypeScript/Vite-Build und nativer API-Smoke-Test bestanden.
+
+Produktion: https://e23-resilienz-check.vercel.app. Release über `flux`; Vercel-Status und Alias separat prüfen. Arbeitsbranch `codex/quick-check`. Lokaler QA-Server `127.0.0.1:5197` muss bei Wiederaufnahme auf Erreichbarkeit geprüft werden. Temporäre Browserartefakte in `.playwright-mcp/` sind von Git und Vercel ausgeschlossen.
+
+---
+
+## Historischer Stand: Resilience-Assessment 0.8.0
 
 Stand: 9. November 2026. David hat den Umbau auf KI-Risiko-Score, konkrete Übernahme und verbleibenden Kaufgrund sowie die erneute Veröffentlichung ausdrücklich beauftragt. Kurz und minimalistisch bleiben.
 

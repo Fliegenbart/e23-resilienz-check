@@ -3,6 +3,10 @@ import { calculateRisk, riskLabel, checkTitle } from "./model";
 import { Arrow } from "./ui";
 import { isProviderMethod, isProviderV5 } from "./provider-questions";
 import { providerRiskV5 } from "./provider-analysis-5";
+import {
+  currentBusinessAnalysis,
+  moatDisputesScore,
+} from "./business-analysis";
 export function History({
   checks,
   onOpen,
@@ -42,6 +46,10 @@ export function History({
               const risk = isProviderV5(c.methodologyVersion)
                 ? providerRiskV5(c)
                 : null;
+              const disputed = moatDisputesScore(
+                currentBusinessAnalysis(c),
+                risk?.score ?? null,
+              );
               return (
                 <button
                   className="history-row"
@@ -78,7 +86,7 @@ export function History({
                             : r.score}
                     <small>
                       {risk && c.view === "results"
-                        ? `KI-Risiko · ${risk.label}`
+                        ? `KI-Risiko · ${disputed ? "KI widerspricht" : risk.label}`
                         : isProviderMethod(c.methodologyVersion)
                           ? "Übernahme & Schutz"
                           : c.view === "scenarios"

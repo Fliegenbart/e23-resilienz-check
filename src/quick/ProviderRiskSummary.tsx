@@ -1,16 +1,30 @@
 import type { QuickCheck } from "./model";
 import { evaluateProviderV5 } from "./provider-analysis-5";
-import { currentBusinessAnalysis } from "./business-analysis";
+import {
+  currentBusinessAnalysis,
+  moatReviewFor,
+  moatDisputesScore,
+  quoteSource,
+  MOAT_VERDICTS,
+  MOAT_PACES,
+  type BusinessAnalysis,
+} from "./business-analysis";
 
 export function ProviderRiskScore({ check }: { check: QuickCheck }) {
   const { risk } = evaluateProviderV5(check);
+  const disputed = moatDisputesScore(
+    currentBusinessAnalysis(check),
+    risk.score,
+  );
   return (
-    <div className={`provider-risk risk-${risk.tone}`}>
+    <div className={`provider-risk risk-${disputed ? "unknown" : risk.tone}`}>
       <p className="provider-risk-label">KI-Risiko-Score</p>
       <div className="provider-risk-value">
         <strong>{risk.score ?? `${risk.min}–${risk.max}`}</strong>
         {risk.score !== null && <span>/100</span>}
-        <span className="provider-risk-band">{risk.label}</span>
+        <span className="provider-risk-band">
+          {disputed ? "KI widerspricht" : risk.label}
+        </span>
       </div>
       {risk.score !== null && (
         <div className="provider-risk-track" aria-hidden="true">
@@ -28,7 +42,29 @@ export function ProviderRiskScore({ check }: { check: QuickCheck }) {
             ? " · Widerspruch klären"
             : ""}
       </p>
+      {disputed && (
+        <p className="provider-risk-review" role="status">
+          Die KI bezweifelt Ihren Schutz. Der Score beruht auf Ihren Antworten –
+          bitte prüfen.
+        </p>
+      )}
     </div>
+  );
+}
+
+function MoatReviewPanel({ analysis }: { analysis: BusinessAnalysis | null }) {
+  const review = moatReviewFor(analysis);
+  if (!review) return null;
+  return (
+    <section
+      className={`provider-moat-review moat-${review.verdict} print-block`}
+      aria-label="KI-Prüfung Ihres Vorteils"
+    >
+      <h2>KI-Prüfung Ihres Vorteils</h2>
+      <p className="provider-moat-verdict">{MOAT_VERDICTS[review.verdict]}</p>
+      <p>{review.reason}</p>
+      <p className="provider-moat-pace">{MOAT_PACES[review.pace]}</p>
+    </section>
   );
 }
 
@@ -41,6 +77,7 @@ export function ProviderPurchaseFindings({
 }) {
   const r = evaluateProviderV5(check);
   const personal = currentBusinessAnalysis(check);
+  const moatReview = moatReviewFor(personal);
   const findings = personal
     ? [
         personal.result.takeover[0],
@@ -53,6 +90,7 @@ export function ProviderPurchaseFindings({
       className="provider-purchase"
       aria-label="Ihr verbleibender Kaufgrund"
     >
+      <MoatReviewPanel analysis={personal} />
       <div className="provider-purchase-grid">
         <section className="print-block">
           <h2>Was KI übernimmt</h2>
@@ -82,13 +120,21 @@ export function ProviderPurchaseFindings({
             <p key={i}>
               <strong>{finding.title}</strong>
               {finding.basisQuote && (
-                <span>Ihre Beschreibung: „{finding.basisQuote}“</span>
+                <span>
+                  {quoteSource(personal, finding)}: „{finding.basisQuote}“
+                </span>
               )}
               {finding.questions.length > 0 && (
                 <span>Ihre Antworten: {finding.questions.join(", ")}</span>
               )}
             </p>
           ))}
+          {moatReview && (
+            <p>
+              <strong>Ihr genannter Vorteil</strong>
+              <span>Ihr Vorteil: „{moatReview.basisQuote}“</span>
+            </p>
+          )}
           <p>Eigener KI-Nutzen: {personal.result.opportunity.detail}</p>
           {personal.result.openQuestions.map((question, i) => (
             <p key={i}>Offen: {question}</p>

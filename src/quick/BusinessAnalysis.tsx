@@ -5,6 +5,7 @@ import {
   analysisInputKey,
   currentBusinessAnalysis,
   requestBusinessAnalysis,
+  quoteSource,
   type BusinessAnalysis,
   type BusinessFinding,
 } from "./business-analysis";
@@ -77,8 +78,7 @@ export function BusinessAnalysisControl({
   if (!input)
     return check.businessAnalysis ? (
       <p className="business-analysis-status" role="status">
-        Die KI-Auswertung ist nicht mehr aktuell. Bitte Ihre
-        Business-Beschreibung ergänzen.
+        Die KI-Auswertung ist nicht mehr aktuell. Bitte Ihre Angaben ergänzen.
       </p>
     ) : null;
 
@@ -105,7 +105,9 @@ export function BusinessAnalysisControl({
               ? "Neu auswerten"
               : check.businessAnalysis
                 ? "Auswertung aktualisieren"
-                : "Mein Business auswerten"}
+                : check.businessMoat?.trim()
+                  ? "Mit KI prüfen"
+                  : "Mein Business auswerten"}
         </button>
         {busy && (
           <button
@@ -121,8 +123,8 @@ export function BusinessAnalysisControl({
         )}
       </div>
       <p className="business-analysis-disclosure">
-        Auf Klick: Beschreibung, Antworten und Szenario an OpenAI über Vercel
-        senden.
+        Auf Klick: Beschreibung, {check.businessMoat?.trim() ? "Vorteil, " : ""}
+        Antworten und Szenario an OpenAI über Vercel senden.
       </p>
       <p className="business-analysis-status" role="status" aria-live="polite">
         {busy ? "Ihre konkrete Auswertung entsteht …" : message}
@@ -188,7 +190,9 @@ export function BusinessAnalysisFindings({
           <p key={i}>
             <strong>{finding.title}</strong>
             {finding.basisQuote !== null && (
-              <span>Ihre Beschreibung: „{finding.basisQuote}“</span>
+              <span>
+                {quoteSource(analysis, finding)}: „{finding.basisQuote}“
+              </span>
             )}
             {finding.questions.length > 0 && (
               <span>Ihre Antworten: {finding.questions.join(", ")}</span>

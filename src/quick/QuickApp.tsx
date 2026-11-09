@@ -203,6 +203,7 @@ export default function QuickApp() {
     [page, setPage] = useState<Page>("home"),
     [selected, setSelected] = useState<string | null>(null),
     [businessDraft, setBusinessDraft] = useState(""),
+    [moatDraft, setMoatDraft] = useState(""),
     [status, setStatus] = useState("Laden …"),
     [error, setError] = useState(""),
     [method, setMethod] = useState(false),
@@ -273,14 +274,17 @@ export default function QuickApp() {
   }, [checks, ready, writable]);
   useEffect(() => {
     const handler = (e: BeforeUnloadEvent) => {
-      if (ready && (checks !== saved.current || businessDraft.trim())) {
+      if (
+        ready &&
+        (checks !== saved.current || businessDraft.trim() || moatDraft.trim())
+      ) {
         e.preventDefault();
         e.returnValue = "";
       }
     };
     window.addEventListener("beforeunload", handler);
     return () => window.removeEventListener("beforeunload", handler);
-  }, [checks, ready, businessDraft]);
+  }, [checks, ready, businessDraft, moatDraft]);
   const go = (p: Page) => {
     setPage(p);
     if (menu.current) menu.current.open = false;
@@ -312,8 +316,10 @@ export default function QuickApp() {
   const start = () => {
     const c = createCheck("existing");
     if (businessDraft.trim()) c.businessDescription = businessDraft.trim();
+    if (moatDraft.trim()) c.businessMoat = moatDraft.trim();
     setChecks((list) => [...list, c]);
     setBusinessDraft("");
+    setMoatDraft("");
     open(c.id);
   };
   const showExample = () => {
@@ -522,6 +528,8 @@ export default function QuickApp() {
           <ProviderLanding
             description={businessDraft}
             onDescriptionChange={setBusinessDraft}
+            moat={moatDraft}
+            onMoatChange={setMoatDraft}
             onStart={start}
             onExample={showExample}
             resume={resume}
@@ -623,6 +631,11 @@ export default function QuickApp() {
                 onDescriptionChange={(text) =>
                   update((c) => {
                     c.businessDescription = text;
+                  })
+                }
+                onMoatChange={(text) =>
+                  update((c) => {
+                    c.businessMoat = text;
                   })
                 }
                 onAnalysisChange={(analysis) =>
