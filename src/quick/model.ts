@@ -36,8 +36,9 @@ import {
 } from "./business-analysis.js";
 import {
   STRESS_METHOD,
+  STRESS_METHOD_8_0,
   STRESS_QUESTIONS,
-  STRESS_IDS,
+  STRESS_QUESTIONS_8_0,
   isStressMethod,
   stressAnswersSchema,
   stressAnalysisSchema,
@@ -78,6 +79,7 @@ export const QUICK_METHODS: Record<string, QuickQuestion[]> = {
   "quick-check-5.0": providerV5 as QuickQuestion[],
   "quick-check-6.0": providerV6 as QuickQuestion[],
   [QUICK_METHOD]: QUICK_QUESTIONS,
+  [STRESS_METHOD_8_0]: STRESS_QUESTIONS_8_0,
   [STRESS_METHOD]: STRESS_QUESTIONS,
 };
 export interface QuickCheck {
@@ -121,7 +123,7 @@ export function createStressCheck(): QuickCheck {
   const c = createCheck("existing");
   c.methodologyVersion = STRESS_METHOD;
   c.methodologySnapshot = structuredClone(STRESS_QUESTIONS);
-  c.answers = Object.fromEntries(STRESS_IDS.map((id) => [id, null]));
+  c.answers = Object.fromEntries(STRESS_QUESTIONS.map((q) => [q.id, null]));
   c.view = "intro";
   return c;
 }
@@ -232,6 +234,7 @@ const checkSchema = z
       "quick-check-5.0",
       "quick-check-6.0",
       QUICK_METHOD,
+      STRESS_METHOD_8_0,
       STRESS_METHOD,
     ]),
     methodologySnapshot: z.array(questionSchema).min(1).max(12),
@@ -335,7 +338,7 @@ export function serializeChecks(checks: QuickCheck[]) {
     {
       format: "e23-quick-check",
       schemaVersion: QUICK_SCHEMA,
-      appVersion: "0.13.0",
+      appVersion: "0.14.0",
       exportedAt: new Date().toISOString(),
       checks,
     },
@@ -413,11 +416,11 @@ export function stressExampleCheck() {
     "Unsere App erstellt aus Audiodateien Transkripte und SRT-Untertitel für einzelne Content-Creator. Kunden zahlen für die automatische Umwandlung und den Download.";
   c.businessMoat = "Einfache Bedienung und viele Exportformate.";
   [1, 1, 2, 1, 1, 1, 1, 1, 1, 2].forEach((value, i) =>
-    answerCheck(c, STRESS_IDS[i], value),
+    answerCheck(c, STRESS_QUESTIONS[i].id, value),
   );
   c.isExample = true;
   c.view = "results";
-  c.step = STRESS_IDS.length - 1;
+  c.step = STRESS_QUESTIONS.length - 1;
   return c;
 }
 export function downloadText(

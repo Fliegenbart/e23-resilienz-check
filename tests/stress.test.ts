@@ -10,6 +10,8 @@ import {
 } from "../src/quick/model";
 import {
   STRESS_METHOD,
+  STRESS_METHOD_8_0,
+  STRESS_QUESTIONS_8_0,
   STRESS_QUESTIONS,
   STRESS_IDS,
   STRESS_WEIGHTS,
@@ -27,7 +29,9 @@ import {
 
 function stress(values: (number | "unknown")[], description = "", moat = "") {
   const c = createStressCheck();
-  values.forEach((value, i) => answerCheck(c, STRESS_IDS[i], value));
+  // Positions follow the 8.0 order; the former network slot now holds S11.
+  const order = ["S1", "S2", "S3", "S4", "S5", "S6", "S11", "S8", "S9", "S10"];
+  values.forEach((value, i) => answerCheck(c, order[i], value));
   if (description) c.businessDescription = description;
   if (moat) c.businessMoat = moat;
   c.view = "results";
@@ -64,16 +68,22 @@ const attach = (c: ReturnType<typeof stress>, r: StressResult) => {
   return c;
 };
 
-describe("Stresstest 8.0 – Fragen", () => {
+describe("Stresstest 8.1 – Fragen", () => {
   it("hat zehn Fragen mit je drei Antworten und ohne Skala", () => {
     expect(STRESS_QUESTIONS).toHaveLength(10);
-    expect(
-      Object.values(STRESS_WEIGHTS).reduce((sum, weight) => sum + weight, 0),
-    ).toBe(100);
+    for (const catalogue of [STRESS_QUESTIONS, STRESS_QUESTIONS_8_0])
+      expect(
+        catalogue.reduce(
+          (sum, q) => sum + STRESS_WEIGHTS[q.id as keyof typeof STRESS_WEIGHTS],
+          0,
+        ),
+      ).toBe(100);
     for (const q of STRESS_QUESTIONS) expect(q.options).toHaveLength(3);
     const c = createStressCheck();
     expect(c.methodologyVersion).toBe(STRESS_METHOD);
-    expect(Object.keys(c.answers)).toEqual([...STRESS_IDS]);
+    expect(Object.keys(c.answers)).toEqual(STRESS_QUESTIONS.map((q) => q.id));
+    expect("S7" in c.answers).toBe(false);
+    expect(STRESS_IDS).toContain("S11");
     expect(() => answerCheck(c, "S1", 4)).toThrow();
     expect(() => answerCheck(c, "Q1", 1)).toThrow();
   });
@@ -85,7 +95,7 @@ describe("Stresstest 8.0 – Fragen", () => {
   });
 });
 
-describe("Stresstest 8.0 – Regeln", () => {
+describe("Stresstest 8.1 – Regeln", () => {
   it("kippt schon in A: digital, heutige KI reicht, nichts Eigenes", () => {
     const c = stress([1, 1, 1, 1, 1, 1, 1, 1, 1, 1]);
     expect(statuses(c)).toEqual(["breaks", "breaks", "breaks"]);
@@ -145,7 +155,7 @@ describe("Stresstest 8.0 – Regeln", () => {
   });
 });
 
-describe("Stresstest 8.0 – KI-Urteil", () => {
+describe("Stresstest 8.1 – KI-Urteil", () => {
   it("lässt sich durch optimistische Antworten nicht kleinreden", () => {
     const c = attach(
       stress(
@@ -223,11 +233,42 @@ describe("Stresstest 8.0 – KI-Urteil", () => {
     expect(
       parse(result({ claim: { verdict: "durable", reason: "Erfunden." } })),
     ).toBe(false);
-    expect(parse(result({ remains: "Siehe S10." }))).toBe(false);
+    expect(parse(result({ remains: "Siehe S11." }))).toBe(false);
   });
 });
 
-describe("Stresstest 8.0 – Speicherung", () => {
+describe("Stresstest – eingefrorene Fassung 8.0", () => {
+  const old = () => {
+    const c = createStressCheck();
+    c.methodologyVersion = STRESS_METHOD_8_0;
+    c.methodologySnapshot = structuredClone(STRESS_QUESTIONS_8_0);
+    c.answers = Object.fromEntries(STRESS_QUESTIONS_8_0.map((q) => [q.id, 2]));
+    c.businessDescription = DESCRIPTION;
+    c.view = "results";
+    c.step = 9;
+    return c;
+  };
+  it("bleibt lesbar und rechnet mit der Netzwerk-Frage wie zuvor", () => {
+    const c = old();
+    expect(parseChecks(serializeChecks([c]))).toEqual([c]);
+    expect(evaluateStress(c).score).toBe(50);
+    answerCheck(c, "S7", 3);
+    expect(evaluateStress(c).scenarios[1].status).toBe("holds");
+    expect("S11" in c.answers).toBe(false);
+  });
+  it("behält eine gespeicherte KI-Auswertung", () => {
+    const c = attach(old(), result());
+    expect(parseChecks(serializeChecks([c]))).toEqual([c]);
+    expect(evaluateStress(c).analysis).not.toBeNull();
+  });
+  it("lehnt Antworten der falschen Fassung ab", () => {
+    const raw = JSON.parse(serializeChecks([old()]));
+    raw.checks[0].methodologyVersion = STRESS_METHOD;
+    expect(() => parseChecks(JSON.stringify(raw))).toThrow();
+  });
+});
+
+describe("Stresstest 8.1 – Speicherung", () => {
   it("übersteht Export und Import zusammen mit alten Checks", () => {
     const current = attach(
       stress([1, 1, 1, 1, 1, 1, 1, 1, 1, 1], DESCRIPTION),
@@ -255,7 +296,7 @@ describe("Stresstest 8.0 – Speicherung", () => {
   });
 });
 
-describe("Stresstest 8.0 – Server", () => {
+describe("Stresstest 8.1 – Server", () => {
   const input = stressInputFor(
     stress([1, 1, 1, 1, 1, 1, 1, 1, 1, 1], DESCRIPTION, "Einfache Bedienung."),
   )!;

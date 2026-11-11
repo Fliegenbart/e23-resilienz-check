@@ -692,6 +692,28 @@
   line-height: 1.2;
   text-wrap: balance;
 }
+.theme-stress .signs {
+  max-width: 56em;
+  margin: 0 0 2em;
+}
+.theme-stress .signs h3 {
+  margin: 0 0 0.4em;
+  font-size: clamp(17px, 1.3vw, 24px);
+  font-weight: 750;
+}
+.theme-stress .signs ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: clamp(16px, 1.3vw, 24px);
+  line-height: 1.4;
+}
+.theme-stress .signs li {
+  display: grid;
+  grid-template-columns: 1.6em 1fr;
+  padding: 0.45em 0;
+  border-top: 1px solid var(--rule);
+}
 .theme-stress .tools {
   display: flex;
   flex-wrap: wrap;

@@ -6,9 +6,9 @@ Das Resilience-Assessment beantwortet diese Frage mit zwölf konkreten Einschät
 
 Repository: https://github.com/Fliegenbart/e23-resilienz-check
 
-Produktionsadresse: https://e23-resilienz-check.vercel.app. Anwendungsversion **0.13.0** (noch nicht veröffentlicht) führt den umgekehrten Stresstest ein. Neue Methode: `quick-check-8.0`. Veröffentlicht ist 0.12.0 mit `quick-check-7.0`.
+Produktionsadresse: https://e23-resilienz-check.vercel.app. Anwendungsversion **0.14.0** mit dem umgekehrten Stresstest. Aktuelle Methode: `quick-check-8.1`.
 
-## Stresstest (Methode 8.0)
+## Stresstest (Methode 8.1)
 
 Für Workshops und Kundengespräche. Gefragt wird nicht, wie wahrscheinlich ein Szenario ist, sondern welches das Geschäft umbringt und was bleibt.
 
@@ -20,11 +20,15 @@ Ablauf: drei Szenarien ansehen, zwei Sätze zu Geschäft und Schutz, zehn Fragen
 | B · Spitzenniveau in jedem Fach (12–18 Monate) | KI verbessert sich selbst und arbeitet überall auf Nobelpreis-Niveau, für alle und günstig                   |
 | C · Dasselbe in sechs Monaten                  | Fähigkeit wie B, nur weniger Zeit zum Umbauen; das Ergebnis entspricht deshalb immer B                       |
 
-Die zehn Fragen (`src/quick/stress.ts`): S1 Ergebnis digital oder vor Ort, S2 heutige KI, S3 Wert der Bedienung, S4 eigene laufende Daten, S5 Zulassung/Recht/Haftung, S6 persönliche Beziehung, S7 Netzwerk, S8 Kundenzugang, S9 Wechseltempo, S10 Kaufbeleg.
+Die zehn Fragen (`src/quick/stress.ts`): S1 Ergebnis digital oder vor Ort, S2 heutige KI, S11 Prüfbarkeit des Ergebnisses, S3 Wert der Bedienung, S4 eigene laufende Daten, S5 Zulassung/Recht/Haftung, S6 persönliche Beziehung, S8 Kundenzugang, S9 Wechseltempo, S10 Kaufbeleg.
 
-**Szenario-Urteil** (kippt, unter Druck, trägt, offen): Ein rein digitales Ergebnis (S1) ohne Beitrag außerhalb der Intelligenz (höchster Wert aus S4–S7) kippt in B und C; schafft heutige KI den Auftrag schon (S2), kippt es bereits in A. Was nur das Unternehmen hat, trägt; ohne mehrfachen Kaufbeleg (S10) steht dabei „laut Ihren Angaben“. Mehr Fähigkeit fällt nie milder aus als weniger.
+**8.0 und 8.1:** Die veröffentlichte Fassung 8.0 fragte statt der Prüfbarkeit (S11) nach einem Netzwerk (S7). Sie ist eingefroren; gespeicherte 8.0-Checks bleiben lesbar und rechnen unverändert. Neue Checks nutzen 8.1. Alle übrigen Fragen, Regeln und Gewichte sind gleich; S11 hat das Gewicht von S7 übernommen und verändert das Szenario-Urteil nicht, nur Score, Empfehlungen und die KI-Prüfung.
 
-**Resilienz-Score** (0 akut gefährdet, 100 robust; unter 35 rot, bis 64 gelb, ab 65 grün): Jede Antwort zählt 0, halb oder voll mit ihrem Gewicht (S1 und S4 je 15, S2, S3, S5–S8 je 10, S9 und S10 je 5). Die Summe wird in den Bereich gelegt, der zum Szenario-Urteil passt: kippt in A 0–20, kippt in B 15–35, Druck in A 25–55, Druck in B 40–65, trägt laut Angaben 60–80, trägt 65–100; gerundet auf Fünferschritte. Das Urteil führt, die Zahl macht es greifbar. Offengelegte Einschätzung, keine Wahrscheinlichkeit.
+**Herkunft der Szenarien:** Sie folgen der Einteilung, mit der der METR-Bericht vom 5. November 2026 diskutiert wird (SCHEME, 10. November 2026): keine allgemeine Beschleunigung (A), anhaltende Beschleunigung (B), sich selbst beschleunigende Beschleunigung (C). Der letzte Ergebnisschritt nennt beobachtbare Anzeichen je Szenario.
+
+**Szenario-Urteil** (kippt, unter Druck, trägt, offen): Ein rein digitales Ergebnis (S1) ohne Beitrag außerhalb der Intelligenz (höchster Wert aus S4–S6, in 8.0 auch S7) kippt in B und C; schafft heutige KI den Auftrag schon (S2), kippt es bereits in A. Was nur das Unternehmen hat, trägt; ohne mehrfachen Kaufbeleg (S10) steht dabei „laut Ihren Angaben“. Mehr Fähigkeit fällt nie milder aus als weniger.
+
+**Resilienz-Score** (0 akut gefährdet, 100 robust; unter 35 rot, bis 64 gelb, ab 65 grün): Jede Antwort zählt 0, halb oder voll mit ihrem Gewicht (S1 und S4 je 15, S2, S3, S5, S6, S8 und S11 je 10, S9 und S10 je 5). Die Summe wird in den Bereich gelegt, der zum Szenario-Urteil passt: kippt in A 0–20, kippt in B 15–35, Druck in A 25–55, Druck in B 40–65, trägt laut Angaben 60–80, trägt 65–100; gerundet auf Fünferschritte. Das Urteil führt, die Zahl macht es greifbar. Offengelegte Einschätzung, keine Wahrscheinlichkeit.
 
 **Empfehlungen:** Ohne KI die vier allgemeinen Ratschläge zu den schwächsten Antworten (schwerstes Gewicht zuerst). Mit KI zusätzlich drei konkrete Empfehlungen für das beschriebene Geschäft.
 
@@ -34,7 +38,7 @@ Die zehn Fragen (`src/quick/stress.ts`): S1 Ergebnis digital oder vor Ort, S2 he
 
 Für Workshops wiederholt der Browser überlastete Anfragen (429/502/503) dreimal mit wachsender Pause; der Server bricht nach 45 Sekunden ab und lässt zwei Wiederholungen beim Modell zu. Die Ratenbegrenzung von fünf Anfragen pro Minute und IP gilt weiter und trifft einen Raum mit gemeinsamem WLAN; vor einem Workshop anheben.
 
-Neue Checks starten mit 8.0. Checks der Methoden 1.0–7.0 bleiben lesbar und unverändert; die folgenden Abschnitte beschreiben Methode 7.0.
+Neue Checks starten mit 8.1. Checks der Methoden 1.0–8.0 bleiben lesbar und unverändert; die folgenden Abschnitte beschreiben Methode 7.0.
 
 ## Nutzung der Methode 7.0
 

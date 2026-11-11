@@ -472,6 +472,42 @@ export function StressScore({ check }: { check: QuickCheck }) {
 const CTA_TEXT =
   "Die Frage ist nicht, ob Sie KI nutzen. Die Frage ist, wie Ihr Geschäft mehr von dem bekommt, was nicht aus einfach ersetzbarer Intelligenz besteht. Daran arbeiten wir mit Ihnen.";
 
+// Which scenario is arriving? Observable signs, not forecasts.
+const SIGNS = [
+  {
+    letter: "A",
+    text: "Offene Modelle erreichen das Niveau der besten, ohne dass die besten spürbar klüger werden.",
+  },
+  {
+    letter: "B",
+    text: "Nicht nur ein Labor, sondern mehrere zeigen denselben Sprung. KI beschleunigt nachweislich die KI-Forschung.",
+  },
+  {
+    letter: "C",
+    text: "Die Abstände zwischen deutlich besseren Modellen schrumpfen von Monaten auf Wochen.",
+  },
+];
+function Signs() {
+  return (
+    <section className="signs">
+      <h3>Woran Sie erkennen, welches Szenario eintritt</h3>
+      <ul>
+        {SIGNS.map((sign) => (
+          <li key={sign.letter}>
+            <span className="scenario-letter">{sign.letter}</span>
+            {sign.text}
+          </li>
+        ))}
+        <li>
+          <span className="scenario-letter">!</span>
+          Für Ihr Geschäft: Ein Agent erledigt den Testauftrag von Montag ohne
+          Nacharbeit.
+        </li>
+      </ul>
+    </section>
+  );
+}
+
 const verdictOf = (r: StressEvaluation, index: number): Verdict => ({
   status: r.scenarios[index].status,
   claimed: r.scenarios[index].status === "holds" && r.claimed,
@@ -656,6 +692,9 @@ export function StressFindings({ check }: { check: QuickCheck }) {
         <h2>Was Sie jetzt tun können</h2>
         <Actions check={check} print />
       </section>
+      <section className="print-block">
+        <Signs />
+      </section>
       <p className="small">
         Grundlage: {r.basis}. Die Szenarien sind Annahmen, keine Prognosen.
       </p>
@@ -792,6 +831,7 @@ export function StressResults({
               Und jetzt?
             </h1>
             <p className="closing">{CTA_TEXT}</p>
+            <Signs />
             <div className="tools">
               <button className="go" onClick={onPrint}>
                 Ergebnis als PDF
@@ -904,10 +944,9 @@ export function StressMethodContent() {
         <strong>Regeln ohne KI.</strong> Ein rein digitales Ergebnis ohne
         eigenen Beitrag außerhalb der Intelligenz kippt in B und C. Kann heutige
         KI den Auftrag schon, kippt es bereits in A. Als Beitrag zählen
-        exklusive Daten, Rechte und Haftung, persönliche Beziehungen und ein
-        Netzwerk. Was nur Sie haben, trägt; ohne Kaufbeleg steht dabei „laut
-        Ihren Angaben“. C hat dasselbe Ergebnis wie B; es bleibt nur weniger
-        Zeit.
+        exklusive Daten, Rechte und Haftung und persönliche Beziehungen. Was nur
+        Sie haben, trägt; ohne Kaufbeleg steht dabei „laut Ihren Angaben“. C hat
+        dasselbe Ergebnis wie B; es bleibt nur weniger Zeit.
       </p>
       <p>
         <strong>Mit KI.</strong> Die KI liest Ihre Beschreibung und urteilt je
@@ -917,16 +956,32 @@ export function StressMethodContent() {
       <p>
         <strong>Resilienz-Score.</strong> Jede Antwort zählt 0, halb oder voll
         mit ihrem Gewicht: Ergebnis und eigene Daten je 15, heutige KI,
-        Bedienung, Rechte, Beziehung, Netzwerk und Kundenzugang je 10, Wechsel
-        und Kaufbeleg je 5. Die Summe wird in den Bereich gelegt, der zum
-        Szenario-Urteil passt: kippt in A 0–20, kippt in B 15–35, Druck in A
-        25–55, Druck in B 40–65, trägt laut Angaben 60–80, trägt 65–100. Unter
-        35 rot, bis 64 gelb, ab 65 grün.
+        Prüfbarkeit, Bedienung, Rechte, Beziehung und Kundenzugang je 10,
+        Wechsel und Kaufbeleg je 5. Checks der Fassung 8.0 fragten statt der
+        Prüfbarkeit nach einem Netzwerk. Die Summe wird in den Bereich gelegt,
+        der zum Szenario-Urteil passt: kippt in A 0–20, kippt in B 15–35, Druck
+        in A 25–55, Druck in B 40–65, trägt laut Angaben 60–80, trägt 65–100.
+        Unter 35 rot, bis 64 gelb, ab 65 grün.
       </p>
       <p className="method-note">
         Die Szenarien sind gesetzte Annahmen, keine Prognosen. Der Score ist
         eine offengelegte Einschätzung, keine Wahrscheinlichkeit. Ihre Antworten
         sind Selbstauskünfte. Hintergrund: Richard Sutton, The Bitter Lesson.
+      </p>
+      <p className="method-note">
+        Die Szenarien folgen der Einteilung, mit der Fachleute den METR-Bericht
+        vom 5. November 2026 diskutieren: von „keine allgemeine Beschleunigung“
+        bis „die Beschleunigung beschleunigt sich“. Laut diesem Bericht werden
+        Modelle bei klar prüfbaren Aufgaben etwa doppelt so schnell besser wie
+        zuvor; ob das anhält, ist offen. Quelle:{" "}
+        <a
+          href="https://schememagazine.substack.com/p/scheme-sura-and-that-metr-report-835"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          SCHEME, 10. November 2026
+        </a>
+        .
       </p>
     </>
   );

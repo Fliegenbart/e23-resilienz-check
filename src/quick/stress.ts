@@ -7,11 +7,15 @@ import {
 
 // Method 8.0: a reverse stress test. It does not ask how likely failure is,
 // it asks which scenario breaks the business. No score, no probability.
-export const STRESS_METHOD = "quick-check-8.0";
+// 8.0 is published and frozen. 8.1 swaps the network question (S7) for
+// verifiability (S11); every other question, rule and weight is unchanged.
+export const STRESS_METHOD_8_0 = "quick-check-8.0";
+export const STRESS_METHOD = "quick-check-8.1";
 export const STRESS_ANALYSIS_VERSION = "stress-analysis-1.0";
 export const STRESS_ANALYSIS_MODEL = "openai/gpt-5.2";
 export const STRESS_ANALYSIS_MIN_LENGTH = 20;
-export const isStressMethod = (version: string) => version === STRESS_METHOD;
+export const isStressMethod = (version: string) =>
+  version === STRESS_METHOD || version === STRESS_METHOD_8_0;
 
 export const STRESS_PREMISE =
   "Angenommen, das Szenario tritt ein. Was bleibt dann von Ihrem Geschäft?";
@@ -53,6 +57,7 @@ export const STRESS_IDS = [
   "S8",
   "S9",
   "S10",
+  "S11",
 ] as const;
 export type StressId = (typeof STRESS_IDS)[number];
 
@@ -77,7 +82,7 @@ const question = (
   action,
   actionDetail,
 });
-export const STRESS_QUESTIONS: QuickQuestion[] = [
+export const STRESS_QUESTIONS_8_0: QuickQuestion[] = [
   question(
     "S1",
     "value",
@@ -189,7 +194,32 @@ export const STRESS_QUESTIONS: QuickQuestion[] = [
     "Zeigen Sie drei Kunden die beste KI-Alternative. Wofür zahlen sie trotzdem bei Ihnen?",
   ),
 ];
-// Disclosed judgment weights for the resilience score; they sum to 100.
+const VERIFIABLE = question(
+  "S11",
+  "value",
+  "Lässt sich Ihr Ergebnis eindeutig als richtig oder falsch prüfen?",
+  ["Ja, eindeutig", "Teilweise", "Nein, es hängt an Urteil und Vertrauen"],
+  "KI wird dort am schnellsten besser, wo sich das Ergebnis klar nachprüfen lässt: Code läuft oder nicht, eine Rechnung stimmt oder nicht. Bei Geschmack, Abwägung und Verantwortung geht es langsamer.",
+  "Auf Urteil und Verantwortung setzen",
+  "Verlagern Sie Ihr Angebot dorthin, wo niemand das Ergebnis einfach nachmessen kann: Abwägung, Einschätzung, Verantwortung für die Folgen.",
+);
+const byId = (id: StressId) => STRESS_QUESTIONS_8_0.find((q) => q.id === id)!;
+export const STRESS_QUESTIONS: QuickQuestion[] = [
+  byId("S1"),
+  byId("S2"),
+  VERIFIABLE,
+  byId("S3"),
+  byId("S4"),
+  byId("S5"),
+  byId("S6"),
+  byId("S8"),
+  byId("S9"),
+  byId("S10"),
+];
+export const stressQuestionsFor = (version: string) =>
+  version === STRESS_METHOD_8_0 ? STRESS_QUESTIONS_8_0 : STRESS_QUESTIONS;
+// Disclosed judgment weights for the resilience score; each method uses ten
+// of them and they sum to 100 (8.0 without S11, 8.1 without S7).
 export const STRESS_WEIGHTS: Record<StressId, number> = {
   S1: 15,
   S2: 10,
@@ -201,6 +231,7 @@ export const STRESS_WEIGHTS: Record<StressId, number> = {
   S8: 10,
   S9: 5,
   S10: 5,
+  S11: 10,
 };
 // What does not consist of intelligence: data, rights, relationships, network.
 const SHIELD_IDS: StressId[] = ["S4", "S5", "S6", "S7"];
@@ -350,7 +381,8 @@ export function evaluateStress(check: QuickCheck) {
   const open = scenarios.some((s) => s.status === "open");
   // Resilience score: weighted answers, then held inside the band that matches
   // the scenario verdicts. The verdicts lead; the number only makes them tangible.
-  const raw = STRESS_IDS.reduce((sum, id) => {
+  const raw = check.methodologySnapshot.reduce((sum, q) => {
+    const id = q.id as StressId;
     const value = numeric(check, id);
     return sum + (value === null ? 0 : (STRESS_WEIGHTS[id] * (value - 1)) / 2);
   }, 0);
@@ -410,7 +442,8 @@ export function evaluateStress(check: QuickCheck) {
           : "Prüfen Sie jährlich, ob das, was nur Sie haben, noch exklusiv ist.";
   // General advice from the weakest answers, heaviest weight first.
   const weakest = (level: number) =>
-    STRESS_QUESTIONS.filter((q) => numeric(check, q.id as StressId) === level)
+    check.methodologySnapshot
+      .filter((q) => numeric(check, q.id as StressId) === level)
       .sort(
         (a, b) =>
           STRESS_WEIGHTS[b.id as StressId] - STRESS_WEIGHTS[a.id as StressId],
@@ -468,10 +501,15 @@ const stressAnswer = z.union([
   z.literal("unknown"),
   z.null(),
 ]);
-export const stressAnswersSchema = z.record(z.enum(STRESS_IDS), stressAnswer);
+const idsOf = (questions: QuickQuestion[]) =>
+  questions.map((q) => q.id) as [StressId, ...StressId[]];
+export const stressAnswersSchema = z.union([
+  z.record(z.enum(idsOf(STRESS_QUESTIONS)), stressAnswer),
+  z.record(z.enum(idsOf(STRESS_QUESTIONS_8_0)), stressAnswer),
+]);
 export const stressInputSchema = z
   .object({
-    methodologyVersion: z.literal(STRESS_METHOD),
+    methodologyVersion: z.enum([STRESS_METHOD_8_0, STRESS_METHOD]),
     businessDescription: z.string().trim().max(BUSINESS_DESCRIPTION_MAX_LENGTH),
     businessMoat: z.string().trim().max(BUSINESS_MOAT_MAX_LENGTH).optional(),
     answers: stressAnswersSchema,
@@ -482,7 +520,16 @@ export const stressInputSchema = z
       input.businessDescription.length >= STRESS_ANALYSIS_MIN_LENGTH ||
       Boolean(input.businessMoat),
     "Bitte Ihr Geschäft oder Ihren Schutz beschreiben.",
+  )
+  .refine(
+    (input) =>
+      stressQuestionsFor(input.methodologyVersion).every(
+        (q) => q.id in input.answers,
+      ),
+    "Die Antworten müssen zur Methodenversion passen.",
   );
+const answerOf = (input: { answers: object }, id: string) =>
+  (input.answers as Record<string, unknown>)[id];
 export type StressInput = z.infer<typeof stressInputSchema>;
 
 const verdictSchema = z
@@ -553,7 +600,7 @@ export const stressAnalysisSchema = z
       issue("Jede Antwort wird höchstens einmal beanstandet.");
     if (
       r.doubts.some(
-        (d) => typeof analysis.input.answers[d.questionId] !== "number",
+        (d) => typeof answerOf(analysis.input, d.questionId) !== "number",
       )
     )
       issue("Die Rückfrage muss eine gegebene Antwort betreffen.");
@@ -570,7 +617,7 @@ export const stressAnalysisSchema = z
       ...r.doubts.map((d) => d.reason),
       r.openQuestion ?? "",
     ].join(" ");
-    if (/\bS(?:10|[1-9])\b/.test(visible))
+    if (/\bS(?:1[01]|[1-9])\b/.test(visible))
       issue("Ergebnis enthält technische Frage-IDs.");
     if (visible.trim().split(/\s+/).length > 700) issue("Ergebnis zu lang.");
   });
@@ -583,7 +630,10 @@ export function stressInputFor(check: QuickCheck): StressInput | null {
     businessDescription: check.businessDescription ?? "",
     ...(check.businessMoat?.trim() ? { businessMoat: check.businessMoat } : {}),
     answers: Object.fromEntries(
-      STRESS_IDS.map((id) => [id, check.answers[id]]),
+      stressQuestionsFor(check.methodologyVersion).map((q) => [
+        q.id,
+        check.answers[q.id],
+      ]),
     ),
   });
   return parsed.success ? parsed.data : null;
@@ -592,7 +642,10 @@ export function stressInputKey(input: StressInput) {
   return JSON.stringify([
     input.businessDescription.trim(),
     input.businessMoat?.trim() ?? "",
-    STRESS_IDS.map((id) => input.answers[id]),
+    stressQuestionsFor(input.methodologyVersion).map((q) => [
+      q.id,
+      answerOf(input, q.id),
+    ]),
   ]);
 }
 export function stressAnalysisMatches(
